@@ -110,7 +110,11 @@ function buildGA(flat) {
   const ga = flat.filter(r => /site/i.test(r.ch) || /ga/i.test(r.ch)).sort((a, b) => a.date < b.date ? -1 : 1);
   const last = re => ga.filter(r => re.test(r.metric)).at(-1) || null;
   const v = last(/^site visitors/i), s = last(/^total subscribers/i);
-  return { site_visitors: v?.value ?? null, subscribers: s?.value ?? null, date: v?.date ?? null };
+  // the Looker subscriber tile can sit unchanged for weeks; report when the value last changed, not when it was last read
+  const subRows = ga.filter(r => /^total subscribers/i.test(r.metric));
+  let since = s?.date ?? null;
+  for (let i = subRows.length - 1; i >= 0 && subRows[i].value === s?.value; i--) since = subRows[i].date;
+  return { site_visitors: v?.value ?? null, subscribers: s?.value ?? null, date: v?.date ?? null, subsSince: since, subsRead: s?.date ?? null };
 }
 
 /* Creative tab -> post records */
@@ -293,7 +297,7 @@ function render(S) {
       mtd: YT.subsDate ? `As of ${mdy(YT.subsDate)}` : "" },
     { cls: "ga", tag: "Site (GA)", lab: "Site visitors (period)", val: full(GA.site_visitors), cap: "", d: { t: "context metric", c: "flat" },
       bench: `Cross-channel followers <b>${full(crossF)}</b> (LinkedIn + Instagram)`,
-      mtd: `Subscribers <b>${full(GA.subscribers)}</b>${GA.date ? ` &middot; as of ${mdy(GA.date)}` : ""}` }
+      mtd: `Subscribers <b>${full(GA.subscribers)}</b>${GA.subsSince && GA.subsSince !== GA.subsRead ? ` &middot; unchanged since ${mdy(GA.subsSince)} (Looker tile)` : GA.subsRead ? ` &middot; as of ${mdy(GA.subsRead)}` : ""}` }
   ];
   document.getElementById("kpis").innerHTML = cards.map(c =>
     `<div class="kpi ${c.cls}"><div class="tag">${c.tag}</div><div class="lab">${c.lab}</div><div class="valrow"><span class="val">${c.val}</span>${c.cap ? `<span class="valcap">${c.cap}</span>` : ""}</div><div class="chg ${c.d.c}">${c.d.t}</div><div class="bench">${c.bench}</div><div class="mtd">${c.mtd}</div></div>`).join("");
