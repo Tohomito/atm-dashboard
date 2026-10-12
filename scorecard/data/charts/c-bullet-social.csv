@@ -1,0 +1,13 @@
+metric,series,value,unit,source_note
+Instagram Reel engagement rate,ATM,0.5,percent,"Instagram Insights, 55 Reels Aug 1–Sep 18: (likes+comments+shares+saves) ÷ 8,279 followers"
+Instagram Reel engagement rate,Benchmark: Rival IQ all-industry median,0.36,percent,
+Instagram Reel engagement rate,Benchmark: Rival IQ Media median,0.443,percent,
+Instagram Reel engagement rate,Benchmark: Rival IQ top quartile,1.02,percent,
+"Instagram follower growth, annualized",ATM,15,percent,"+102 followers in the last 30 days on 8,279 (Instagram Insights)"
+"Instagram follower growth, annualized","Benchmark: Socialinsider 5–10K tier, 2025",20.3,percent,
+YouTube organic views / month,ATM,2518,integer,"Sep 1–18, YouTube Analytics; Jun–Aug organic ran 3–8K with the ad excluded"
+YouTube organic views / month,"Benchmark: Digiday (views ÷ uploads × ~30 uploads/mo, derived)",8000,integer,
+LinkedIn page engagement rate,ATM,8.98,percent,"August, engagements ÷ impressions (LinkedIn Page analytics)"
+LinkedIn page engagement rate,Benchmark: Socialinsider 2026 average,5.2,percent,
+LinkedIn page engagement rate,Benchmark: video posts avg,6,percent,
+LinkedIn page engagement rate,Benchmark: documents avg,7,percent,

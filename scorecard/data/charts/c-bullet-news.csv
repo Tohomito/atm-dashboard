@@ -1,0 +1,16 @@
+metric,series,value,unit,source_note
+Open rate,ATM,44.9,percent,"avg of 7 issues, beehiiv"
+Open rate,Benchmark: Omeda B2B median,30.9,percent,
+Open rate,Benchmark: beehiiv platform avg 2025,41.24,percent,
+Click rate per delivered (verified),ATM,0.58,percent,verified unique clickers ÷ delivered
+Click rate per delivered (verified),Benchmark: Omeda B2B median,1.01,percent,
+Click rate per delivered (verified),Benchmark: Omeda all-publisher top of range,2,percent,
+Click-to-open (verified),ATM,1.38,percent,verified unique clickers ÷ unique opens
+Click-to-open (verified),Benchmark: Omeda B2B median,3.4,percent,
+Click-to-open (verified),Benchmark: GlueLetter bot-filtered median,7.5,percent,
+Unsubscribe rate per issue,ATM,0.43,percent,avg of 7 issues
+Unsubscribe rate per issue,Benchmark: Omeda B2B median,0.088,percent,
+Unsubscribe rate per issue,Benchmark: MailerLite all-industry,0.22,percent,
+Unsubscribe rate per issue,"Benchmark: ""content mismatch"" line",0.5,percent,
+Delivery rate,ATM,98.8,percent,avg of 7 issues
+Delivery rate,Benchmark: beehiiv platform,98.9,percent,

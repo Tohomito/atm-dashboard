@@ -1,0 +1,21 @@
+block,group,text_as_published
+Sep 19 baseline verdict,Champion,44.9% open rate vs 30.9% B2B median; legacy list alone opens at 51% in 30 days
+Sep 19 baseline verdict,Champion,"LinkedIn composition confirmed on the page: 47.8% Director+, 70.4% Senior+, 22% Advertising Services, NYC 39%"
+Sep 19 baseline verdict,Champion,"LinkedIn engagement 7.5–15% by impressions every month, ~2× the 5.2% platform average; LinkedIn's own benchmark puts ATM's new followers at +98% and comments at +52% vs the peer set"
+Sep 19 baseline verdict,Champion,"Instagram reaches 176K unique accounts a quarter, 82% of them non-followers"
+Sep 19 baseline verdict,Champion,"98.8%–99.3% delivery, zero spam reports through a list that doubled"
+Sep 19 baseline verdict,Champion,YouTube retention when people arrive: 64–66% still watching at 0:30 on the best interviews
+Sep 19 baseline verdict,Champion,The ad-trade video lane is uncontested
+Sep 19 baseline verdict,Yellow flag,Verified click-to-open 1.38% vs 3.4% B2B median; 93 humans clicked last month
+Sep 19 baseline verdict,Yellow flag,"LinkedIn impressions −56%, comments −64% in the last 30 days; reach swings ±50% month to month"
+Sep 19 baseline verdict,Yellow flag,Instagram sends the site 101 link taps per 309K views (0.03%); comments ~2 per Reel
+Sep 19 baseline verdict,Yellow flag,"Unsubscribes 0.43%/issue, 5× B2B median; 120 of 160 opt-outs were fresh imports"
+Sep 19 baseline verdict,Yellow flag,"A second LinkedIn page (""At The Moment"", 1,803 followers) is still collecting 113 followers a month"
+Sep 19 baseline verdict,Red flag,"Optin: 3,797 imports, 20 verified clickers in 30 days"
+Sep 19 baseline verdict,Red flag,98% of the active list is imported; 1.7% organic; the site has no email capture; the welcome flow has enrolled 12 people since July
+Sep 19 baseline verdict,Red flag,YouTube: 89.9% of 200K annual views were paid; 364 uploads in a year average 55 organic views each; rolling audience fell from 28K to 2K as the campaign ended
+Sep 19 baseline verdict,Red flag,"Google organic is ~150 clicks/month, every identifiable query a brand search; ~190 of 220 episode pages show zero impressions"
+Sep 19 baseline verdict,Red flag,"GA4 is mis-instrumented: every event is a Key Event (engaged sessions = 100%), newsletter traffic lands in Unassigned"
+Sep 29 flag for the team,1,"Rest Michelle Crossan-Matos until Nov 5. Moment Maker (Jul), honoree trailer + poster (Sep 18/23), Masterclass (Sep 28)."
+Sep 29 flag for the team,2,"Space repeat guests at least two weeks apart. Will McIntosh's fall cut, 10 days after his Moment Maker, drew 133 LinkedIn impressions."
+Sep 29 flag for the team,3,Book more agency and CPG / pharma brand voices. Under-represented against the newsletter's audience mix.

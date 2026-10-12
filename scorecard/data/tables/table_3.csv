@@ -1,0 +1,6 @@
+Fix,Where,Effect
+"Un-mark page_view, session_start, first_visit, click, scroll, user_engagement as Key Events",GA4 → Admin → Data display → Key events,"Engaged sessions, bounce rate and conversions become measurable (forward only)"
+"Set UTM medium to ""email""","beehiiv → Settings → General Info → UTM Analytics; and the episode-link template (""owned_audience"")","Newsletter traffic lands in Email for every tool, not just Rob's custom group"
+"Clean episode URLs; add title tag, meta description, VideoObject schema, publish date, transcript",atm.media episode template,The 190 invisible pages become rankable for guest and topic queries
+Submit a video sitemap; request indexing,Search Console,Indexing in weeks instead of never
+"Merge ""At The Moment"" into the ATM page",LinkedIn page-merge request,+113 followers/month stop landing on a page nobody posts to

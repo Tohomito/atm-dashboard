@@ -1,0 +1,7 @@
+series,category,value
+Optin cohort,"Opened ≥1, 30d",88.1
+Optin cohort,"Verified click ≥1, 30d",0.54
+Optin cohort,Unsubscribed (lifetime),2.8
+Legacy list,"Opened ≥1, 30d",51.3
+Legacy list,"Verified click ≥1, 30d",1.09
+Legacy list,Unsubscribed (lifetime),11

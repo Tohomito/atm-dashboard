@@ -1,0 +1,63 @@
+key,text
+header.eyebrow,"ATM Audience Scorecard · September 2026 update · Sep 1–28 vs Aug 1–28 · pulled Sep 29, 2026"
+header.title,"Fewer impressions, more conversation, and partners carried the reach."
+header.lede,"LinkedIn impressions fell from the July–August peak, but comments rose 80% and the engagement rate held. Where a partner reposted with their own copy, the piece reached 7–8× its organic engagement. On Instagram, the top three posts were all accepted collabs. The newsletter list grew on imports, and human clicks per reader slipped."
+header.meta,"<span>Sources: Supermetrics (LinkedIn Pages, Instagram Insights, YouTube, GA4) · beehiiv · LinkedIn admin, Instagram dashboard and YouTube Studio read in Rob's ""reporting"" Chrome (Sep 29) · monday.com, Teams live links. Measurement only; no financial figures.</span>"
+A.eyebrow,A · September at a glance
+A.headline,The headline numbers
+A.lede,"Connector figures, Sep 1–28, 2026, with the change against Aug 1–28. Native dashboard figures and the connector-vs-native gaps are in the tracker."
+B.eyebrow,B · Trailing 13 months
+B.headline,Where September sits in the year
+B.lede,"Calendar months via Supermetrics and beehiiv; September 2026 = Sep 1–28. LinkedIn history in the connector starts Sep 29, 2025."
+B.legend1,"<span style=""--c:var(--muted)"">Paid (ADVERTISING)</span><span style=""--c:var(--s1)"">Organic</span>"
+C.eyebrow,C · Syndication
+C.headline,Partner reposts with their own copy multiply the piece
+C.lede,"LinkedIn reposts with commentary, read on the Reposts list of 17 of 38 September posts. Engagement = reactions + comments + reposts. Impressions on reposters' posts are not visible to ATM, so they are not counted."
+C.legend1,"<span style=""--c:var(--s1)"">ATM post (organic)</span><span style=""--c:var(--s2)"">Reposts with commentary (syndicated)</span>"
+D.eyebrow,D · Executive appearance tally
+D.headline,209 executives featured since launch
+D.lede,"All-time count from monday.com (May 2025–Aug 2026, names only for the 2025 archive) plus this month's post log. One row per appearance in the tracker."
+D.card1.title,Flags for the team
+E.eyebrow,E · What worked
+E.headline,"Top posts, and the likely why"
+E.lede,"Reads are hypotheses. Full top/bottom 5 per platform, patterns and the tagging audit are in the tracker."
+E.note1,"Best comment of the month: ""Ok, this is the LinkedIn content I am here for. Learning that the people who are amazing professional leaders are of course amazing at something outside of work is my favorite thing!"" (Vanessa Otero, CEO and Founder, Ad Fontes Media, on the Lori Goode post)."
+audit.eyebrow,"Baseline · Sep 19 internal audience audit (kept for reference; financial items removed) · beehiiv, LinkedIn, Instagram, YouTube, atm.media, Search Console · pulled Sep 19, 2026 · v5, every source live"
+audit.headline,Sep 19 baseline: ATM wins the open. It loses the follow-through.
+audit.lede,"The audience is senior and opens above every trade-media benchmark. Then almost nothing happens next: clicks, sign-ups, search and organic growth all sit below par, because 98% of the active list was imported and under 2% was earned by the content. The Optin cohort makes the open rate look better and the click rate worse; YouTube's 200K views were 90% paid; Google sends ~150 clicks a month, all of them brand searches. Every one of those is fixable without a clickbait headline, and most of the fixes are plumbing."
+audit.meta,"<span>Sources: beehiiv API + cohort segments · YouTube Studio, LinkedIn Page admin and Instagram Professional Dashboard read directly in Rob's Chrome (Sep 19) · YouTube Analytics, Instagram Insights, LinkedIn Pages, GA4 and Search Console via Supermetrics (Sep 19) · Dan Lewis growth plan (Jul 10) · Hannah's monthly pre-reads · Omeda H1 2026, MailerLite 2026, Socialinsider 2026, Rival IQ 2025, Metricool 2026</span>"
+01.eyebrow,01 · The scorecard
+01.headline,"Above the line on attention, below it on action"
+01.lede,ATM's observed number (bar) against the most defensible 2025–26 benchmark for a corporate-domain trade list (black tick). Hover any bar for the source.
+01.legend1,"<span style=""--c:var(--s1)"">ATM (Aug 21–Sep 18)</span><span class=""bm"">Benchmark</span>"
+01.legend2,"<span style=""--c:var(--s1)"">ATM</span><span class=""bm"">Benchmark / peer</span>"
+02.eyebrow,02 · Newsletter
+02.headline,"A list that was assembled, not grown"
+02.lede,"Your ATM Withdrawal on beehiiv. 8,017 active subscribers on Sep 19; 3,221 on Aug 4; the difference is three imports of the Optin cold-acquired audience (tag ""optin"", 3,797 addresses). The cohort is separated out at the bottom of this section."
+02.legend1,"<span class=""line"" style=""--c:var(--s1)"">Open rate</span>"
+02.legend2,"<span class=""line"" style=""--c:var(--s2)"">Verified click-to-open</span>"
+02.legend3,"<span style=""--c:var(--s2)"">Optin cohort (3,690 active)</span><span style=""--c:var(--s1)"">Legacy list (4,327 active)</span>"
+02.subhead1,"The Optin cohort, separated"
+03.eyebrow,03 · LinkedIn
+03.headline,"The best engagement rate ATM owns, on a 3,806-follower base that is also split in two"
+03.lede,"Company page read directly in LinkedIn admin (Sep 19) plus LinkedIn Page analytics via Supermetrics. 3,806 followers confirmed on the page. A second ATM page (""At The Moment"", 1,803 followers) sits in LinkedIn's own competitor table. Socialinsider 2026 tier benchmarks."
+03.card1.title,"LinkedIn's own competitor benchmark, last 30 days"
+03.note1,"ATM out-earns every direct peer per post except Adweek and Puck, on a base a fraction of theirs. Marketecture posts 2.7× as often for a fifth of the reactions per post. Frequency is not ATM's problem; follower base is."
+04.eyebrow,04 · Instagram & YouTube
+04.headline,Instagram is reach without referral. YouTube was an ad buy on top of an unread library.
+04.lede,"YouTube Studio and the Instagram Professional Dashboard read directly (Sep 19), plus YouTube Analytics and Instagram Insights via Supermetrics. Instagram 8,277 followers; YouTube 90 subscribers, 364 uploads in the last 365 days (223 long-form, 141 Shorts)."
+04.legend1,"<span style=""--c:var(--muted)"">Paid (ADVERTISING)</span><span style=""--c:var(--s1)"">Organic (Shorts feed, search, suggested, subscribers)</span>"
+04.legend2,"<span style=""--c:var(--s1)"">Videos (2.2K views)</span><span style=""--c:var(--s2)"">Shorts (1.4K views)</span>"
+04.legend3,"<span style=""--c:var(--s1)"">Views</span><span style=""--c:var(--s2)"">Reach</span>"
+05.eyebrow,05 · atm.media and search
+05.headline,"The site gets ~5K users a month. Google sends 150 of them, and every identifiable search typed ""ATM""."
+05.lede,"GA4 via Supermetrics (property 489265998) and Google Search Console (sc-domain:atm.media, 16 months of history, connected Sep 19). Both instruments have configuration problems, listed at the bottom."
+05.card1.title,"Instrumentation fixes, in order"
+06.eyebrow,06 · Competitive set
+06.headline,Incumbents lead on scale. The fast growers grow through people and rooms.
+06.lede,"Every peer that grew in 2025–26 did it with mechanics ATM has not yet run: guests sharing their own interviews (FOS), events (Semafor, Marketecture), writer-as-franchise (Puck), awards (Digiday)."
+08.eyebrow,08 · Data plumbing
+08.headline,Everything is connected. Three instruments are mis-configured.
+08.lede,"Supermetrics has all seven sources on the plan as of 5:00pm Sep 19 (AI Chats destination swapped in, Rob's seat assigned, GA4 property shared, Search Console swapped in for Meta Ads). The native dashboards were read directly in Rob's Chrome. What remains is configuration, not access."
+footer.1,"Internal. September 2026 update Sep 29, 2026; baseline sections prepared Sep 19, 2026. Benchmarks: Omeda Newsletter Benchmark Report for Media H1 2026 and Email Engagement Q2 2026 · MailerLite industry benchmarks 2026 · GlueLetter Q1–Q2 2025 · beehiiv State of Newsletters 2026 · Socialinsider LinkedIn & Instagram benchmarks 2026 · Rival IQ Social Media Industry Benchmark Report 2025 · Metricool YouTube & LinkedIn studies 2026 · Litmus email client share Jul 2026 · Digiday, Axios, The Rebooting, Simon Owens, Press Gazette for peer figures. Sep 19 growth-plan, cost and peer-revenue content was removed from this page in the Sep 29 update (measurement only, no financials); it remains in version history."
+footer.2,Derived figures are labeled in the card captions. Sep 18 issue was ~30 hours old at pull time and is still accruing.

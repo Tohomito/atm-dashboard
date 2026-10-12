@@ -1,0 +1,9 @@
+label,value,source_note,note,flag
+Direct / (none),2536,,,benchmark/peer
+Newsletter (both UTM mediums),1103,783 + 320; GA4 default grouping files both as Unassigned,,
+Organic search,451,,,
+Organic social (all mediums),405,organic_social 215 + partner_social 115 + referral-social 64 + other 11,,
+Email (medium = email),221,,,
+Paid social,122,,,
+Referral,72,,,
+(not set) / other,36,,,benchmark/peer

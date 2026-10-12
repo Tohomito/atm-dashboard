@@ -1,0 +1,646 @@
+{
+ "c-bullet-news": {
+  "type": "bullet",
+  "rows": {
+   "Open rate": {
+    "max": 60,
+    "fmt": "percent",
+    "marks": {
+     "Omeda B2B median": "B2B median",
+     "beehiiv platform avg 2025": "beehiiv avg"
+    }
+   },
+   "Click rate per delivered (verified)": {
+    "max": 2.5,
+    "fmt": "percent",
+    "marks": {
+     "Omeda B2B median": "B2B median",
+     "Omeda all-publisher top of range": "top of range"
+    }
+   },
+   "Click-to-open (verified)": {
+    "max": 9,
+    "fmt": "percent",
+    "marks": {
+     "Omeda B2B median": "B2B",
+     "GlueLetter bot-filtered median": "bot-filtered median"
+    }
+   },
+   "Unsubscribe rate per issue": {
+    "max": 0.6,
+    "fmt": "percent",
+    "marks": {
+     "Omeda B2B median": "B2B",
+     "MailerLite all-industry": "all-industry",
+     "\"content mismatch\" line": "mismatch"
+    }
+   },
+   "Delivery rate": {
+    "max": 100,
+    "fmt": "percent",
+    "marks": {
+     "beehiiv platform": "platform"
+    }
+   }
+  },
+  "opts": {
+   "labW": 200,
+   "aria": "Newsletter metrics vs benchmarks"
+  }
+ },
+ "c-bullet-social": {
+  "type": "bullet",
+  "rows": {
+   "Instagram Reel engagement rate": {
+    "max": 1.2,
+    "fmt": "percent",
+    "marks": {
+     "Rival IQ all-industry median": "all-ind.",
+     "Rival IQ Media median": "Media median",
+     "Rival IQ top quartile": "top quartile"
+    }
+   },
+   "Instagram follower growth, annualized": {
+    "max": 30,
+    "fmt": "percent",
+    "marks": {
+     "Socialinsider 5–10K tier, 2025": "tier par"
+    }
+   },
+   "YouTube organic views / month": {
+    "max": 12000,
+    "fmt": "integer",
+    "marks": {
+     "Digiday (views ÷ uploads × ~30 uploads/mo, derived)": "Digiday ≈"
+    }
+   },
+   "LinkedIn page engagement rate": {
+    "max": 16,
+    "fmt": "percent",
+    "marks": {
+     "Socialinsider 2026 average": "platform avg",
+     "video posts avg": "video",
+     "documents avg": "documents"
+    }
+   }
+  },
+  "opts": {
+   "labW": 200,
+   "aria": "Social metrics vs benchmarks"
+  }
+ },
+ "c-acq": {
+  "type": "stack100",
+  "colors": {
+   "List imports": "--s1",
+   "Site embed form": "--s2",
+   "Other (magic link, web)": "--s3"
+  },
+  "opts": {
+   "aria": "Subscriber acquisition sources"
+  }
+ },
+ "c-openers": {
+  "type": "vbar",
+  "opts": {
+   "fmt": "integer_abbrev",
+   "aria": "Monthly unique openers"
+  }
+ },
+ "c-issues": {
+  "type": "line",
+  "colors": {
+   "Open rate": "--s1"
+  },
+  "opts": {
+   "fmt": "pct0",
+   "max": 70,
+   "every": 2,
+   "band": [
+    6,
+    12
+   ],
+   "bandLabel": "list doubled",
+   "aria": "Open rate by issue",
+   "h": 170
+  }
+ },
+ "c-issues2": {
+  "type": "line",
+  "colors": {
+   "Verified click-to-open": "--s2"
+  },
+  "opts": {
+   "fmt": "pct1",
+   "max": 3.5,
+   "every": 2,
+   "band": [
+    6,
+    12
+   ],
+   "bandLabel": "list doubled",
+   "aria": "Click-to-open by issue",
+   "h": 150
+  }
+ },
+ "c-bots": {
+  "type": "hbar",
+  "colors": {
+   "Scanner clicks (32 accounts)": "--muted",
+   "Human clicks (93 people)": "--s1"
+  },
+  "opts": {
+   "fmt": "integer",
+   "labW": 200,
+   "rowH": 38,
+   "aria": "Bot vs human clicks"
+  }
+ },
+ "c-unsub": {
+  "type": "vbar",
+  "opts": {
+   "fmt": "percent",
+   "max": 0.62,
+   "hideVals": true,
+   "every": 2,
+   "aria": "Unsubscribe rate by issue",
+   "marks": [
+    {
+     "label": "Omeda B2B median 0.088%",
+     "value": 0.088
+    },
+    {
+     "label": "0.5% mismatch line",
+     "value": 0.5,
+     "dash": true
+    }
+   ],
+   "colors": {
+    "Jul 17": "--s1",
+    "Jul 22": "--s1",
+    "Jul 24": "--s1",
+    "Jul 31": "--s1",
+    "Aug 7": "--s1",
+    "Aug 14": "--s1",
+    "Aug 21": "--s1",
+    "Aug 28": "--s1",
+    "Sep 1": "--crit",
+    "Sep 4": "--s1",
+    "Sep 11": "--crit",
+    "Sep 15": "--s1",
+    "Sep 18": "--crit"
+   }
+  }
+ },
+ "c-links": {
+  "type": "hbar",
+  "colors": {
+   "Social footer & share links, every issue": "--muted"
+  },
+  "opts": {
+   "fmt": "integer",
+   "labW": 250,
+   "rowH": 27,
+   "aria": "Verified clickers per link"
+  }
+ },
+ "c-li": {
+  "type": "vbar",
+  "opts": {
+   "fmt": "integer_abbrev",
+   "hideVals": true,
+   "aria": "LinkedIn impressions by month",
+   "marks": [
+    {
+     "label": "tier band ceiling ≈ 74K/mo (Socialinsider, 10–50K pages)",
+     "value": 74000,
+     "dash": true
+    }
+   ]
+  }
+ },
+ "c-lier": {
+  "type": "line",
+  "colors": {
+   "Engagement rate": "--s1"
+  },
+  "opts": {
+   "fmt": "pct1",
+   "max": 16,
+   "every": 2,
+   "aria": "LinkedIn engagement rate by month",
+   "h": 180
+  }
+ },
+ "c-gausers": {
+  "type": "vbar",
+  "opts": {
+   "fmt": "integer_abbrev",
+   "hideVals": true,
+   "every": 2,
+   "aria": "atm.media monthly users"
+  }
+ },
+ "c-gachan": {
+  "type": "hbar",
+  "colors": {
+   "Direct / (none)": "--muted",
+   "(not set) / other": "--muted"
+  },
+  "opts": {
+   "fmt": "integer",
+   "labW": 250,
+   "rowH": 27,
+   "aria": "Site sessions by medium, last 30 days"
+  }
+ },
+ "c-ytpaid": {
+  "type": "vstack",
+  "colors": {
+   "Paid (ADVERTISING)": "--muted",
+   "Organic": "--s1"
+  },
+  "opts": {
+   "fmt": "integer_abbrev",
+   "aria": "YouTube paid vs organic views"
+  }
+ },
+ "c-igmonthly": {
+  "type": "vstack",
+  "colors": {
+   "Views": "--s1",
+   "Reach": "--s2"
+  },
+  "opts": {
+   "fmt": "integer_abbrev",
+   "grouped": true,
+   "aria": "Instagram monthly views and reach"
+  }
+ },
+ "c-liposts": {
+  "type": "hbar",
+  "colors": {
+   "Tier avg, company-page video": "--muted",
+   "Chiney Ogwumike · WNBA": "--s2",
+   "Cynthia Plotch · Winx": "--s2",
+   "Travis Kelce × Publicis": "--s2",
+   "Guy Tytunovich · CHEQ": "--s2",
+   "Jodi Neuhauser · 51&": "--s2"
+  },
+  "opts": {
+   "fmt": "integer",
+   "labW": 210,
+   "rowH": 26,
+   "aria": "August LinkedIn post impressions"
+  }
+ },
+ "c-lifollow": {
+  "type": "vbar",
+  "opts": {
+   "fmt": "integer",
+   "aria": "New LinkedIn followers per month",
+   "hideVals": true,
+   "every": 2
+  }
+ },
+ "c-senior": {
+  "type": "hbar",
+  "colors": {
+   "Director": "--s3",
+   "Entry": "--muted",
+   "VP": "--s3",
+   "CXO": "--s3",
+   "Owner": "--s3",
+   "Partner": "--s3"
+  },
+  "opts": {
+   "fmt": "percent",
+   "max": 26,
+   "labW": 110,
+   "rowH": 26,
+   "aria": "LinkedIn follower seniority (LinkedIn admin, Sep 19)"
+  }
+ },
+ "c-ig": {
+  "type": "hbar",
+  "colors": {
+   "Marketing Brew": "--s2",
+   "Front Office Sports": "--s2",
+   "Adweek": "--s2",
+   "ATM (Insights, Reels, Aug–Sep)": "--s1",
+   "ATM (Social Blade estimate)": "--s1",
+   "Digiday": "--s2"
+  },
+  "opts": {
+   "fmt": "percent",
+   "max": 0.6,
+   "labW": 210,
+   "rowH": 30,
+   "aria": "Instagram engagement rate vs peers",
+   "marks": [
+    {
+     "label": "Rival IQ Media median",
+     "value": 0.443
+    }
+   ]
+  }
+ },
+ "c-ytviews": {
+  "type": "hbar",
+  "colors": {
+   "Front Office Sports": "--s2",
+   "20VC": "--s2",
+   "Lenny's Podcast": "--s2",
+   "Adweek": "--s3",
+   "Digiday": "--s3",
+   "ATM incl. paid ad views": "--s1",
+   "ATM organic only": "--s1"
+  },
+  "opts": {
+   "fmt": "integer",
+   "log": true,
+   "labW": 170,
+   "rowH": 30,
+   "aria": "YouTube views per upload"
+  }
+ },
+ "c-ytconv": {
+  "type": "hbar",
+  "colors": {
+   "Lenny's Podcast": "--s2",
+   "Diary of a CEO": "--s2",
+   "Colin & Samir": "--s2",
+   "Front Office Sports": "--s2",
+   "20VC": "--s2",
+   "ATM, organic views only": "--s1",
+   "ATM, all views incl. ad": "--s1"
+  },
+  "opts": {
+   "fmt": "dec1",
+   "labW": 170,
+   "rowH": 30,
+   "aria": "Subscribers per 1,000 views"
+  }
+ },
+ "c-ytsubs": {
+  "type": "hbar",
+  "colors": {
+   "Diary of a CEO": "--s2",
+   "Colin & Samir": "--s2",
+   "Lenny's Podcast": "--s2",
+   "20VC": "--s2",
+   "Front Office Sports": "--s2",
+   "Digiday": "--s3",
+   "Adweek": "--s3",
+   "ATM": "--s1",
+   "Puck": "--s3"
+  },
+  "opts": {
+   "fmt": "integer_abbrev",
+   "log": true,
+   "labW": 150,
+   "rowH": 26,
+   "aria": "YouTube subscribers"
+  }
+ },
+ "c-optin": {
+  "type": "vstack",
+  "colors": {
+   "Optin cohort": "--s2",
+   "Legacy list": "--s1"
+  },
+  "opts": {
+   "fmt": "pct_small2",
+   "grouped": true,
+   "aria": "Optin cohort vs legacy list"
+  }
+ },
+ "c-func": {
+  "type": "hbar",
+  "colors": {
+   "Advertising Services (industry)": "--s2",
+   "Entertainment Providers (industry)": "--s2",
+   "Software Development (industry)": "--s2",
+   "PR & Communications (industry)": "--s2"
+  },
+  "opts": {
+   "fmt": "percent",
+   "max": 26,
+   "labW": 230,
+   "rowH": 24,
+   "aria": "LinkedIn followers by job function and industry"
+  }
+ },
+ "c-liwk": {
+  "type": "hbar",
+  "colors": {
+   "Awards honorees collab post (9/15)": "--s2",
+   "Moves post (9/18)": "--s2",
+   "Executive of the Year video (9/16)": "--s2",
+   "Marketer of the Year video (9/18)": "--s2",
+   "Nominate the biggest moment (9/17)": "--s2"
+  },
+  "opts": {
+   "fmt": "integer",
+   "labW": 260,
+   "rowH": 25,
+   "aria": "LinkedIn impressions by post, Sep 5–19"
+  }
+ },
+ "c-ytsrc": {
+  "type": "hbar",
+  "colors": {
+   "YouTube advertising": "--muted"
+  },
+  "opts": {
+   "fmt": "percent",
+   "max": 100,
+   "labW": 170,
+   "rowH": 28,
+   "aria": "YouTube traffic sources, last 365 days"
+  }
+ },
+ "c-ytaud": {
+  "type": "hbar",
+  "colors": {
+   "New viewers": "--muted",
+   "Regular viewers": "--s2"
+  },
+  "opts": {
+   "fmt": "percent",
+   "max": 100,
+   "labW": 150,
+   "rowH": 26,
+   "aria": "YouTube audience by watch behaviour, last 28 days"
+  }
+ },
+ "c-yt28": {
+  "type": "vstack",
+  "colors": {
+   "Videos": "--s1",
+   "Shorts": "--s2"
+  },
+  "opts": {
+   "fmt": "pct0",
+   "grouped": true,
+   "aria": "YouTube traffic sources by format, last 28 days"
+  }
+ },
+ "c-igfunnel": {
+  "type": "hbar",
+  "colors": {
+   "External link taps": "--s2"
+  },
+  "opts": {
+   "fmt": "integer",
+   "log": true,
+   "labW": 150,
+   "rowH": 28,
+   "aria": "Instagram funnel, last 90 days"
+  }
+ },
+ "c-gsc": {
+  "type": "vbar",
+  "opts": {
+   "fmt": "integer",
+   "hideVals": true,
+   "every": 2,
+   "aria": "Google search clicks per month (Search Console)"
+  }
+ },
+ "c-gscq": {
+  "type": "hbar",
+  "colors": {
+   "(unknown)": "--muted",
+   "Every guest-name query": "--s2",
+   "\"360i\" family (640 impressions)": "--s2"
+  },
+  "opts": {
+   "fmt": "integer",
+   "labW": 230,
+   "rowH": 26,
+   "aria": "Search queries with clicks, last 90 days"
+  }
+ },
+ "c-gaev": {
+  "type": "hbar",
+  "colors": {
+   "page_view ★": "--s2",
+   "session_start ★": "--s2",
+   "first_visit ★": "--s2",
+   "click ★": "--s2",
+   "user_engagement ★": "--s2",
+   "scroll ★": "--s2",
+   "ads_conversion_About_Us_1 ★": "--s2",
+   "form_start ★": "--s3",
+   "video_start / video_progress": "--muted"
+  },
+  "opts": {
+   "fmt": "integer",
+   "labW": 220,
+   "rowH": 24,
+   "aria": "GA4 events, last 30 days; ★ = marked as Key Event"
+  }
+ },
+ "c-lictr": {
+  "type": "hbar",
+  "colors": {
+   "Moves carousel/image (9/18)": "--s3",
+   "Industry Moves carousel (Aug, Hannah)": "--s3"
+  },
+  "opts": {
+   "fmt": "percent",
+   "max": 38,
+   "labW": 250,
+   "rowH": 25,
+   "aria": "LinkedIn click-through rate by post"
+  }
+ },
+ "c-peer-news": {
+  "type": "hbar",
+  "colors": {
+   "Ad Age (all newsletters)": "--s2",
+   "Digiday": "--s2",
+   "Adweek": "--s2",
+   "AdExchanger (daily)": "--s2",
+   "Simon Owens": "--s7",
+   "ATM": "--s1",
+   "Next in Media": "--s7"
+  },
+  "opts": {
+   "fmt": "integer_abbrev",
+   "log": true,
+   "labW": 170,
+   "rowH": 28,
+   "aria": "Newsletter list sizes"
+  }
+ },
+ "s-li": {
+  "type": "vbar",
+  "opts": {
+   "fmt": "integer_abbrev",
+   "hideVals": true,
+   "every": 2,
+   "aria": "LinkedIn impressions by month"
+  }
+ },
+ "s-ig": {
+  "type": "vbar",
+  "opts": {
+   "fmt": "integer_abbrev",
+   "hideVals": true,
+   "every": 2,
+   "aria": "Instagram views by month"
+  }
+ },
+ "s-yt": {
+  "type": "vstack",
+  "colors": {
+   "Paid (ADVERTISING)": "--muted",
+   "Organic": "--s1"
+  },
+  "opts": {
+   "fmt": "integer_abbrev",
+   "aria": "YouTube paid vs organic views"
+  }
+ },
+ "s-ga": {
+  "type": "vbar",
+  "opts": {
+   "fmt": "integer_abbrev",
+   "hideVals": true,
+   "every": 2,
+   "aria": "atm.media users by month"
+  }
+ },
+ "s-nl": {
+  "type": "vbar",
+  "opts": {
+   "fmt": "integer_abbrev",
+   "hideVals": true,
+   "every": 2,
+   "aria": "Newsletter active subscribers, month end"
+  }
+ },
+ "s-syn": {
+  "type": "vstack",
+  "colors": {
+   "ATM post (organic)": "--s1",
+   "Syndicated": "--s2"
+  },
+  "opts": {
+   "fmt": "integer",
+   "aria": "Organic vs syndicated LinkedIn engagement"
+  }
+ },
+ "s-sect": {
+  "type": "hbar",
+  "colors": {},
+  "opts": {
+   "fmt": "integer",
+   "labW": 220,
+   "rowH": 26,
+   "aria": "September appearances by sector"
+  }
+ }
+}

@@ -1,0 +1,12 @@
+Source,Status,What it gives us / what still needs fixing
+beehiiv,Live,"All of section 02 plus six cohort segments. Fix: UTM medium → ""email""; welcome automation for imports; referral milestones (currently none); double opt-in decision for cold sources"
+YouTube (ATM channel),Live + Studio read,"Traffic sources, audience behaviour, retention, per-format views; 365-day and 28-day reads captured"
+Instagram Insights,Live + dashboard read,"Views/reach/interactions, follower vs non-follower split, profile visits and link taps. Follower demographics need a Meta Business Suite login (not attempted)"
+LinkedIn Pages,Live + admin read,"3,806 confirmed; seniority/function/industry/size splits; competitor table; search appearances. Fix: merge the duplicate ""At The Moment"" page"
+Google Analytics 4,Live (property 489265998),"Users, sessions, mediums, events. Fix: un-mark the six default events as Key Events; medium fix upstream in beehiiv"
+Google Search Console,Live (sc-domain:atm.media),"16 months of queries, pages, positions. Fix: episode-page titles/descriptions/schema, clean slugs, video sitemap"
+LinkedIn Ads,"Live, no spend",Ready if founder-profile boosts are tested
+Meta Ads,Removed from plan,No spend in 90 days; slot given to Search Console
+Optin's own send reporting,Not seen,"Weekly subscriber-growth, deliverability and engagement-cohort reports are a contractual deliverable (§1(f)); ask Hannah/Amanda for the Slack channel history"
+Vimeo,Not connected (no connector),Plays per episode and per partner series for sponsor recaps
+TikTok / X / Facebook Page,Not connected / dormant,Only if ATM decides to redistribute there
