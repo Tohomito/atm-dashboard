@@ -7,7 +7,8 @@ One page, in the Audience Scorecard's design, built from two data sources:
 | Sections | Data | Refresh |
 |---|---|---|
 | Now (daily social), the benchmark row in A, YouTube watch hours in B, F (every post) | The ATM Daily Social Pulse Google Sheet, read live each time the page opens, plus `js/archive.js` | Whenever Hannah's daily run writes to the sheet |
-| Header, A–E, Sep 19 baseline (01–08), footer | The files in `data/scorecard/` | When new files from Rob's monthly run are copied in |
+| A–E, Sep 19 baseline (01–08), footer | The files in `data/scorecard/` | When new files from Rob's monthly run are copied in |
+| Header and "The read" (combined findings and recommendations) | `data/analysis.csv`, written across every source | Rewritten each month after the monthly files arrive |
 
 The header shows the date of each source.
 

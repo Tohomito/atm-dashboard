@@ -78,7 +78,7 @@ function render(S) {
   const POST_START = POSTS.reduce((m, p) => p.date < m ? p.date : m, "9999");
   const liLast = liDays.at(-1), igFollNow = DAILY.filter(d => d.ig_runf != null).at(-1);
 
-  setHTML('st-daily', `Daily social: through ${longDate(AS_OF)}, read live from Hannah's ATM Daily Social Pulse sheet`);
+  setHTML('st-daily', `Daily figures: through ${longDate(AS_OF)}, refreshed each time the page opens`);
 
   /* ===== This week ===== */
   const igReads = DAILY.filter(d => d.ig_reach != null);
@@ -95,7 +95,7 @@ function render(S) {
   setHTML('now-eyebrow', `Now · daily · through ${mdy(AS_OF)}`);
   setHTML('now-lede', [
     `LinkedIn organic impressions were <b>${full(s7)}</b> over the 7 days to ${mdy(AS_OF)}${p7 ? ` (${pctTxt(s7, p7)} on the week before)` : ''}.`,
-    `LinkedIn followers stand at <b>${full(liLast.li_runf)}</b>${li30 ? ` (${sign(liLast.li_runf - li30.li_runf)}${full(liLast.li_runf - li30.li_runf)} in 30 days)` : ''}; Instagram at <b>${full(igFollNow?.ig_runf)}</b>.`,
+    `LinkedIn gained <b>${li30 ? full(liLast.li_runf - li30.li_runf) : '—'}</b> organic followers in 30 days; Instagram stands at <b>${full(igFollNow?.ig_runf)}</b> followers.`,
     igNow ? `Instagram's 28-day window reads <b>${fmt(igNow.ig_reach)} reach</b> and <b>${fmt(igNow.ig_views)} views</b>${igPrev ? ` (${pctTxt(igNow.ig_reach, igPrev.ig_reach)} reach on the prior 28 days)` : ''}.` : '',
     topLI ? `Top LinkedIn post of the last 30 days: ${who(topLI)} (${mdy(topLI.date)}), <b>${full(topLI.reach)} impressions</b>.` : '',
     topIG ? `Top Instagram post: ${who(topIG)} (${mdy(topIG.date)}), <b>${full(topIG.views)} views</b>.` : ''
@@ -161,7 +161,7 @@ function render(S) {
   ];
   setHTML('a-bench-tiles', tiles.map(([v, k, d]) => `<div class="tile"><div class="v mono">${esc(v)}</div><div class="k">${esc(k)}</div><div class="d">${esc(d)}</div></div>`).join(''));
   const proxy = MOk.find(k => MO[k].proxy);
-  setHTML('a-bench-note', `${Hn} ${Hm.slice(0, 4)} is the last full month in the daily sheet; the benchmark is the three months before it, so this row moves forward on its own each month. LinkedIn per-post reach = monthly organic impressions ÷ (days × ${CAD} posts/day).${proxy ? ` From ${monthName(proxy)} on, LinkedIn monthly engagement is summed from posts published that month; earlier months use LinkedIn's Highlights totals.` : ''} Source: ATM Daily Social Pulse sheet.`);
+  setHTML('a-bench-note', `${Hn} ${Hm.slice(0, 4)} is the last full month in the daily sheet; the benchmark is the three months before it, so this row moves forward on its own each month. LinkedIn per-post reach = monthly organic impressions ÷ (days × ${CAD} posts/day).${proxy ? ` From ${monthName(proxy)} on, LinkedIn monthly engagement is summed from posts published that month; earlier months use LinkedIn's Highlights totals.` : ''} Sources: LinkedIn page analytics, Meta Business Suite, YouTube Studio.`);
 
   /* ===== YouTube watch time, in section B ===== */
   const ytm = YT.months.filter(m => m.watch != null);
@@ -171,7 +171,7 @@ function render(S) {
   const BENCH = buildBench(POSTS);
   const spanDays = Math.round((new Date(POST_END) - new Date(POST_START)) / 864e5) + 1;
   setHTML('f-eyebrow', `F · Every post · ${slash(POST_START)} to ${slash(POST_END)}`);
-  setHTML('f-lede', `${POSTS.length} organic LinkedIn and Instagram posts over ${spanDays} days. Posts through ${slash(ARCHIVE_END)} come from the per-post archive; later ones from the daily sheet's Creative tab. Instagram Stories are excluded. LinkedIn engagement rate = (clicks + reactions + comments + reposts) ÷ impressions; Instagram = interactions ÷ reach, so read each against its own median.`);
+  setHTML('f-lede', `${POSTS.length} organic LinkedIn and Instagram posts over ${spanDays} days. Per-post figures from LinkedIn page analytics and Meta Business Suite; recent posts keep gaining until they mature. Instagram Stories are excluded. LinkedIn engagement rate = (clicks + reactions + comments + reposts) ÷ impressions; Instagram = interactions ÷ reach, so read each against its own median.`);
   const L = BENCH.LinkedIn, I = BENCH.Instagram;
   const brow = (lab, a, b) => `<tr><td>${lab}</td><td class="num">${a}</td><td class="num">${b}</td></tr>`;
   $('d-bench').innerHTML = '<tr><th>Per post</th><th>LinkedIn</th><th>Instagram</th></tr>' + [
@@ -225,13 +225,13 @@ function render(S) {
   $('p-month').addEventListener('change', e => { pMonth = e.target.value; drawAll(); });
   $('p-field').addEventListener('change', e => { pField = e.target.value; drawAll(); });
 
-  setHTML('foot-daily', `Daily social sections: the ATM Daily Social Pulse Google Sheet, read live each time this page opens (Daily Pulse, Creative and Flat Feed tabs), plus the per-post archive from LinkedIn page analytics and Meta Business Suite through ${slash(ARCHIVE_END)}. Instagram reach and views on the daily series are 28-day rolling figures. Boosted Instagram posts report organic and paid together.`);
+  setHTML('foot-daily', `Daily and per-post figures (Now, the benchmark row in A, YouTube watch hours, F) refresh each time the page opens, from LinkedIn page analytics, Meta Business Suite and YouTube Studio reads. Instagram reach and views on the daily series are 28-day rolling figures. Boosted Instagram posts report organic and paid together.`);
   document.documentElement.dataset.dailyReady = '1';
 }
 
 D.load().then(render).catch(e => {
   console.error(e);
-  setHTML('st-daily', `<span style="color:var(--crit)">Daily social could not read the Google Sheet: ${esc(e.message)}. Try refreshing.</span>`);
+  setHTML('st-daily', `<span style="color:var(--crit)">Daily figures could not load: ${esc(e.message)}. Try refreshing.</span>`);
   document.documentElement.dataset.dailyReady = 'error';
 });
 })();

@@ -56,10 +56,18 @@ All files are UTF-8 CSV with a header row. Numbers can include thousands commas.
 
 | Key pattern | What it is |
 |---|---|
-| `header.eyebrow`, `header.title`, `header.lede`, `header.meta` | Page header |
+| `header.eyebrow`, `header.title`, `header.lede`, `header.meta` | Kept for the record. The dashboard's header now shows the combined analysis, which is written across all sources each month (see below). |
 | `<section>.eyebrow`, `.headline`, `.lede` | Each section's label, headline and intro. Section keys are `A`–`E`, `01`–`08`, and `audit` for the baseline block |
 | `<section>.legend<n>`, `.note<n>`, `.subhead<n>`, `.card<n>.title` | Legends, notes under tables, sub-headings, titles of cards without a chart |
 | `footer.1`, `footer.2` | Footer lines |
+
+## Wording
+
+Name sources by platform and date, not by person or by dashboard. Write "read from LinkedIn admin (Sep 29)", not "read in Rob's Chrome". The page is one dashboard and should read as one.
+
+## The combined analysis
+
+The header and "The read" section at the top of the page come from `data/analysis.csv`. That file is not part of the monthly run's output. It is rewritten each month after the run's files arrive, reading the run's figures together with the daily figures, so its findings and recommendations cover every source on the page.
 
 ## What still needs a dashboard change
 

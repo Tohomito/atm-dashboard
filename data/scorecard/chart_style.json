@@ -546,7 +546,7 @@
   "type": "hbar",
   "colors": {
    "Moves carousel/image (9/18)": "--s3",
-   "Industry Moves carousel (Aug, Hannah)": "--s3"
+   "Industry Moves carousel (Aug)": "--s3"
   },
   "opts": {
    "fmt": "percent",

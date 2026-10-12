@@ -14,6 +14,9 @@
 th.sortable{cursor:pointer;white-space:nowrap}
 td.beat{color:var(--goodtext);font-weight:600}
 .dim{color:var(--muted)}
+.findings{margin:6px 0 0;padding-left:20px;display:grid;gap:12px;font-size:14px}
+.findings b{display:block;margin-bottom:2px}
+.notes{margin:6px 0 0;padding-left:18px;display:grid;gap:6px;font-size:13.5px;color:var(--ink2)}
 table.posts td{white-space:nowrap}
 table.posts td.post{white-space:normal;min-width:260px;max-width:440px}
 .status-strip span{display:inline-flex;align-items:center;gap:6px}
@@ -133,21 +136,30 @@ a{color:var(--ink)}
 <div class="meta" data-k="header.meta"></div><div class="meta status-strip" data-added=""><span id="st-daily">Daily social: loading…</span><span id="st-monthly"></span></div>
 </header>
 
+<section data-added="" id="read">
+<div class="sec-head"><span class="eyebrow" id="read-eyebrow"></span><h2 id="read-headline"></h2><p id="read-lede"></p></div>
+<div class="grid two">
+<div class="card"><h3>What happened</h3><ol class="findings" id="read-findings"></ol></div>
+<div class="card"><h3>What to do next</h3><div class="plays" id="read-actions"></div></div>
+</div>
+<div class="card" style="margin-top:18px"><h3>Reading the numbers</h3><ul class="notes" id="read-notes"></ul></div>
+</section>
+
 <section data-added="" id="now">
 <div class="sec-head"><span class="eyebrow" id="now-eyebrow">Now · daily</span><h2>This week in social</h2><p id="now-lede">Loading the latest numbers from the daily sheet…</p></div>
 <div class="grid two">
-<div class="card"><div class="head"><h3>LinkedIn organic impressions per day</h3><div class="seg" data-for="liimpr" role="group"><button aria-pressed="false" data-v="14" type="button">14d</button><button aria-pressed="true" data-v="30" type="button">30d</button><button aria-pressed="false" data-v="all" type="button">All</button></div></div><p class="sub">Paid excluded. LinkedIn reports a day or two late.</p><figure id="d-liimpr"></figure><p class="src">Source: ATM Daily Social Pulse sheet, daily rows</p></div>
-<div class="card"><div class="head"><h3>LinkedIn followers</h3><div class="seg" data-for="lifoll" role="group"><button aria-pressed="false" data-v="14" type="button">14d</button><button aria-pressed="true" data-v="30" type="button">30d</button><button aria-pressed="false" data-v="all" type="button">All</button></div></div><p class="sub">Running organic follower count.</p><figure id="d-lifoll"></figure><p class="src">Source: ATM Daily Social Pulse sheet, daily rows</p></div>
-<div class="card"><div class="head"><h3>Instagram reach and views, 28-day rolling</h3><div class="seg" data-for="igreach" role="group"><button aria-pressed="false" data-v="14" type="button">14d</button><button aria-pressed="true" data-v="30" type="button">30d</button><button aria-pressed="false" data-v="all" type="button">All</button></div></div><p class="sub" id="d-igreach-sub">Meta's 28-day rolling figures.</p><figure id="d-igreach"></figure><div class="legend"><span class="line" style="--c:var(--s2)">Reach</span><span class="line" style="--c:var(--s4)">Views</span></div><p class="src">Source: ATM Daily Social Pulse sheet, daily rows</p></div>
-<div class="card"><div class="head"><h3>Instagram followers</h3><div class="seg" data-for="igfoll" role="group"><button aria-pressed="false" data-v="14" type="button">14d</button><button aria-pressed="true" data-v="30" type="button">30d</button><button aria-pressed="false" data-v="all" type="button">All</button></div></div><p class="sub" id="d-igfoll-sub">Lifetime follower total.</p><figure id="d-igfoll"></figure><p class="src">Source: ATM Daily Social Pulse sheet, daily rows</p></div>
+<div class="card"><div class="head"><h3>LinkedIn organic impressions per day</h3><div class="seg" data-for="liimpr" role="group"><button aria-pressed="false" data-v="14" type="button">14d</button><button aria-pressed="true" data-v="30" type="button">30d</button><button aria-pressed="false" data-v="all" type="button">All</button></div></div><p class="sub">Paid excluded. LinkedIn reports a day or two late.</p><figure id="d-liimpr"></figure><p class="src">Source: LinkedIn page analytics, daily</p></div>
+<div class="card"><div class="head"><h3>LinkedIn followers</h3><div class="seg" data-for="lifoll" role="group"><button aria-pressed="false" data-v="14" type="button">14d</button><button aria-pressed="true" data-v="30" type="button">30d</button><button aria-pressed="false" data-v="all" type="button">All</button></div></div><p class="sub">Running organic follower count.</p><figure id="d-lifoll"></figure><p class="src">Source: LinkedIn page analytics, daily</p></div>
+<div class="card"><div class="head"><h3>Instagram reach and views, 28-day rolling</h3><div class="seg" data-for="igreach" role="group"><button aria-pressed="false" data-v="14" type="button">14d</button><button aria-pressed="true" data-v="30" type="button">30d</button><button aria-pressed="false" data-v="all" type="button">All</button></div></div><p class="sub" id="d-igreach-sub">Meta's 28-day rolling figures.</p><figure id="d-igreach"></figure><div class="legend"><span class="line" style="--c:var(--s2)">Reach</span><span class="line" style="--c:var(--s4)">Views</span></div><p class="src">Source: Meta Business Suite, daily reads</p></div>
+<div class="card"><div class="head"><h3>Instagram followers</h3><div class="seg" data-for="igfoll" role="group"><button aria-pressed="false" data-v="14" type="button">14d</button><button aria-pressed="true" data-v="30" type="button">30d</button><button aria-pressed="false" data-v="all" type="button">All</button></div></div><p class="sub" id="d-igfoll-sub">Lifetime follower total.</p><figure id="d-igfoll"></figure><p class="src">Source: Instagram profile, daily reads</p></div>
 </div>
 <h3 style="margin:26px 0 10px">Engagement on posts published in the last 30 days, against the 30 before</h3>
 <div class="tiles" id="now-delta"></div>
 <p class="sub" id="now-delta-note" style="margin-top:10px;max-width:80ch"></p>
 <div class="card-row-head" style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin:26px 0 10px"><h3 style="margin:0">Trailing 30-day engagement</h3><div class="seg" data-for="eng" role="group"><button aria-pressed="true" data-v="LinkedIn" type="button">LinkedIn</button><button aria-pressed="false" data-v="Instagram" type="button">Instagram</button></div></div>
 <div class="grid two">
-<div class="card"><h3 id="d-eng-t1">Reactions</h3><p class="sub">Total for posts published in the 30 days up to each date.</p><figure id="d-eng-rx"></figure><div class="legend" id="d-eng-legend1"></div><p class="src">Source: per-post data, ATM Daily Social Pulse sheet and archive</p></div>
-<div class="card"><h3 id="d-eng-t2">Comments and reposts</h3><p class="sub">Same window, on their own scale.</p><figure id="d-eng-cm"></figure><div class="legend" id="d-eng-legend2"></div><p class="src">Source: per-post data, ATM Daily Social Pulse sheet and archive</p></div>
+<div class="card"><h3 id="d-eng-t1">Reactions</h3><p class="sub">Total for posts published in the 30 days up to each date.</p><figure id="d-eng-rx"></figure><div class="legend" id="d-eng-legend1"></div><p class="src">Source: LinkedIn page analytics and Meta Business Suite, per post</p></div>
+<div class="card"><h3 id="d-eng-t2">Comments and reposts</h3><p class="sub">Same window, on their own scale.</p><figure id="d-eng-cm"></figure><div class="legend" id="d-eng-legend2"></div><p class="src">Source: LinkedIn page analytics and Meta Business Suite, per post</p></div>
 </div>
 </section>
 <section data-sec="A">
@@ -162,7 +174,7 @@ a{color:var(--ink)}
 <div class="card" data-chart-card="s-yt"><h3 data-chart-text="card_title"></h3><p class="sub" data-chart-text="card_subtitle_as_published"></p><figure id="s-yt"></figure><div class="legend" data-k="B.legend1"></div><p class="sowhat" data-chart-text="commentary_as_published"></p></div>
 <div class="card" data-chart-card="s-ga"><h3 data-chart-text="card_title"></h3><p class="sub" data-chart-text="card_subtitle_as_published"></p><figure id="s-ga"></figure><p class="sowhat" data-chart-text="commentary_as_published"></p></div>
 <div class="card" data-chart-card="s-nl"><h3 data-chart-text="card_title"></h3><p class="sub" data-chart-text="card_subtitle_as_published"></p><figure id="s-nl"></figure><p class="sowhat" data-chart-text="commentary_as_published"></p></div>
-<div class="card" data-added=""><h3>YouTube watch hours per month</h3><p class="sub">Account level. Faded bars are pre-launch or partial months.</p><figure id="d-ytwatch"></figure><p class="sowhat">Watch time follows views: it fell away when the paid flight ended in August.</p><p class="src">Source: YouTube Studio monthly reads, ATM Daily Social Pulse sheet (Flat Feed)</p></div></div>
+<div class="card" data-added=""><h3>YouTube watch hours per month</h3><p class="sub">Account level. Faded bars are pre-launch or partial months.</p><figure id="d-ytwatch"></figure><p class="sowhat">Watch time follows views: it fell away when the paid flight ended in August.</p><p class="src">Source: YouTube Studio, monthly</p></div></div>
 </section>
 <section data-sec="C">
 <div class="sec-head"><span class="eyebrow" data-k="C.eyebrow"></span><h2 data-k="C.headline"></h2><p data-k="C.lede"></p></div>
@@ -185,8 +197,8 @@ a{color:var(--ink)}
 <section data-added="" id="posts">
 <div class="sec-head"><span class="eyebrow" id="f-eyebrow">F · Every post</span><h2>Post by post, ranked</h2><p id="f-lede"></p></div>
 <div class="grid two">
-<div class="card"><h3>Running benchmarks, all posts</h3><p class="sub">Median is the typical post; the average is pulled up by a few outliers, so set targets on the median.</p><div class="tblwrap"><table id="d-bench"></table></div><p class="src">Source: per-post data, ATM Daily Social Pulse sheet and archive</p></div>
-<div class="card"><h3>Comments by post, LinkedIn</h3><p class="sub" id="d-cmt-sub"></p><figure id="d-cmt"></figure><p class="src">Source: per-post data, ATM Daily Social Pulse sheet and archive</p></div>
+<div class="card"><h3>Running benchmarks, all posts</h3><p class="sub">Median is the typical post; the average is pulled up by a few outliers, so set targets on the median.</p><div class="tblwrap"><table id="d-bench"></table></div><p class="src">Source: LinkedIn page analytics and Meta Business Suite, per post</p></div>
+<div class="card"><h3>Comments by post, LinkedIn</h3><p class="sub" id="d-cmt-sub"></p><figure id="d-cmt"></figure><p class="src">Source: LinkedIn page analytics and Meta Business Suite, per post</p></div>
 </div>
 <div class="card" style="margin-top:18px"><div class="head"><h3>Top content, last 30 days</h3><div class="seg" data-for="top" role="group"><button aria-pressed="true" data-v="all" type="button">All</button><button aria-pressed="false" data-v="LinkedIn" type="button">LinkedIn</button><button aria-pressed="false" data-v="Instagram" type="button">Instagram</button></div></div><p class="sub" id="d-top-sub"></p><div class="tblwrap tall"><table class="posts" id="d-top"></table></div></div>
 <div class="card" style="margin-top:18px"><h3>Every post</h3><div class="ctrl"><div class="seg" data-for="posts" role="group"><button aria-pressed="true" data-v="all" type="button">All</button><button aria-pressed="false" data-v="LinkedIn" type="button">LinkedIn</button><button aria-pressed="false" data-v="Instagram" type="button">Instagram</button></div><input aria-label="Search posts" id="p-search" placeholder="Search person, company or post" type="search"/><select aria-label="Month" id="p-month"></select><select aria-label="Search in" id="p-field"><option value="any">Search: anything</option><option value="person">Person only</option><option value="company">Company only</option><option value="title">Post copy only</option></select><span class="dim" id="p-count"></span></div><div class="tblwrap tall"><table class="posts" id="d-posts"></table></div></div>
@@ -617,6 +629,18 @@ async function boot() {
     getCSV('stat_tiles.csv'), getCSV('written_analysis.csv')
   ]);
   const T = Object.fromEntries(text.map(r => [r.key, r.text]));
+  // the combined analysis (written across every source) replaces the header and fills "The read"
+  const A = await fetch(`data/analysis.csv?v=${V}`, { cache: 'no-store' }).then(r => r.ok ? r.text() : '').then(t => t ? objects(parseCSV(t)) : []).catch(() => []);
+  const one = k => (A.find(r => r.kind === k) || {}).text;
+  for (const [k, key] of [['header_eyebrow', 'header.eyebrow'], ['header_title', 'header.title'], ['header_lede', 'header.lede'], ['header_meta', 'header.meta']]) if (one(k)) T[key] = one(k);
+  const put = (id, h) => { const e = document.getElementById(id); if (e) e.innerHTML = h; };
+  put('read-eyebrow', esc(one('read_eyebrow') || ''));
+  put('read-headline', esc(one('read_headline') || ''));
+  put('read-lede', esc(one('read_lede') || ''));
+  put('read-findings', A.filter(r => r.kind === 'finding').map(r => `<li><b>${esc(r.title)}</b>${esc(r.text)}</li>`).join(''));
+  put('read-actions', A.filter(r => r.kind === 'action').map((r, i) => `<div class="play"><div class="num">${i + 1}</div><div><b>${esc(r.title)}</b><div class="why">${esc(r.text)}</div></div></div>`).join(''));
+  put('read-notes', A.filter(r => r.kind === 'note').map(r => `<li><b>${esc(r.title)}</b> ${esc(r.text)}</li>`).join(''));
+  if (!A.length) { const sec = document.getElementById('read'); if (sec) sec.hidden = true; }
   document.querySelectorAll('[data-k]').forEach(e => { if (T[e.dataset.k] != null) e.innerHTML = T[e.dataset.k]; });
 
   // tiles
@@ -668,7 +692,7 @@ async function boot() {
       .catch(e => { f.innerHTML = `<p class="sub">Chart data unavailable (${esc(e.message)}).</p>`; console.error(f.id, e); });
   }));
   const stm = document.getElementById('st-monthly');
-  if (stm && tiles[0]) stm.textContent = `Monthly scorecard: ${tiles[0].data_vintage}, from Rob's monthly run`;
+  if (stm && tiles[0]) stm.textContent = `Monthly figures: ${tiles[0].data_vintage.replace(/ update /, ' pull ')}`;
   document.documentElement.dataset.ready = '1';
 }
 boot().catch(e => {
