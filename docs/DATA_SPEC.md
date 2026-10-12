@@ -1,6 +1,6 @@
 # Audience Scorecard: files the monthly run should save
 
-For Rob. The ATM Unified Dashboard now draws the Audience Scorecard from data files instead of typed-in HTML. The pilot uses the files from your Oct 7 handoff. To make it live, the monthly run should save the files below to SharePoint after each run. A scheduled task in Matt's account copies them to the dashboard.
+For Rob. The ATM Unified Dashboard draws the Audience Scorecard sections from data files instead of typed-in HTML. The pilot uses the files from your Oct 7 handoff. To make it live, the monthly run should save the files below to SharePoint after each run. A scheduled task in Matt's account copies them to the dashboard.
 
 The run no longer needs to edit or republish the scorecard HTML for the dashboard. It only writes these files.
 

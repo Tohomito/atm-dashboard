@@ -1,27 +1,26 @@
-# ATM Unified Dashboard
+# ATM Audience Dashboard
 
 Live at https://atm.mattbecher.com (also https://tohomito.github.io/atm-dashboard/), embedded in the Notion "Unified Dashboard" page. Team use only; search engines are blocked.
 
-The root page has two tabs, each loading its own page in a frame:
+One page, in the Audience Scorecard's design, built from two data sources:
 
-| Tab | Folder | Data | Refresh |
-|---|---|---|---|
-| Daily social | `daily/` | Reads the ATM Daily Social Pulse Google Sheet live every time the page opens | Whenever Hannah's daily run writes to the sheet |
-| Monthly audience scorecard | `scorecard/` | Reads the files in `scorecard/data/` | When new files from Rob's monthly run are copied in |
+| Sections | Data | Refresh |
+|---|---|---|
+| Now (daily social), the benchmark row in A, YouTube watch hours in B, F (every post) | The ATM Daily Social Pulse Google Sheet, read live each time the page opens, plus `js/archive.js` | Whenever Hannah's daily run writes to the sheet |
+| Header, A–E, Sep 19 baseline (01–08), footer | The files in `data/scorecard/` | When new files from Rob's monthly run are copied in |
 
-## daily/
+The header shows the date of each source.
 
-- `index.html`: layout, from Hannah's dashboard design
-- `live.js`: reads the Daily Pulse, Creative and Flat Feed tabs and computes every number
-- `archive.js`: fixed history the sheet doesn't hold (posts through Oct 5, 2026; LinkedIn monthly totals May to Sep 2026)
+## Files
 
-The sheet must stay shared as "Anyone with the link can view" (or edit). If the sheet's column layout changes, `live.js` needs a matching update.
+- `index.html`: the page. Layout and chart code come from Rob's scorecard. Every scorecard number and text block is filled from `data/scorecard/`.
+- `data/scorecard/`: the monthly files (pilot: Rob's Oct 7, 2026 handoff export). `chart_style.json` holds how each chart is drawn and belongs to the dashboard, not the monthly run.
+- `js/daily_data.js`: reads the Daily Pulse, Creative and Flat Feed tabs and builds the daily series.
+- `js/daily_view.js`: draws the daily sections with the scorecard's chart code.
+- `js/archive.js`: history the sheet doesn't hold (posts through Oct 5, 2026; LinkedIn monthly totals May to Sep 2026).
+- `docs/DATA_SPEC.md`: the files Rob's monthly run must save to SharePoint.
 
-## scorecard/
+## Rules that keep it working
 
-- `index.html`: Rob's Audience Scorecard design and chart code. Every number and text block is filled from `data/`.
-- `data/`: the monthly files. The pilot uses Rob's Oct 7, 2026 handoff export (Sep 29 run, plus the Sep 19 baseline).
-- `data/chart_style.json`: how each chart is drawn (type, colours, scale, benchmark lines). This belongs to the dashboard, not to the monthly run.
-- `DATA_SPEC.md`: the exact files Rob's run must save to SharePoint for the scorecard to update.
-
-To refresh by hand, replace the files in `scorecard/data/` with a new set that follows `DATA_SPEC.md` and commit.
+- The Google Sheet must stay shared as "Anyone with the link can view" (or edit). If its column layout changes, `js/daily_data.js` needs a matching update.
+- Monthly files must follow `docs/DATA_SPEC.md`. To refresh by hand, replace the files in `data/scorecard/` and commit.
