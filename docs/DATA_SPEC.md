@@ -63,7 +63,7 @@ All files are UTF-8 CSV with a header row. Numbers can include thousands commas.
 
 ## Wording
 
-Name sources by platform and date, not by person or by dashboard. Write "read from LinkedIn admin (Sep 29)", not "read in Rob's Chrome". The page is one dashboard and should read as one.
+Name sources by platform and date, not by person or by dashboard. Write "read from LinkedIn admin (Sep 29)", not "read in Rob's Chrome". The page is one dashboard and should read as one. Name baselines and snapshots by month ("September baseline"), not by day.
 
 ## The combined analysis
 

@@ -17,6 +17,7 @@ function lineGaps(id, cats, series, opt = {}) {
   if (!all.length) { host.innerHTML = '<p class="sub">No data in this range.</p>'; return; }
   let minv = opt.zero ? 0 : Math.min(...all), maxv = Math.max(...all);
   if (!opt.zero) { const pad = (maxv - minv) * 0.12 || maxv * 0.02 || 1; minv = Math.max(0, minv - pad); maxv = maxv + pad; } else maxv *= 1.1;
+  if (opt.intTicks) { minv = Math.floor(minv); maxv = minv + Math.max(4, Math.ceil((Math.ceil(maxv) - minv) / 4) * 4); }
   const x0 = padL, x1 = W - padR, y0 = H - padB, y1 = padT, n = cats.length;
   const sx = i => n > 1 ? x0 + (x1 - x0) * i / (n - 1) : (x0 + x1) / 2, sy = v => y0 - (y0 - y1) * (v - minv) / (maxv - minv);
   for (let t = 0; t <= 4; t++) { const v = minv + (maxv - minv) * t / 4, y = sy(v); svg.appendChild(el('line', { x1: x0, y1: y, x2: x1, y2: y, class: 'gridline' })); svg.appendChild(el('text', { x: x0 - 8, y: y + 4, class: 'tick', 'text-anchor': 'end' }, opt.fmt(v))); }
@@ -104,11 +105,11 @@ function render(S) {
   const slice = r => r === 'all' ? liDays : liDays.slice(-parseInt(r));
   const draw = {
     liimpr: r => { const rows = slice(r); lineGaps('d-liimpr', rows.map(d => mdy(d.date)), [{ name: 'Organic impressions', color: S1, values: rows.map(d => d.li_org) }], { fmt: C.fmtK, zero: true, aria: 'LinkedIn organic impressions per day' }); },
-    lifoll: r => { const rows = slice(r); lineGaps('d-lifoll', rows.map(d => mdy(d.date)), [{ name: 'Followers', color: S1, values: rows.map(d => d.li_runf) }], { fmt: C.fmtInt, aria: 'LinkedIn followers' }); },
+    lifoll: r => { const rows = slice(r); lineGaps('d-lifoll', rows.map(d => mdy(d.date)), [{ name: 'Followers', color: S1, values: rows.map(d => d.li_runf) }], { fmt: C.fmtInt, intTicks: true, aria: 'LinkedIn followers' }); },
     igreach: r => { const rows = slice(r); lineGaps('d-igreach', rows.map(d => mdy(d.date)), [{ name: 'Reach', color: S2, values: rows.map(d => d.ig_reach) }, { name: 'Views', color: S4, dash: true, values: rows.map(d => d.ig_views) }], { fmt: C.fmtK, zero: true, aria: 'Instagram 28-day reach and views' }); },
-    igfoll: r => { const rows = slice(r); lineGaps('d-igfoll', rows.map(d => mdy(d.date)), [{ name: 'Followers', color: S2, values: rows.map(d => d.ig_runf) }], { fmt: C.fmtInt, aria: 'Instagram followers' }); }
+    igfoll: r => { const rows = slice(r); lineGaps('d-igfoll', rows.map(d => mdy(d.date)), [{ name: 'Followers', color: S2, values: rows.map(d => d.ig_runf) }], { fmt: C.fmtInt, intTicks: true, aria: 'Instagram followers' }); }
   };
-  for (const k in draw) { draw[k]('30'); seg(k, draw[k]); }
+  for (const k in draw) { draw[k]('7'); seg(k, draw[k]); }
   const firstIG = DAILY.find(d => d.ig_reach != null), firstIGF = DAILY.find(d => d.ig_runf != null);
   if (firstIG) setHTML('d-igreach-sub', `Meta's 28-day rolling reach and views, read most days since ${mdy(firstIG.date)}. Gaps are days with no read.`);
   if (firstIGF) setHTML('d-igfoll-sub', `Lifetime follower total, read since ${mdy(firstIGF.date)}.`);
