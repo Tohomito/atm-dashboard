@@ -221,8 +221,17 @@ function buildBench(posts) {
 }
 
 
+/* LinkedIn competitor table: ATM's own total followers, and the peer pages it is measured against */
+function buildCompetitors(rows) {
+  const h = rows.findIndex(r => (r[0] || "").trim() === "Rank");
+  if (h < 0) return { rows: [], note: "" };
+  const note = rows.slice(0, h).map(r => r[0]).filter(Boolean).find(t => /pull|refresh|last 30/i.test(t)) || "";
+  const out = rows.slice(h + 1).filter(r => num(r[0]) != null && r[1]).map(r => ({ rank: num(r[0]), company: r[1].trim(), total: num(r[2]), newf: num(r[3]), posts: num(r[4]), comments: num(r[5]) }));
+  return { rows: out, note, atm: out.find(r => /\(ATM\)/.test(r.company)) || null, peer: out.find(r => /^At The Moment$/i.test(r.company)) || null };
+}
+
 async function load() {
-  const [daily, creative, flat] = await Promise.all(["Daily Pulse", "Creative", "Flat Feed"].map(readTab));
+  const [daily, creative, flat, comp] = await Promise.all(["Daily Pulse", "Creative", "Flat Feed", "Competitors"].map(n => readTab(n).catch(e => n === "Competitors" ? [] : Promise.reject(e))));
   const DAILY = buildDaily(daily);
   if (!DAILY.length) throw new Error("the Daily Pulse tab had no dated rows");
   const asOf = DAILY.filter(d => d.li_org != null).at(-1).date;
@@ -230,6 +239,7 @@ async function load() {
   const F = buildFlat(flat);
   const S = { DAILY, POSTS, YT: buildYouTube(F), GA: buildGA(F) };
   S.MO = buildMonths(DAILY, POSTS);
+  S.COMP = buildCompetitors(comp);
   return S;
 }
 

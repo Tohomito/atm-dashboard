@@ -32,7 +32,20 @@ body[data-view="actions"] .wrap>:not(.toolbar):not(#actions):not(#tip){display:n
 body:not([data-view="actions"]) #actions{display:none}
 #glance{padding-top:28px}
 .glance-head{display:flex;justify-content:space-between;align-items:flex-end;gap:10px;flex-wrap:wrap;margin-bottom:12px}
-.glance{margin:0;font-size:16px;line-height:1.6;max-width:80ch;color:var(--ink)}
+.glance{margin:0;padding-left:20px;display:grid;gap:7px;font-size:14.5px;line-height:1.5}
+.glance-headline{font-family:"Archivo",sans-serif;font-size:19px;font-weight:700;line-height:1.3;margin:0 0 10px}
+.glance-tabs{display:flex;flex-wrap:wrap;gap:8px;min-width:0;max-width:100%}
+@media (max-width:600px){.glance-head{flex-wrap:wrap}.glance-tabs{width:100%}.glance-tabs .seg{max-width:100%;overflow-x:auto;scrollbar-width:none}.glance-tabs .seg button{flex:none}}
+.glance-body{display:grid;gap:18px;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);align-items:start}
+@media (max-width:860px){.glance-body{grid-template-columns:1fr}}
+#overview{padding-top:28px}
+.overview{display:grid;gap:12px;grid-template-columns:minmax(0,1.7fr) repeat(3,minmax(0,1fr))}
+@media (max-width:980px){.overview{grid-template-columns:repeat(2,minmax(0,1fr))}.overview .ov-wide{grid-column:span 2}}
+@media (max-width:600px){.overview{grid-template-columns:1fr}.overview .ov-wide{grid-column:auto}}
+.aud{display:grid;gap:5px;margin:4px 0}
+.audrow{display:grid;grid-template-columns:78px 1fr 60px;align-items:center;gap:8px;font-size:12px;color:var(--ink2)}
+.audrow i{display:block;height:8px;border-radius:4px}
+.audrow b{text-align:right;font-weight:600;color:var(--ink)}
 .measures{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr))}
 .measure{background:var(--surface);border:1px solid var(--ring);border-radius:6px;padding:14px 16px;display:grid;gap:6px;align-content:start}
 .measure .mk{font-size:12px;color:var(--ink2);font-weight:600}
@@ -171,10 +184,29 @@ a{color:var(--ink)}
 <p class="lede" data-k="header.lede"></p>
 <div class="meta" data-k="header.meta"></div><div class="meta status-strip" data-added=""><span id="st-daily">Daily social: loading…</span><span id="st-monthly"></span></div>
 </header>
+<section data-added="" id="overview">
+<div class="sec-head"><span class="eyebrow">Overview</span><h2>Where ATM stands</h2></div>
+<div class="overview">
+<div class="measure ov-wide" id="ov-audience"><div class="mk">Total audience</div><div class="mp dim">Loading…</div></div>
+<div class="measure" id="ov-site"><div class="mk">Site traffic</div></div>
+<div class="measure" id="ov-newret"><div class="mk">New vs returning visitors</div></div>
+<div class="measure" id="ov-yoy"><div class="mk">Year over year</div></div>
+</div>
+<h3 style="margin:22px 0 10px">Scorecards: the last full month against the three before</h3>
+<div class="tiles" id="a-bench-tiles"></div>
+<p class="sub" id="a-bench-note" style="margin-top:10px;max-width:80ch"></p>
+</section>
+
 <section data-added="" id="glance">
-<div class="glance-head"><div><span class="eyebrow">At a glance</span><h2 id="glance-title">The latest, by time frame</h2></div>
-<div aria-label="Time frame" class="seg" data-for="glance" role="group"><button aria-pressed="true" data-v="7" type="button">7 days</button><button aria-pressed="false" data-v="14" type="button">14 days</button><button aria-pressed="false" data-v="30" type="button">30 days</button><button aria-pressed="false" data-v="all" type="button">All</button></div></div>
-<p class="glance" id="glance-list"><span class="dim">Loading…</span></p>
+<div class="glance-head"><div><span class="eyebrow">At a glance</span><h2 id="glance-title">The latest</h2></div>
+<div class="glance-tabs">
+<div aria-label="Channel" class="seg" data-for="channel" role="group"><button aria-pressed="true" data-v="all" type="button">All</button><button aria-pressed="false" data-v="li" type="button">LinkedIn</button><button aria-pressed="false" data-v="ig" type="button">Instagram</button><button aria-pressed="false" data-v="yt" type="button">YouTube</button><button aria-pressed="false" data-v="nl" type="button">Newsletter</button><button aria-pressed="false" data-v="site" type="button">Site</button></div>
+<div aria-label="Time frame" class="seg" data-for="glance" role="group"><button aria-pressed="true" data-v="7" type="button">7 days</button><button aria-pressed="false" data-v="14" type="button">14 days</button><button aria-pressed="false" data-v="30" type="button">30 days</button><button aria-pressed="false" data-v="all" type="button">All</button></div>
+</div></div>
+<div class="glance-body">
+<div><p class="glance-headline" id="glance-headline"></p><ul class="glance" id="glance-list"><li class="dim">Loading…</li></ul></div>
+<div class="card"><figure id="glance-chart"></figure><p class="sub" id="glance-chart-cap"></p></div>
+</div>
 <h3 style="margin:22px 0 10px">The measures that matter most</h3>
 <div class="measures" id="measures"></div>
 <p class="sub" id="measures-note" style="margin-top:10px;max-width:80ch"></p>
@@ -183,7 +215,9 @@ a{color:var(--ink)}
 <div class="sec-head"><span class="eyebrow" id="actions-eyebrow">Actions</span><h2>What to do next</h2><p>Ranked suggestions from the latest analysis, which reads every source on the dashboard together with the optimization log.</p></div>
 <div class="grid two" id="actions-grid">
 <div class="card"><h3>Priorities</h3><div class="plays" id="read-actions"></div></div>
-<div class="card"><h3>Catch posts tagged to the wrong page</h3><p class="sub">"At The Moment" is a separate LinkedIn page with a similar name. These steps catch follows and tags meant for ATM that land there.</p><div class="plays" id="tag-actions"></div></div>
+<div class="card"><h3>Catch posts tagged to the wrong page</h3><p class="sub">"At The Moment" is a separate LinkedIn page with a similar name. These steps catch follows and tags meant for ATM that land there.</p><p class="sub" id="peer-watch"></p><div class="plays" id="tag-actions"></div></div>
+<div class="card"><h3>Setup tasks</h3><p class="sub">Access and tracking work that unlocks parts of the dashboard. Each names an owner.</p><div class="plays" id="setup-actions"></div></div>
+<div class="card"><h3>Tracking issues on record</h3><p class="sub">Known tagging and measurement problems that skew the numbers until they are fixed.</p><div class="plays" id="tracking-actions"></div></div>
 <div class="card"><h3 data-k="D.card1.title"></h3><div class="plays" data-plays="flag for the team"></div></div></div>
 </section>
 
@@ -215,7 +249,7 @@ a{color:var(--ink)}
 <section data-sec="A">
 <div class="sec-head"><span class="eyebrow" data-k="A.eyebrow"></span><h2 data-k="A.headline"></h2><p data-k="A.lede"></p></div>
 <div class="tiles" data-tiles="A · September at a glance|1"></div>
-<div data-added=""><h3 style="margin:26px 0 10px">Against the trailing benchmark</h3><div class="tiles" id="a-bench-tiles"></div><p class="sub" id="a-bench-note" style="margin-top:10px;max-width:80ch"></p></div></section>
+</section>
 <section data-sec="B">
 <div class="sec-head"><span class="eyebrow" data-k="B.eyebrow"></span><h2 data-k="B.headline"></h2><p data-k="B.lede"></p></div>
 <div class="grid two">
@@ -690,6 +724,9 @@ async function boot() {
   put('read-findings', A.filter(r => r.kind === 'finding').map(r => `<li><b>${esc(r.title)}</b>${esc(r.text)}</li>`).join(''));
   put('read-actions', A.filter(r => r.kind === 'action').map((r, i) => `<div class="play"><div class="num">${i + 1}</div><div><b>${esc(r.title)}</b><div class="why">${esc(r.text)}</div></div></div>`).join(''));
   put('tag-actions', A.filter(r => r.kind === 'action_tag').map((r, i) => `<div class="play"><div class="num">${i + 1}</div><div><b>${esc(r.title)}</b><div class="why">${esc(r.text)}</div></div></div>`).join(''));
+  const plays = kind => A.filter(r => r.kind === kind).map((r, i) => `<div class="play"><div class="num">${i + 1}</div><div><b>${esc(r.title)}</b><div class="why">${esc(r.text)}</div></div></div>`).join('');
+  put('setup-actions', plays('setup'));
+  put('tracking-actions', plays('tracking'));
   if (one('header_eyebrow')) put('actions-eyebrow', esc('Actions · ' + (one('header_eyebrow').match(/written [^·]+/i) || [''])[0].trim()));
   window.ATMAnalysis = A;
   put('read-notes', A.filter(r => r.kind === 'note').map(r => `<li><b>${esc(r.title)}</b> ${esc(r.text)}</li>`).join(''));
@@ -761,7 +798,7 @@ window.ATMScoreReady = boot().catch(e => {
 window.ATMChart = { el, css, hover, showTip, hideTip, bullet, hbar, vbar, vstack, line, stack100, fmtPct, fmtInt, fmtK };
 })();
 </script>
-<script src="js/archive.js?v=20261015160544"></script>
-<script src="js/daily_data.js?v=20261015160544"></script>
-<script src="js/daily_view.js?v=20261015160544"></script>
-<script src="js/glance.js?v=20261015160544"></script>
+<script src="js/archive.js?v=20261015161927"></script>
+<script src="js/daily_data.js?v=20261015161927"></script>
+<script src="js/daily_view.js?v=20261015161927"></script>
+<script src="js/glance.js?v=20261015161927"></script>

@@ -39,6 +39,8 @@ function lineGaps(id, cats, series, opt = {}) {
   host.appendChild(svg);
 }
 
+window.ATMLine = lineGaps;
+
 /* segmented buttons: <div class="seg" data-for="chartKey"><button data-v="..."> */
 function seg(key, onPick) {
   const box = document.querySelector(`.seg[data-for="${key}"]`); if (!box) return;
