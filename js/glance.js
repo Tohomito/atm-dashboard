@@ -65,21 +65,19 @@ function windowFacts(S, W, tiles) {
   return f;
 }
 
-function who(p) { return p.person ? `${esc(p.person)}${p.company ? `, ${esc(p.company)}` : ''}` : esc(p.title.length > 60 ? p.title.slice(0, 58) + '…' : p.title); }
+function who(p) { return p.person ? `${esc(p.person)}${p.company ? `, ${esc(p.company)}` : ''}` : esc(p.title.split(/ - | \(/)[0].length <= 80 ? p.title.split(/ - | \(/)[0] : p.title.slice(0, 78) + '…'); }
 
 function glanceHTML(f) {
-  const span = f.all ? `since ${mdy(f.from)}` : `over the ${f.W} days to ${mdy(f.AS_OF)}`;
+  const upDown = p => p == null ? '' : `${p >= 0 ? 'up' : 'down'} ${Math.abs(p).toFixed(0)}%`;
+  const before = f.all ? '' : `the ${f.W} days before`;
+  const span = f.all ? `since ${mdy(f.from)}` : `in the ${f.W} days to ${mdy(f.AS_OF)}`;
   const b = [];
-  b.push(`LinkedIn organic impressions: <b>${full(f.imp)}</b> ${span}${f.impPrev != null ? ` (${pctTxt(pct(f.imp, f.impPrev))} on the ${f.W} days before)` : ''}.`);
-  b.push(`LinkedIn gained <b>${full(f.liGain)}</b> organic followers${f.liGainPrev != null ? ` (${full(f.liGainPrev)} the ${f.W} days before)` : ''}; Instagram followers ${f.igFollChange != null ? `moved ${sign(f.igFollChange)}${full(f.igFollChange)} ` : ''}to <b>${full(f.igFoll)}</b>.`);
-  if (f.igReach != null) b.push(`Instagram's 28-day reach is <b>${fmt(f.igReach)}</b> as of ${mdy(f.igReachDate)}${f.igReachThen ? ` (${pctTxt(pct(f.igReach, f.igReachThen))} on the ${mdy(f.igReachThenDate)} read)` : ''}.`);
-  b.push(`Posts published ${slash(f.postStart)}–${slash(f.postEnd)}: <b>${f.liPosts} on LinkedIn and ${f.igPosts} on Instagram</b>. LinkedIn posts drew <b>${full(f.liComments)} comments</b>${f.cpp != null ? `, ${f.cpp.toFixed(1)} per post` : ''}${f.cppPrev != null ? ` (${f.cppPrev.toFixed(1)} the ${f.W} days before)` : ''}.${!f.all && f.W <= 14 ? ' Posts from the last few days are still collecting comments, so short windows read low.' : ''}`);
-  const tops = [];
-  if (f.topLI) tops.push(`on LinkedIn, ${who(f.topLI)} (${mdy(f.topLI.date)}) with <b>${full(f.topLI.reach)} impressions</b>`);
-  if (f.topIG) tops.push(`on Instagram, ${who(f.topIG)} (${mdy(f.topIG.date)}) with <b>${full(f.topIG.views)} views</b>`);
-  if (tops.length) b.push(`Best post ${tops.join('; ')}.`);
-  if (f.ytGain != null) b.push(`YouTube gained <b>${full(f.ytGain)} subscribers</b> since ${mdy(f.ytFrom)}, to ${full(f.ytTotal)}.`);
-  if ((f.all || f.W >= 30) && (f.nl || f.sess)) b.push(`Monthly (${esc(f.monthly)}): ${f.nl ? `<b>${esc(f.nl.value_as_published)}</b> active newsletter subscribers` : ''}${f.nl && f.sess ? '; ' : ''}${f.sess ? `<b>${esc(f.sess.value_as_published)}</b> site sessions (${esc(f.sess.detail.split('·')[0].trim())})` : ''}.`);
+  b.push(`LinkedIn drew <b>${full(f.imp)}</b> organic impressions ${span}${f.impPrev != null ? `, ${upDown(pct(f.imp, f.impPrev))} on ${before}` : ''}, and gained <b>${full(f.liGain)}</b> organic followers${f.liGainPrev != null ? `, against ${full(f.liGainPrev)} in ${before}` : ''}.`);
+  b.push(`Instagram ${f.igFollChange != null ? `${f.igFollChange >= 0 ? 'added' : 'lost'} ${full(Math.abs(f.igFollChange))} followers, to <b>${full(f.igFoll)}</b>` : `has <b>${full(f.igFoll)}</b> followers`}${f.igReach != null ? `, and its 28-day reach stood at <b>${fmt(f.igReach)}</b> on ${mdy(f.igReachDate)}${f.igReachThen ? `, ${upDown(pct(f.igReach, f.igReachThen))} on the ${mdy(f.igReachThenDate)} reading` : ''}` : ''}.`);
+  b.push(`ATM published <b>${f.liPosts} posts on LinkedIn and ${f.igPosts} on Instagram</b> between ${mdy(f.postStart)} and ${mdy(f.postEnd)}. The LinkedIn posts drew <b>${full(f.liComments)} comments</b>${f.cpp != null ? `, ${f.cpp.toFixed(1)} per post` : ''}${f.cppPrev != null ? ` against ${f.cppPrev.toFixed(1)} in ${before}` : ''}${!f.all && f.W <= 14 ? ', though posts from the last few days are still collecting comments' : ''}.`);
+  if (f.topLI) b.push(`The top LinkedIn post was ${who(f.topLI)} (${mdy(f.topLI.date)}), with <b>${full(f.topLI.reach)} impressions</b>${f.topIG ? `; on Instagram it was ${who(f.topIG)} (${mdy(f.topIG.date)}), with <b>${full(f.topIG.views)} views</b>` : ''}.`);
+  if (f.ytGain != null) b.push(`YouTube gained <b>${full(f.ytGain)} subscribers</b> since ${mdy(f.ytFrom)}, reaching ${full(f.ytTotal)}.`);
+  if ((f.all || f.W >= 30) && (f.nl || f.sess)) b.push(`Over ${esc(f.monthly)}, ${f.nl ? `the newsletter had <b>${esc(f.nl.value_as_published)}</b> active subscribers` : ''}${f.nl && f.sess ? ' and ' : ''}${f.sess ? `the site had <b>${esc(f.sess.value_as_published)}</b> sessions, ${esc((f.sess.detail.split('·')[0].match(/[+−-][\d.]+%/) || [''])[0]).replace(/^\+/, 'up ').replace(/^[−-]/, 'down ')} on the month before` : ''}.`);
   return b;
 }
 
@@ -115,13 +113,13 @@ function measuresHTML(cards) {
 Promise.all([window.ATMDailyReady, window.ATMScoreReady]).then(([S, score]) => {
   const tiles = score ? score.tiles : [];
   $('loaded-at').textContent = 'Loaded ' + new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
-  if (!S) { $('glance-list').innerHTML = '<li>Daily figures could not load. Try Refresh.</li>'; return; }
+  if (!S) { $('glance-list').textContent = 'Daily figures could not load. Try Refresh.'; return; }
   const W = { '7': 7, '14': 14, '30': 30, all: 'all' };
   const facts = Object.fromEntries(Object.keys(W).map(k => [k, windowFacts(S, W[k], tiles)]));
   const show = k => {
     const f = facts[k];
     $('glance-title').textContent = f.all ? `Everything since ${longDate(f.from)}` : `The last ${f.W} days, to ${longDate(f.AS_OF)}`;
-    $('glance-list').innerHTML = glanceHTML(f).map(x => `<li>${x}</li>`).join('');
+    $('glance-list').innerHTML = glanceHTML(f).join(' ');
     $('measures').innerHTML = measuresHTML(measureCards(f, tiles));
   };
   const box = document.querySelector('.seg[data-for="glance"]');

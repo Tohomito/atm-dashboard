@@ -32,7 +32,7 @@ body[data-view="actions"] .wrap>:not(.toolbar):not(#actions):not(#tip){display:n
 body:not([data-view="actions"]) #actions{display:none}
 #glance{padding-top:28px}
 .glance-head{display:flex;justify-content:space-between;align-items:flex-end;gap:10px;flex-wrap:wrap;margin-bottom:12px}
-.glance{margin:0;padding-left:20px;display:grid;gap:8px;font-size:15px;max-width:86ch}
+.glance{margin:0;font-size:16px;line-height:1.6;max-width:80ch;color:var(--ink)}
 .measures{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr))}
 .measure{background:var(--surface);border:1px solid var(--ring);border-radius:6px;padding:14px 16px;display:grid;gap:6px;align-content:start}
 .measure .mk{font-size:12px;color:var(--ink2);font-weight:600}
@@ -174,7 +174,7 @@ a{color:var(--ink)}
 <section data-added="" id="glance">
 <div class="glance-head"><div><span class="eyebrow">At a glance</span><h2 id="glance-title">The latest, by time frame</h2></div>
 <div aria-label="Time frame" class="seg" data-for="glance" role="group"><button aria-pressed="true" data-v="7" type="button">7 days</button><button aria-pressed="false" data-v="14" type="button">14 days</button><button aria-pressed="false" data-v="30" type="button">30 days</button><button aria-pressed="false" data-v="all" type="button">All</button></div></div>
-<ul class="glance" id="glance-list"><li class="dim">Loading…</li></ul>
+<p class="glance" id="glance-list"><span class="dim">Loading…</span></p>
 <h3 style="margin:22px 0 10px">The measures that matter most</h3>
 <div class="measures" id="measures"></div>
 <p class="sub" id="measures-note" style="margin-top:10px;max-width:80ch"></p>
@@ -761,7 +761,7 @@ window.ATMScoreReady = boot().catch(e => {
 window.ATMChart = { el, css, hover, showTip, hideTip, bullet, hbar, vbar, vstack, line, stack100, fmtPct, fmtInt, fmtK };
 })();
 </script>
-<script src="js/archive.js?v=20261015155753"></script>
-<script src="js/daily_data.js?v=20261015155753"></script>
-<script src="js/daily_view.js?v=20261015155753"></script>
-<script src="js/glance.js?v=20261015155753"></script>
+<script src="js/archive.js?v=20261015160544"></script>
+<script src="js/daily_data.js?v=20261015160544"></script>
+<script src="js/daily_view.js?v=20261015160544"></script>
+<script src="js/glance.js?v=20261015160544"></script>
