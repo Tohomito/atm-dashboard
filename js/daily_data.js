@@ -99,7 +99,7 @@ function buildYouTube(flat) {
   if (subsNow) { const back = subsRows.filter(r => r.date <= addDays(subsNow.date, -28)).at(-1); if (back) subs28 = subsNow.value - back.value; }
   return {
     months: list,
-    total_subs: subsNow ? subsNow.value : null, subsDate: subsNow ? subsNow.date : null, subs28,
+    total_subs: subsNow ? subsNow.value : null, subsDate: subsNow ? subsNow.date : null, subs28, subsRows,
     last28: { views: latest("views (last 28")?.value ?? null, watch: latest("watch time (last 28")?.value ?? null, date: latest("views (last 28")?.date ?? null }
   };
 }

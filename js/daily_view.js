@@ -230,9 +230,10 @@ function render(S) {
   document.documentElement.dataset.dailyReady = '1';
 }
 
-D.load().then(render).catch(e => {
+window.ATMDailyReady = D.load().then(S => { render(S); return S; }).catch(e => {
   console.error(e);
   setHTML('st-daily', `<span style="color:var(--crit)">Daily figures could not load: ${esc(e.message)}. Try refreshing.</span>`);
   document.documentElement.dataset.dailyReady = 'error';
+  return null;
 });
 })();

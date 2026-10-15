@@ -3,4 +3,4 @@ Fix,Where,Effect
 "Set UTM medium to ""email""","beehiiv → Settings → General Info → UTM Analytics; and the episode-link template (""owned_audience"")","Newsletter traffic lands in Email for every tool, not just one custom report"
 "Clean episode URLs; add title tag, meta description, VideoObject schema, publish date, transcript",atm.media episode template,The 190 invisible pages become rankable for guest and topic queries
 Submit a video sitemap; request indexing,Search Console,Indexing in weeks instead of never
-"Merge ""At The Moment"" into the ATM page",LinkedIn page-merge request,+113 followers/month stop landing on a page nobody posts to
+"Catch tags and follows meant for ATM that land on ""At The Moment""",LinkedIn mentions and the competitor table,Mis-tagged posts get fixed while they are fresh

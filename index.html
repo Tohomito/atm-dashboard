@@ -19,6 +19,35 @@ td.beat{color:var(--goodtext);font-weight:600}
 .notes{margin:6px 0 0;padding-left:18px;display:grid;gap:6px;font-size:13.5px;color:var(--ink2)}
 table.posts td{white-space:nowrap}
 table.posts td.post{white-space:normal;min-width:260px;max-width:440px}
+.toolbar{position:sticky;top:0;z-index:5;display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;padding:10px 0;background:var(--plane);border-bottom:1px solid var(--grid)}
+.toolbar .ask{display:flex;flex:1 1 320px;gap:6px;min-width:0}
+.toolbar .ask input{flex:1;min-width:0;font:13.5px "IBM Plex Sans",system-ui,sans-serif;padding:6px 10px;border:1px solid var(--ring);border-radius:6px;background:var(--surface);color:var(--ink)}
+.toolbar button{font:600 12.5px "IBM Plex Sans",system-ui,sans-serif;padding:6px 12px;border:1px solid var(--ring);border-radius:6px;background:var(--surface);color:var(--ink);cursor:pointer;white-space:nowrap}
+.toolbar .ask button{background:var(--ink);color:var(--plane);border-color:var(--ink)}
+.toolbar .refresh{display:flex;align-items:center;gap:8px;font-size:12px}
+.toolbar .ask-note{flex-basis:100%;margin:0;font-size:12.5px}
+.toolbar button:focus-visible,.toolbar input:focus-visible{outline:2px solid var(--s1);outline-offset:1px}
+@media (max-width:600px){.toolbar{position:static}}
+body[data-view="actions"] .wrap>:not(.toolbar):not(#actions):not(#tip){display:none}
+body:not([data-view="actions"]) #actions{display:none}
+#glance{padding-top:28px}
+.glance-head{display:flex;justify-content:space-between;align-items:flex-end;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.glance{margin:0;padding-left:20px;display:grid;gap:8px;font-size:15px;max-width:86ch}
+.measures{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr))}
+.measure{background:var(--surface);border:1px solid var(--ring);border-radius:6px;padding:14px 16px;display:grid;gap:6px;align-content:start}
+.measure .mk{font-size:12px;color:var(--ink2);font-weight:600}
+.measure .mv{font-family:"Archivo",sans-serif;font-size:30px;font-weight:800;line-height:1}
+.measure .mp{font-size:11.5px;color:var(--muted)}
+.measure .chip{justify-self:start;font:600 11.5px "IBM Plex Mono",monospace;padding:2px 8px;border-radius:999px;background:var(--grid);color:var(--ink2)}
+.measure .chip.up{background:var(--wash-good);color:var(--goodtext)}
+.measure .chip.down{background:var(--wash-crit);color:var(--crit)}
+.measure .bars{display:grid;gap:3px;margin-top:2px}
+.measure .bar{display:grid;grid-template-columns:62px 1fr;align-items:center;gap:6px;font-size:11px;color:var(--muted)}
+.measure .bar i{display:block;height:7px;border-radius:4px;background:var(--s1)}
+.measure .bar.prev i{background:var(--axis)}
+.measure .mn{font-size:12.5px;color:var(--ink2)}
+.findings.two-col{columns:2 420px;column-gap:28px;display:block}
+.findings.two-col li{break-inside:avoid;margin-bottom:12px}
 .status-strip span{display:inline-flex;align-items:center;gap:6px}
 .status-strip span::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--good)}
 </style></head><body>
@@ -129,19 +158,40 @@ a{color:var(--ink)}
 </style>
 <div aria-live="polite" id="tip" role="status"></div>
 <div class="wrap">
+
+<div class="toolbar" data-added="">
+<div aria-label="View" class="seg viewsw" data-for="view" role="group"><button aria-pressed="true" data-v="data" type="button">Data &amp; insights</button><button aria-pressed="false" data-v="actions" type="button">Actions</button></div>
+<form autocomplete="off" class="ask" id="ask-form"><input aria-label="Ask for a custom insight" id="ask-q" placeholder="Ask for a custom insight, e.g. Which guests drive the most comments?" type="text"/><button type="submit">Ask Claude</button></form>
+<div class="refresh"><button id="refresh-btn" title="Reload the latest data" type="button">↻ Refresh</button><span class="dim" id="loaded-at"></span></div>
+<p class="ask-note dim" hidden="" id="ask-note"></p>
+</div>
 <header>
 <span class="eyebrow" data-k="header.eyebrow"></span>
 <h1 data-k="header.title"></h1>
 <p class="lede" data-k="header.lede"></p>
 <div class="meta" data-k="header.meta"></div><div class="meta status-strip" data-added=""><span id="st-daily">Daily social: loading…</span><span id="st-monthly"></span></div>
 </header>
+<section data-added="" id="glance">
+<div class="glance-head"><div><span class="eyebrow">At a glance</span><h2 id="glance-title">The latest, by time frame</h2></div>
+<div aria-label="Time frame" class="seg" data-for="glance" role="group"><button aria-pressed="true" data-v="7" type="button">7 days</button><button aria-pressed="false" data-v="14" type="button">14 days</button><button aria-pressed="false" data-v="30" type="button">30 days</button><button aria-pressed="false" data-v="all" type="button">All</button></div></div>
+<ul class="glance" id="glance-list"><li class="dim">Loading…</li></ul>
+<h3 style="margin:22px 0 10px">The measures that matter most</h3>
+<div class="measures" id="measures"></div>
+<p class="sub" id="measures-note" style="margin-top:10px;max-width:80ch"></p>
+</section>
+<section data-added="" id="actions">
+<div class="sec-head"><span class="eyebrow" id="actions-eyebrow">Actions</span><h2>What to do next</h2><p>Ranked suggestions from the latest analysis, which reads every source on the dashboard together with the optimization log.</p></div>
+<div class="grid two" id="actions-grid">
+<div class="card"><h3>Priorities</h3><div class="plays" id="read-actions"></div></div>
+<div class="card"><h3>Catch posts tagged to the wrong page</h3><p class="sub">"At The Moment" is a separate LinkedIn page with a similar name. These steps catch follows and tags meant for ATM that land there.</p><div class="plays" id="tag-actions"></div></div>
+<div class="card"><h3 data-k="D.card1.title"></h3><div class="plays" data-plays="flag for the team"></div></div></div>
+</section>
+
+
 
 <section data-added="" id="read">
 <div class="sec-head"><span class="eyebrow" id="read-eyebrow"></span><h2 id="read-headline"></h2><p id="read-lede"></p></div>
-<div class="grid two">
-<div class="card"><h3>What happened</h3><ol class="findings" id="read-findings"></ol></div>
-<div class="card"><h3>What to do next</h3><div class="plays" id="read-actions"></div></div>
-</div>
+<div class="card"><h3>What happened</h3><ol class="findings two-col" id="read-findings"></ol><p class="sub" style="margin-top:6px">What to do about it is in the <a data-goto="actions" href="#actions">Actions view</a>.</p></div>
 <div class="card" style="margin-top:18px"><h3>Reading the numbers</h3><ul class="notes" id="read-notes"></ul></div>
 </section>
 
@@ -186,7 +236,7 @@ a{color:var(--ink)}
 <div class="tiles" data-tiles="D · Executive appearance tally|1" style="margin-bottom:18px"></div>
 <div class="grid two">
 <div class="card" data-chart-card="s-sect"><h3 data-chart-text="card_title"></h3><p class="sub" data-chart-text="card_subtitle_as_published"></p><figure id="s-sect"></figure><p class="sowhat" data-chart-text="commentary_as_published"></p></div>
-<div class="card"><h3 data-k="D.card1.title"></h3><div class="plays" data-plays="flag for the team"></div></div>
+
 </div>
 </section>
 <section data-sec="E">
@@ -639,6 +689,9 @@ async function boot() {
   put('read-lede', esc(one('read_lede') || ''));
   put('read-findings', A.filter(r => r.kind === 'finding').map(r => `<li><b>${esc(r.title)}</b>${esc(r.text)}</li>`).join(''));
   put('read-actions', A.filter(r => r.kind === 'action').map((r, i) => `<div class="play"><div class="num">${i + 1}</div><div><b>${esc(r.title)}</b><div class="why">${esc(r.text)}</div></div></div>`).join(''));
+  put('tag-actions', A.filter(r => r.kind === 'action_tag').map((r, i) => `<div class="play"><div class="num">${i + 1}</div><div><b>${esc(r.title)}</b><div class="why">${esc(r.text)}</div></div></div>`).join(''));
+  if (one('header_eyebrow')) put('actions-eyebrow', esc('Actions · ' + (one('header_eyebrow').match(/written [^·]+/i) || [''])[0].trim()));
+  window.ATMAnalysis = A;
   put('read-notes', A.filter(r => r.kind === 'note').map(r => `<li><b>${esc(r.title)}</b> ${esc(r.text)}</li>`).join(''));
   if (!A.length) { const sec = document.getElementById('read'); if (sec) sec.hidden = true; }
   document.querySelectorAll('[data-k]').forEach(e => { if (T[e.dataset.k] != null) e.innerHTML = T[e.dataset.k]; });
@@ -694,18 +747,21 @@ async function boot() {
   const stm = document.getElementById('st-monthly');
   if (stm && tiles[0]) stm.textContent = `Monthly figures: ${tiles[0].data_vintage.replace(/ update /, ' pull ')}`;
   document.documentElement.dataset.ready = '1';
+  return { tiles, analysis: window.ATMAnalysis || [] };
 }
-boot().catch(e => {
+window.ATMScoreReady = boot().catch(e => {
   console.error(e);
   const b = document.createElement('div');
   b.style.cssText = 'margin:16px 0;padding:12px 14px;border:1px solid var(--crit);border-radius:6px;color:var(--crit)';
   b.textContent = 'The scorecard could not load its data: ' + e.message;
   document.querySelector('.wrap').prepend(b);
+  return null;
 });
 
 window.ATMChart = { el, css, hover, showTip, hideTip, bullet, hbar, vbar, vstack, line, stack100, fmtPct, fmtInt, fmtK };
 })();
 </script>
-<script src="js/archive.js?v=20261012192608"></script>
-<script src="js/daily_data.js?v=20261012192608"></script>
-<script src="js/daily_view.js?v=20261012192608"></script>
+<script src="js/archive.js?v=20261015155753"></script>
+<script src="js/daily_data.js?v=20261015155753"></script>
+<script src="js/daily_view.js?v=20261015155753"></script>
+<script src="js/glance.js?v=20261015155753"></script>
