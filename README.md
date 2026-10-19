@@ -22,8 +22,11 @@ The header shows the date of each source.
 - `js/glance.js`: the toolbar (Data & insights / Actions switch, Refresh, the "Ask Claude" box), the "At a glance" insights for 7 days / 14 days / 30 days / All, and the key-measures panel.
 - `js/archive.js`: history the sheet doesn't hold (posts through Oct 5, 2026; LinkedIn monthly totals May to Sep 2026).
 - `docs/DATA_SPEC.md`: the files Rob's monthly run must save to SharePoint.
+- `data/ask.md`: one plain-text file with every figure the dashboard cites (analysis, monthly tiles, all chart data, tables, post history). The "Ask Claude" box links to it so answers can draw on all of it. Built by `tools/build_ask.py`.
 
 ## Rules that keep it working
 
 - The Google Sheet must stay shared as "Anyone with the link can view" (or edit). If its column layout changes, `js/daily_data.js` needs a matching update.
 - Monthly files must follow `docs/DATA_SPEC.md`. To refresh by hand, replace the files in `data/scorecard/` and commit.
+- After any change to `data/` or `js/archive.js`, run `python3 tools/build_ask.py` and commit `data/ask.md` with it, so the ask box reads current figures.
+- `data/ask.md` is public like the rest of the site.

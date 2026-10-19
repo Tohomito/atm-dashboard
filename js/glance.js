@@ -259,22 +259,39 @@ Promise.all([window.ATMDailyReady, window.ATMScoreReady]).then(async ([S, score]
     }
     lines.push('', 'KEY MEASURES (last 30 days where daily):');
     measureCards(facts['30'], tiles).forEach(c => lines.push(`- ${c.k}: ${c.v} (${c.p})${c.now != null && c.prev != null ? `, before ${c.fmtB(c.prev)}` : ''}`));
+    // posts newer than the full data file, read live from the sheet
+    const end = typeof ARCHIVE_END !== 'undefined' ? ARCHIVE_END : '';
+    const recent = (S.POSTS || []).filter(p => p.date > end).sort((a, b) => b.date.localeCompare(a.date));
+    if (recent.length) {
+      const v = x => x == null ? '' : x;
+      lines.push('', `POSTS SINCE ${end} (date | channel | format | person | title | reach | reactions | comments | reposts):`);
+      recent.slice(0, 40).forEach(p => lines.push(`- ${p.date} | ${p.ch} | ${v(p.fmt)} | ${v(p.person)} | ${(p.title || '').slice(0, 70)} | ${v(p.reach)} | ${v(p.reactions)} | ${v(p.comments)} | ${v(p.amp)}`));
+    }
+    const comp = (S.COMP && S.COMP.rows) || [];
+    if (comp.length) {
+      lines.push('', `LINKEDIN PEER SET, LAST 30 DAYS (rank | page | followers | new followers | posts | comments)${S.COMP.note ? '. ' + S.COMP.note.replace(/[.\s]+$/, '') : ''}:`);
+      comp.forEach(r => lines.push(`- ${r.rank} | ${r.company} | ${v0(r.total)} | ${v0(r.newf)} | ${v0(r.posts)} | ${v0(r.comments)}`));
+    }
     const fnd = A.filter(r => r.kind === 'finding'), notes = A.filter(r => r.kind === 'note');
     if (fnd.length) { lines.push('', 'CURRENT ANALYSIS:'); fnd.forEach(r => lines.push(`- ${r.title} ${r.text}`)); }
     if (notes.length) { lines.push('', 'HOW TO READ THE NUMBERS:'); notes.forEach(r => lines.push(`- ${r.title} ${r.text}`)); }
     return lines.join('\n');
   };
+  const v0 = x => x == null ? '' : x;
+  const DATA_FILE = 'https://atm.mattbecher.com/data/ask.md';
   $('ask-form').addEventListener('submit', e => {
     e.preventDefault();
     const q = $('ask-q').value.trim(); if (!q) { $('ask-q').focus(); return; }
     let ctx = context();
+    // the analysis and notes are also in the data file, so they go first when space runs short
     if (ctx.length > 7000) ctx = ctx.split('\nHOW TO READ THE NUMBERS:')[0];
+    if (ctx.length > 7000) ctx = ctx.split('\nCURRENT ANALYSIS:')[0];
     if (ctx.length > 7000) ctx = ctx.slice(0, 7000) + '\n[trimmed]';
-    const prompt = `I'm on the ATM team. Answer my question using the dashboard figures below. Say plainly when they can't answer it, and what data would.\n\nQuestion: ${q}\n\n${ctx}`;
+    const prompt = `I'm on the ATM team. Answer my question about ATM's audience.\n\nQuestion: ${q}\n\nFirst read the dashboard's full data file: ${DATA_FILE}\nIt holds the monthly scorecard, every chart's data, the post history from May with speakers and companies, the peer set, and the current analysis and actions. The live daily figures and newest posts are below; use them for anything recent. If you can't open the file, say so, then answer from the figures below. Say plainly when the data can't answer the question, and what data would.\n\n${ctx}`;
     const url = 'https://claude.ai/new?q=' + encodeURIComponent(prompt);
     const w = window.open(url, '_blank', 'noopener');
     const note = $('ask-note'); note.hidden = false;
-    note.innerHTML = w ? 'Opened in a new Claude chat with the dashboard figures attached. The answer appears there.' : `Your browser blocked the new tab. <a href="${url}" target="_blank" rel="noopener">Open the question in Claude</a>.`;
+    note.innerHTML = w ? 'Opened in a new Claude chat with the latest figures and a link to the full data file. The answer appears there.' : `Your browser blocked the new tab. <a href="${url}" target="_blank" rel="noopener">Open the question in Claude</a>.`;
   });
 });
 })();

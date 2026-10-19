@@ -67,7 +67,7 @@ Name sources by platform and date, not by person or by dashboard. Write "read fr
 
 ## The combined analysis
 
-The header and "The read" section at the top of the page come from `data/analysis.csv`. That file is not part of the monthly run's output. It is rewritten each month after the run's files arrive, reading the run's figures together with the daily figures, so its findings and recommendations cover every source on the page.
+The header and "The read" section at the top of the page come from `data/analysis.csv`. That file is not part of the monthly run's output, and neither is `data/ask.md`, which `tools/build_ask.py` rebuilds from the run's files after they arrive. It is rewritten each month after the run's files arrive, reading the run's figures together with the daily figures, so its findings and recommendations cover every source on the page.
 
 ## What still needs a dashboard change
 
