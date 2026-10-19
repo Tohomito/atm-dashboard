@@ -42,12 +42,13 @@ body:not([data-view="actions"]) .actions-view{display:none}
 .hl .hk{font-size:12px;font-weight:600;color:var(--ink2)}
 .hl .hd{font-size:11.5px;color:var(--muted)}
 .carousel{margin-top:4px}
-.carousel-ctl{display:flex;align-items:center;justify-content:flex-end;gap:10px;margin:0 0 8px;font-size:12px}
-.carousel-ctl button{font:600 16px/1 "IBM Plex Sans",system-ui,sans-serif;width:32px;height:32px;border:1px solid var(--ring);border-radius:50%;background:var(--surface);color:var(--ink);cursor:pointer}
+.carousel-ctl{display:flex;align-items:center;justify-content:flex-end;gap:12px;margin:0 0 10px;font-size:15px;font-weight:600;color:var(--ink2)}
+.carousel-ctl .ccount{min-width:5.5em;text-align:center}
+.carousel-ctl button{font:600 24px/1 "IBM Plex Sans",system-ui,sans-serif;width:44px;height:44px;border:1px solid var(--ring);border-radius:50%;background:var(--surface);color:var(--ink);cursor:pointer}
 .carousel-ctl button:disabled{opacity:.35;cursor:default}
 .carousel-ctl button:focus-visible,.carousel-track:focus-visible{outline:2px solid var(--s1);outline-offset:2px}
-.carousel-track{display:flex;align-items:flex-start;gap:18px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;padding-bottom:8px;scrollbar-width:thin}
-.carousel-track>.card{flex:0 0 calc(50% - 9px);scroll-snap-align:start;min-width:0}
+.carousel-track{display:flex;align-items:flex-start;gap:18px;overflow:hidden;scroll-behavior:smooth;overscroll-behavior-x:contain}
+.carousel-track>.card{flex:0 0 calc(50% - 9px);min-width:0}
 @media (max-width:860px){.carousel-track>.card{flex-basis:100%}}
 #glance{padding-top:28px}
 .glance-head{display:flex;justify-content:space-between;align-items:flex-end;gap:10px;flex-wrap:wrap;margin-bottom:12px}
@@ -332,7 +333,7 @@ a{color:var(--ink)}
 <section data-sec="02">
 <div class="sec-head"><span class="eyebrow" data-k="02.eyebrow"></span><h2 data-k="02.headline"></h2><p data-k="02.lede"></p></div>
 <div class="tiles" data-tiles="02 · Newsletter|1"></div>
-<div class="grid two" style="margin-top:18px">
+<div class="carousel" data-added=""><div class="carousel-ctl"><button aria-label="Previous charts" class="cprev" type="button">‹</button><span class="ccount dim"></span><button aria-label="Next charts" class="cnext" type="button">›</button></div><div aria-label="6 charts; use the arrows to page through" class="carousel-track" style="margin-top:18px" tabindex="0">
 <div class="card" data-chart-card="c-acq"><h3 data-chart-text="card_title"></h3><p class="sub" data-chart-text="card_subtitle_as_published"></p>
 <figure id="c-acq"></figure>
 <p class="sowhat" data-chart-text="commentary_as_published"></p></div>
@@ -354,7 +355,7 @@ a{color:var(--ink)}
 <div class="card" data-chart-card="c-links"><h3 data-chart-text="card_title"></h3><p class="sub" data-chart-text="card_subtitle_as_published"></p>
 <figure id="c-links"></figure>
 <p class="sowhat" data-chart-text="commentary_as_published"></p></div>
-</div>
+</div></div>
 <h3 data-k="02.subhead1" style="margin:26px 0 10px"></h3>
 <div class="tiles" data-tiles="02 · Newsletter|2"></div>
 <div class="grid two" style="margin-top:18px">
@@ -368,7 +369,7 @@ a{color:var(--ink)}
 <section data-sec="03">
 <div class="sec-head"><span class="eyebrow" data-k="03.eyebrow"></span><h2 data-k="03.headline"></h2><p data-k="03.lede"></p></div>
 <div class="tiles" data-tiles="03 · LinkedIn|1"></div>
-<div class="carousel" data-added=""><div class="carousel-ctl"><button aria-label="Previous chart" class="cprev" type="button">‹</button><span class="ccount dim"></span><button aria-label="Next chart" class="cnext" type="button">›</button></div><div aria-label="9 charts; scroll sideways or use the arrows" class="carousel-track" style="margin-top:18px" tabindex="0">
+<div class="carousel" data-added=""><div class="carousel-ctl"><button aria-label="Previous charts" class="cprev" type="button">‹</button><span class="ccount dim"></span><button aria-label="Next charts" class="cnext" type="button">›</button></div><div aria-label="9 charts; use the arrows to page through" class="carousel-track" style="margin-top:18px" tabindex="0">
 <div class="card" data-chart-card="c-li"><h3 data-chart-text="card_title"></h3><p class="sub" data-chart-text="card_subtitle_as_published"></p>
 <figure id="c-li"></figure>
 <p class="sowhat" data-chart-text="commentary_as_published"></p></div>
@@ -402,7 +403,7 @@ a{color:var(--ink)}
 <section data-sec="04">
 <div class="sec-head"><span class="eyebrow" data-k="04.eyebrow"></span><h2 data-k="04.headline"></h2><p data-k="04.lede"></p></div>
 <div class="tiles" data-tiles="04 · Instagram &amp; YouTube|1"></div>
-<div class="carousel" data-added=""><div class="carousel-ctl"><button aria-label="Previous chart" class="cprev" type="button">‹</button><span class="ccount dim"></span><button aria-label="Next chart" class="cnext" type="button">›</button></div><div aria-label="9 charts; scroll sideways or use the arrows" class="carousel-track" style="margin-top:18px" tabindex="0">
+<div class="carousel" data-added=""><div class="carousel-ctl"><button aria-label="Previous charts" class="cprev" type="button">‹</button><span class="ccount dim"></span><button aria-label="Next charts" class="cnext" type="button">›</button></div><div aria-label="9 charts; use the arrows to page through" class="carousel-track" style="margin-top:18px" tabindex="0">
 <div class="card" data-chart-card="c-ytsrc"><h3 data-chart-text="card_title"></h3><p class="sub" data-chart-text="card_subtitle_as_published"></p>
 <figure id="c-ytsrc"></figure>
 <p class="sowhat" data-chart-text="commentary_as_published"></p></div>
@@ -440,7 +441,7 @@ a{color:var(--ink)}
 <section data-sec="05">
 <div class="sec-head"><span class="eyebrow" data-k="05.eyebrow"></span><h2 data-k="05.headline"></h2><p data-k="05.lede"></p></div>
 <div class="tiles" data-tiles="05 · atm.media and search|1"></div>
-<div class="carousel" data-added=""><div class="carousel-ctl"><button aria-label="Previous chart" class="cprev" type="button">‹</button><span class="ccount dim"></span><button aria-label="Next chart" class="cnext" type="button">›</button></div><div aria-label="6 charts; scroll sideways or use the arrows" class="carousel-track" style="margin-top:18px" tabindex="0">
+<div class="carousel" data-added=""><div class="carousel-ctl"><button aria-label="Previous charts" class="cprev" type="button">‹</button><span class="ccount dim"></span><button aria-label="Next charts" class="cnext" type="button">›</button></div><div aria-label="6 charts; use the arrows to page through" class="carousel-track" style="margin-top:18px" tabindex="0">
 <div class="card" data-chart-card="c-gausers"><h3 data-chart-text="card_title"></h3><p class="sub" data-chart-text="card_subtitle_as_published"></p>
 <figure id="c-gausers"></figure>
 <p class="sowhat" data-chart-text="commentary_as_published"></p></div>
@@ -814,8 +815,8 @@ window.ATMScoreReady = boot().catch(e => {
 window.ATMChart = { el, css, hover, showTip, hideTip, bullet, hbar, vbar, vstack, line, stack100, fmtPct, fmtInt, fmtK };
 })();
 </script>
-<script src="js/archive.js?v=20261019120011"></script>
-<script src="js/daily_data.js?v=20261019120011"></script>
-<script src="js/daily_view.js?v=20261019120011"></script>
-<script src="js/glance.js?v=20261019120011"></script>
-<script src="js/carousel.js?v=20261019120011"></script>
+<script src="js/archive.js?v=20261019145019"></script>
+<script src="js/daily_data.js?v=20261019145019"></script>
+<script src="js/daily_view.js?v=20261019145019"></script>
+<script src="js/glance.js?v=20261019145019"></script>
+<script src="js/carousel.js?v=20261019145019"></script>

@@ -283,15 +283,15 @@ _s08 = soup.find("section", attrs={"data-sec": "08"}).extract()
 _s08["class"] = (_s08.get("class") or []) + ["actions-view"]
 soup.find("section", id="actions").insert_after(_s08)
 # chart carousels for the LinkedIn, Instagram & YouTube, and site sections
-for k in ("03", "04", "05"):
+for k in ("02", "03", "04", "05"):
     sec = soup.find("section", attrs={"data-sec": k})
     for g in sec.find_all("div", class_="grid", recursive=False):
-        if not g.find("figure"): continue
         n = len(g.find_all(class_="card", recursive=False))
-        g["class"] = ["carousel-track"]; g["tabindex"] = "0"; g["aria-label"] = f"{n} charts; scroll sideways or use the arrows"
+        if not g.find("figure") or n < 3: continue
+        g["class"] = ["carousel-track"]; g["tabindex"] = "0"; g["aria-label"] = f"{n} charts; use the arrows to page through"
         wrap = soup.new_tag("div", attrs={"class": "carousel", "data-added": ""})
         g.wrap(wrap)
-        wrap.insert(0, frag('<div class="carousel-ctl"><button type="button" class="cprev" aria-label="Previous chart">&#8249;</button><span class="ccount dim"></span><button type="button" class="cnext" aria-label="Next chart">&#8250;</button></div>'))
+        wrap.insert(0, frag('<div class="carousel-ctl"><button type="button" class="cprev" aria-label="Previous charts">&#8249;</button><span class="ccount dim"></span><button type="button" class="cnext" aria-label="Next charts">&#8250;</button></div>'))
 
 
 secB = soup.find("section", attrs={"data-sec": "B"})
@@ -408,12 +408,13 @@ body:not([data-view="actions"]) .actions-view{display:none}
 .hl .hk{font-size:12px;font-weight:600;color:var(--ink2)}
 .hl .hd{font-size:11.5px;color:var(--muted)}
 .carousel{margin-top:4px}
-.carousel-ctl{display:flex;align-items:center;justify-content:flex-end;gap:10px;margin:0 0 8px;font-size:12px}
-.carousel-ctl button{font:600 16px/1 "IBM Plex Sans",system-ui,sans-serif;width:32px;height:32px;border:1px solid var(--ring);border-radius:50%;background:var(--surface);color:var(--ink);cursor:pointer}
+.carousel-ctl{display:flex;align-items:center;justify-content:flex-end;gap:12px;margin:0 0 10px;font-size:15px;font-weight:600;color:var(--ink2)}
+.carousel-ctl .ccount{min-width:5.5em;text-align:center}
+.carousel-ctl button{font:600 24px/1 "IBM Plex Sans",system-ui,sans-serif;width:44px;height:44px;border:1px solid var(--ring);border-radius:50%;background:var(--surface);color:var(--ink);cursor:pointer}
 .carousel-ctl button:disabled{opacity:.35;cursor:default}
 .carousel-ctl button:focus-visible,.carousel-track:focus-visible{outline:2px solid var(--s1);outline-offset:2px}
-.carousel-track{display:flex;align-items:flex-start;gap:18px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;padding-bottom:8px;scrollbar-width:thin}
-.carousel-track>.card{flex:0 0 calc(50% - 9px);scroll-snap-align:start;min-width:0}
+.carousel-track{display:flex;align-items:flex-start;gap:18px;overflow:hidden;scroll-behavior:smooth;overscroll-behavior-x:contain}
+.carousel-track>.card{flex:0 0 calc(50% - 9px);min-width:0}
 @media (max-width:860px){.carousel-track>.card{flex-basis:100%}}
 #glance{padding-top:28px}
 .glance-head{display:flex;justify-content:space-between;align-items:flex-end;gap:10px;flex-wrap:wrap;margin-bottom:12px}
