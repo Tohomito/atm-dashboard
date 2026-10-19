@@ -1,6 +1,3 @@
-User-agent: Claude-User
-Allow: /data/ask.md
-Disallow: /
-
 User-agent: *
+Allow: /data/ask.md
 Disallow: /
