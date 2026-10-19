@@ -400,6 +400,8 @@ body:not([data-view="actions"]) .actions-view{display:none}
 .fnote summary{cursor:pointer;font-weight:600;color:var(--ink2);width:max-content;max-width:100%}
 .fnote summary:focus-visible{outline:2px solid var(--s1);outline-offset:2px}
 .fnote p{margin:6px 0 0}
+.verdict{align-content:start}
+.verdict .pill{justify-self:start}
 .chg{font-weight:600}
 .chg.up{color:var(--goodtext)}
 .chg.down{color:var(--crit)}
@@ -410,10 +412,11 @@ body:not([data-view="actions"]) .actions-view{display:none}
 .hl .hv{font-family:"Archivo",sans-serif;font-size:22px;font-weight:800;line-height:1.1}
 .hl .hk{font-size:12px;font-weight:600;color:var(--ink2)}
 .hl .hd{font-size:11.5px;color:var(--muted)}
-.carousel{margin-top:4px}
-.carousel-ctl{display:flex;align-items:center;justify-content:flex-end;gap:12px;margin:0 0 10px;font-size:15px;font-weight:600;color:var(--ink2)}
+.carousel{margin-top:18px}
+.carousel-ctl{display:flex;align-items:center;justify-content:flex-end;gap:12px;margin:0 0 18px;font-size:15px;font-weight:600;color:var(--ink2)}
 .carousel-ctl .ccount{min-width:5.5em;text-align:center}
-.carousel-ctl button{font:600 24px/1 "IBM Plex Sans",system-ui,sans-serif;width:44px;height:44px;border:1px solid var(--ring);border-radius:50%;background:var(--surface);color:var(--ink);cursor:pointer}
+.carousel-ctl button{font:600 24px/1 "IBM Plex Sans",system-ui,sans-serif;width:44px;height:44px;display:inline-flex;align-items:center;justify-content:center;padding:0 0 3px;border:1px solid var(--ring);border-radius:50%;background:#fff;color:var(--muted);cursor:pointer;box-shadow:0 1px 2px rgba(0,0,0,.06)}
+.carousel-ctl button:not(:disabled):hover{color:var(--ink2);border-color:var(--muted)}
 .carousel-ctl button:disabled{opacity:.35;cursor:default}
 .carousel-ctl button:focus-visible,.carousel-track:focus-visible{outline:2px solid var(--s1);outline-offset:2px}
 .carousel-track{display:flex;align-items:flex-start;gap:18px;overflow:hidden;scroll-behavior:smooth;overscroll-behavior-x:contain}
