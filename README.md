@@ -1,6 +1,6 @@
 # ATM Audience Dashboard
 
-Live at https://atm.mattbecher.com (also https://tohomito.github.io/atm-dashboard/), embedded in the Notion "Unified Dashboard" page. Team use only; search engines are blocked.
+Live at https://atm.mattbecher.com (also https://tohomito.github.io/atm-dashboard/). Team use only; search engines are blocked.
 
 One page, in the Audience Scorecard's design, built from two data sources:
 
@@ -22,11 +22,12 @@ The header shows the date of each source.
 - `js/glance.js`: the toolbar (Data & insights / Actions switch, Refresh, the "Ask Claude" box), the "At a glance" insights for 7 days / 14 days / 30 days / All, and the key-measures panel.
 - `js/archive.js`: history the sheet doesn't hold (posts through Oct 5, 2026; LinkedIn monthly totals May to Sep 2026).
 - `docs/DATA_SPEC.md`: the files Rob's monthly run must save to SharePoint.
-- `data/ask.md`: one plain-text file with every figure the dashboard cites (analysis, monthly tiles, all chart data, tables, post history). The "Ask Claude" box links to it so answers can draw on all of it. Built by `tools/build_ask.py`.
+- `tools/build_ask.py`: builds every figure the dashboard cites (analysis, monthly tiles, all chart data, tables, post history) into two private Google Docs in the "ATM Dashboard: Claude data" Drive folder. The "Ask Claude" box links to those Docs, and Claude opens them through the asker's own Google Drive connector, so the full data never sits on the public site. Steps are in the script's header.
 
 ## Rules that keep it working
 
 - The Google Sheet must stay shared as "Anyone with the link can view" (or edit). If its column layout changes, `js/daily_data.js` needs a matching update.
 - Monthly files must follow `docs/DATA_SPEC.md`. To refresh by hand, replace the files in `data/scorecard/` and commit.
-- After any change to `data/` or `js/archive.js`, run `python3 tools/build_ask.py` and commit `data/ask.md` with it, so the ask box reads current figures.
-- `data/ask.md` is public like the rest of the site.
+- After any change to `data/` or `js/archive.js`, refresh the two Google Docs (steps in `tools/build_ask.py`), so the ask box reads current figures.
+- People who use the ask box need Google Drive connected in Claude and access to the Drive folder.
+- Use the dashboard from its direct address, https://atm.mattbecher.com. The Notion embed is retired.

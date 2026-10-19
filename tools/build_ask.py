@@ -1,11 +1,21 @@
 #!/usr/bin/env python3
-"""Build data/ask.md: one plain-text file holding every figure the dashboard cites.
+"""Build build/ask.md: every figure the dashboard cites, in one text file,
+plus the same content split in two (build/ask_main.md, build/ask_posts.md).
 
-The ask box on the dashboard sends its question to Claude with a link to this
-file, so the answer can draw on all the data, not just what fits in a link.
+Its content goes into two private Google Docs
+in the "ATM Dashboard: Claude data" Drive folder, shared with the team only.
+The ask box sends its question to Claude with the Docs' links, and Claude opens
+them through the asker's own Google Drive connector.
 
-Run from the repo root after any change to data/ or js/archive.js:
-    python3 tools/build_ask.py
+build/ is git-ignored, so none of this reaches the public site.
+
+After any change to data/ or js/archive.js:
+  1. python3 tools/build_ask.py
+  2. Upload build/ask_main.md and build/ask_posts.md to the Drive folder as new
+     Google Docs (markdown converted), titled "ATM Dashboard data (for Claude)"
+     and "ATM Dashboard post history (for Claude)".
+  3. Put the new Doc IDs in DATA_DOCS in js/glance.js, rebuild, publish.
+  4. Move the previous Docs to the trash.
 """
 import csv, io, json, re, sys
 from datetime import datetime, timezone
@@ -66,14 +76,14 @@ def main():
     end, months, posts = archive()
     built = datetime.now(timezone.utc).strftime("%Y-%m-%d")
 
-    add("# ATM Audience Dashboard: full data file")
+    add("# ATM Audience Dashboard: full data")
     add("")
-    add(f"Built {built}. Dashboard: {SITE}. This file holds every figure the dashboard cites, so questions can be answered from all of it.")
+    add(f"Built {built}. Dashboard: {SITE}. This holds every figure the dashboard cites, so questions can be answered from all of it.")
     add("")
-    add("## How to read this file")
+    add("## How to read this data")
     add("")
-    add("- **Daily figures** (LinkedIn, Instagram, YouTube, site) come from a Google Sheet that the dashboard reads live each time it opens. The question that brought you here includes the latest of those figures, and any posts newer than this file. Prefer those for anything recent.")
-    add(f"- **Post history** below runs from May 2026 to {end}. Newer posts are in the question.")
+    add("- **Daily figures** (LinkedIn, Instagram, YouTube, site) come from a Google Sheet that the dashboard reads live each time it opens. The question that brought you here includes the latest of those figures, and any posts newer than this data. Prefer those for anything recent.")
+    add(f"- **Post history** runs from May 2026 to {end}. Newer posts are in the question.")
     add("- **Monthly figures** come from the monthly audience scorecard. Each chart below states its own date range and source.")
     add("- Name sources by platform (LinkedIn, Instagram, beehiiv, GA4), not by person. Call a baseline by its month (\"September baseline\").")
     add("- \"At The Moment\" is a separate LinkedIn page with a similar name, watched as a peer. It is not an ATM page; never add its figures to ATM's.")
@@ -172,9 +182,16 @@ def main():
                   for p in sorted(posts, key=lambda p: p["date"], reverse=True)]
     add(csv_block(t))
 
-    out = D / "ask.md"
+    B = ROOT / "build"
+    B.mkdir(exist_ok=True)
+    out = B / "ask.md"
     out.write_text("\n".join(L).rstrip() + "\n", encoding="utf-8")
-    print(f"wrote {out} ({out.stat().st_size:,} bytes, {len(posts)} posts, {len(dicts(SC / 'chart_index.csv'))} charts)")
+    # two Google Docs: the main data, and the post history (each small enough to upload in one step)
+    cut = next(i for i, x in enumerate(L) if x.startswith("## Post history"))
+    main_ = L[:cut] + [f"## Post history", "", f"The post history ({len(posts)} posts, May 2026 to {end}) is in the companion Doc \"ATM Dashboard post history (for Claude)\"."]
+    (B / "ask_main.md").write_text("\n".join(main_).rstrip() + "\n", encoding="utf-8")
+    (B / "ask_posts.md").write_text("# ATM Audience Dashboard: post history\n\n" + f"Built {built}. Companion to \"ATM Dashboard data (for Claude)\", which explains how to read the figures.\n\n" + "\n".join(L[cut:]).rstrip() + "\n", encoding="utf-8")
+    print(f"wrote {out} ({out.stat().st_size:,} bytes, {len(posts)} posts)")
 
 
 if __name__ == "__main__":

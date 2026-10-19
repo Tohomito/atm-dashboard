@@ -1,3 +1,2 @@
 User-agent: *
-Allow: /data/ask.md
 Disallow: /

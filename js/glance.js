@@ -278,7 +278,11 @@ Promise.all([window.ATMDailyReady, window.ATMScoreReady]).then(async ([S, score]
     return lines.join('\n');
   };
   const v0 = x => x == null ? '' : x;
-  const DATA_FILE = 'https://atm.mattbecher.com/data/ask.md';
+  // private Google Docs in the team's Drive folder; Claude opens them with the asker's own Google Drive connector
+  const DATA_DOCS = [
+    'https://docs.google.com/document/d/1Qwn770yCzLZI-2uOwyLXqn8dOEgVU-hLjtD8xVLVs2E/edit',
+    'https://docs.google.com/document/d/1Y17XTL4KqGCJzl8JQ-RZSl6RbRDKKqiJzbqHHi0Bxsc/edit',
+  ];
   $('ask-form').addEventListener('submit', e => {
     e.preventDefault();
     const q = $('ask-q').value.trim(); if (!q) { $('ask-q').focus(); return; }
@@ -287,11 +291,11 @@ Promise.all([window.ATMDailyReady, window.ATMScoreReady]).then(async ([S, score]
     if (ctx.length > 7000) ctx = ctx.split('\nHOW TO READ THE NUMBERS:')[0];
     if (ctx.length > 7000) ctx = ctx.split('\nCURRENT ANALYSIS:')[0];
     if (ctx.length > 7000) ctx = ctx.slice(0, 7000) + '\n[trimmed]';
-    const prompt = `I'm on the ATM team. Answer my question about ATM's audience.\n\nQuestion: ${q}\n\nFirst read the dashboard's full data file: ${DATA_FILE}\nIt holds the monthly scorecard, every chart's data, the post history from May with speakers and companies, the peer set, and the current analysis and actions. The live daily figures and newest posts are below; use them for anything recent. If you can't open the file, say so, then answer from the figures below. Say plainly when the data can't answer the question, and what data would.\n\n${ctx}`;
+    const prompt = `I'm on the ATM team. Answer my question about ATM's audience.\n\nQuestion: ${q}\n\nFirst read the dashboard's two data Docs with Google Drive:\n- ${DATA_DOCS[0]} (monthly scorecard, every chart's data, the peer set, the current analysis and actions)\n- ${DATA_DOCS[1]} (post history from May, with speakers, companies and series)\nThe live daily figures and newest posts are below; use them for anything recent. If you can't open the Docs (Google Drive not connected, or no access to the folder), say so in one line, then answer from the figures below. Say plainly when the data can't answer the question, and what data would.\n\n${ctx}`;
     const url = 'https://claude.ai/new?q=' + encodeURIComponent(prompt);
     const w = window.open(url, '_blank', 'noopener');
     const note = $('ask-note'); note.hidden = false;
-    note.innerHTML = w ? 'Opened in a new Claude chat with the latest figures and a link to the full data file. The answer appears there.' : `Your browser blocked the new tab. <a href="${url}" target="_blank" rel="noopener">Open the question in Claude</a>.`;
+    note.innerHTML = w ? 'Opened in a new Claude chat with the latest figures and links to the full data. The answer appears there. Claude needs Google Drive connected to read the full data.' : `Your browser blocked the new tab. <a href="${url}" target="_blank" rel="noopener">Open the question in Claude</a>.`;
   });
 });
 })();
