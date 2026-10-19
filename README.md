@@ -35,3 +35,7 @@ The header shows the date of each source.
 - After any change to `data/` or `js/archive.js`, refresh the two Google Docs (steps in `tools/build_ask.py`), so the ask box reads current figures.
 - People who use the ask box need Google Drive connected in Claude and access to the Drive folder.
 - Use the dashboard from its direct address, https://atm.mattbecher.com. The Notion embed is retired.
+
+## GA4 (weekly)
+
+`data/ga4/` holds the site figures from GA4 (property 489265998, read through Supermetrics): new vs returning users by month (`new_returning.csv`), sessions by channel for the last 30 days (`channels_30d.csv`, grouped from `sources_raw_30d.csv`), top landing pages and event counts, plus `meta.json` with the pull date and window. A scheduled task rewrites these files every Monday morning; the page reads them when it opens. They feed the Overview's new-vs-returning card and the Site tab in At a glance.

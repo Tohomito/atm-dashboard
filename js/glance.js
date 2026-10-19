@@ -34,6 +34,23 @@ function parseCSV(t) {
   return rest.map(x => Object.fromEntries(h.map((k, i) => [k, x[i] ?? ''])));
 }
 const getMonthly = id => fetch(`data/scorecard/charts/${id}.csv?v=${Date.now()}`, { cache: 'no-store' }).then(r => r.ok ? r.text() : '').then(t => t ? parseCSV(t) : []).catch(() => []);
+/* GA4 files (written by the weekly GA4 pull): new vs returning by month, sessions by channel, landing pages, events */
+const GA4 = { ready: false };
+async function loadGA4() {
+  const get = f => fetch(`data/ga4/${f}?v=${Date.now()}`, { cache: 'no-store' }).then(r => r.ok ? r.text() : '').then(t => t ? parseCSV(t) : []).catch(() => []);
+  const [nr, chn, lp, ev] = await Promise.all(['new_returning.csv', 'channels_30d.csv', 'landing_pages_30d.csv', 'events_30d.csv'].map(get));
+  const meta = await fetch(`data/ga4/meta.json?v=${Date.now()}`, { cache: 'no-store' }).then(r => r.ok ? r.json() : {}).catch(() => ({}));
+  Object.assign(GA4, { nr, chn, lp, ev, meta, ready: nr.length > 0 && chn.length > 0 });
+  if (GA4.ready) {
+    const n = x => +x || 0;
+    GA4.months = nr.map(r => ({ key: r.month, nu: n(r.new_users), ru: n(r.returning_users), partial: r.month === meta.partial_month }));
+    GA4.full = GA4.months.filter(m => !m.partial).at(-1); GA4.part = GA4.months.find(m => m.partial);
+    GA4.sess30 = chn.reduce((a, r) => a + n(r.sessions), 0);
+    GA4.w = meta.window_30d || [];
+  }
+  return GA4;
+}
+const retShare = m => m && (m.nu + m.ru) ? m.ru / (m.nu + m.ru) * 100 : null;
 /* give each monthly label a year: "Oct '25", "Nov", ..., "Jan '26", ..., "Sep*" */
 function datedMonths(rows) {
   const MS = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'];
@@ -142,8 +159,21 @@ function readout(f, ch) {
     headline = cm ? `The verified-click rate fell from ${cm[2]}% to ${cm[1]}% of delivered email while the list grew on imports.` : 'Newsletter figures are monthly.';
     if (!f.all && f.n < 30) B.push(monthlyOnly); else B.push(nl(), ck(), 'List size includes imported addresses, so verified clicks are the better measure of readers.');
   } else if (ch === 'site') {
-    headline = f.sess ? `The site drew ${esc(f.sess.value_as_published)} sessions over ${esc(f.monthly)}.` : 'Site traffic.';
-    if (!f.all && f.n < 30) B.push(monthlyOnly); else B.push(site(), 'New against returning visitors needs GA4 data; getting access is a setup task in the Actions view.');
+    if (GA4.ready) {
+      const g = GA4, top = g.lp[0], w = `the 30 days to ${mdy(g.w[1])}`, chs = g.chn.slice(0, 3);
+      const topShare = top ? Math.round(+top.sessions / g.sess30 * 100) : null;
+      headline = top && topShare >= 25 ? `${full(g.sess30)} site sessions in ${w}; ${top.landing_page} drew ${topShare}% of them.` : `${full(g.sess30)} site sessions in ${w}.`;
+      const rs = retShare(g.full), rp = retShare(g.part);
+      B.push(`GA4 figures cover ${w}, whatever time frame is selected above.`,
+        `Where visits came from: ${chs.map(c => `${esc(c.channel.toLowerCase())} <b>${full(+c.sessions)}</b>`).join(', ')}.`,
+        rs != null ? `Returning visitors: <b>${rs.toFixed(0)}%</b> of ${monthName(g.full.key)}'s users (${full(g.full.ru)} of ${full(g.full.nu + g.full.ru)})${rp != null ? `; ${rp.toFixed(0)}% so far in ${monthName(g.part.key)}` : ''}.` : '',
+        `Top landing pages: ${g.lp.filter(r => r.landing_page !== '(not set)').slice(0, 3).map(r => `${esc(r.landing_page)} (${full(+r.sessions)})`).join(', ')}.`,
+        site(),
+        'Engagement and conversion rates mean nothing yet: every GA4 event is marked as a key event (see Tracking issues).');
+    } else {
+      headline = f.sess ? `The site drew ${esc(f.sess.value_as_published)} sessions over ${esc(f.monthly)}.` : 'Site traffic.';
+      if (!f.all && f.n < 30) B.push(monthlyOnly); else B.push(site(), 'New against returning visitors arrives with the weekly GA4 pull.');
+    }
   }
   return { headline, bullets: B.filter(Boolean) };
 }
@@ -160,6 +190,11 @@ async function drawChart(f, ch, S) {
     if (sr.length > 1) { window.ATMLine('glance-chart', sr.map(r => mdy(r.date)), [{ name: 'Subscribers', color: css('--s1'), values: sr.map(r => r.value) }], { fmt: C.fmtInt, intTicks: true, h: 200 }); cap.textContent = 'YouTube subscribers, on days with a reading'; return; }
     const ms = S.YT.months.filter(m => m.views != null);
     C.vbar('glance-chart', ms.map(m => m.m), ms.map(m => m.views), { fmt: C.fmtK, colors: ms.map(m => m.pre || m.partial ? css('--muted') : css('--s1')) }); cap.textContent = 'YouTube views per month'; return;
+  }
+  if (ch === 'site' && GA4.ready) {
+    host.innerHTML = '';
+    C.hbar('glance-chart', GA4.chn.map(r => ({ label: r.channel, value: +r.sessions })), { fmt: C.fmtInt, labW: 230, rowH: 26, aria: 'Site sessions by source, last 30 days' });
+    cap.textContent = `Site sessions by source, ${mdy(GA4.w[0])} to ${mdy(GA4.w[1])} (GA4)`; return;
   }
   const mrows = await getMonthly(ch === 'nl' ? 's-nl' : 's-ga');
   host.innerHTML = '';
@@ -185,6 +220,10 @@ function measureCards(f, tiles, chan) {
     { ch: 'ig', all: false, k: 'Instagram followers', v: full(f.igFoll), p: f.igFollChange != null ? `${sign(f.igFollChange)}${full(f.igFollChange)} ${period}` : 'latest daily read', now: null, prev: null, n: 'Lifetime total from the daily reads.' },
     { ch: 'yt', all: true, k: 'YouTube subscribers gained', v: f.ytGain != null ? `${sign(f.ytGain)}${full(f.ytGain)}` : '—', p: f.ytGain != null ? `since ${mdy(f.ytFrom)} · ${full(f.ytTotal)} total` : `${full(f.ytTotal)} total; no reading at the start of this window`, now: f.ytGain, prev: f.all ? null : f.ytGainPrev, prevLabel, fmtB: full, n: 'All organic since the ad flight ended in August.' },
     { ch: 'nl', all: true, k: 'Newsletter verified-click rate', v: ctrNow != null ? ctrNow.toFixed(2) + '%' : '—', p: `${f.monthly}, monthly, share of delivered email`, now: ctrNow, prev: ctrWas, prevLabel: 'month before', fmtB: x => x.toFixed(2) + '%', n: 'Bot-filtered clicks; list size alone is inflated by imports.' },
+    ...(GA4.ready ? [
+      { ch: 'site', all: false, k: 'Site sessions, last 30 days', v: full(GA4.sess30), p: `to ${mdy(GA4.w[1])}, GA4`, now: null, prev: null, n: GA4.lp[0] ? `${GA4.lp[0].landing_page} alone drew ${full(+GA4.lp[0].sessions)}.` : '' },
+      { ch: 'site', all: false, k: 'Returning visitors', v: retShare(GA4.full) != null ? retShare(GA4.full).toFixed(1) + '%' : '—', p: `${monthName(GA4.full.key)}, share of users`, now: null, prev: null, n: GA4.part ? `${monthName(GA4.part.key)} so far: ${retShare(GA4.part).toFixed(1)}%. Almost every visit is a first visit.` : '' }
+    ] : []),
     { ch: 'site', all: true, k: 'Homepage sign-up rate', v: 'Not yet', p: 'starts with October data', now: null, prev: null, n: 'The subscribe prompt moved up the homepage on Oct 1. Judge it on sign-ups per homepage session, not total subscribers.' }
   ];
   return chan && chan !== 'all' ? cards.filter(c => c.ch === chan) : cards.filter(c => c.all);
@@ -222,7 +261,15 @@ async function overview(S, tiles) {
   const sess = tileBy(tiles, /atm\.media sessions/i);
   const per = tiles && tiles[0] ? (tiles[0].data_vintage.match(/\(([^)]+)\)/) || ['', 'latest month'])[1].replace(/ window/, '') : '';
   $('ov-site').innerHTML = `<div class="mk">Site traffic</div><div class="mv mono">${sess ? esc(sess.value_as_published) : '—'}</div><div class="mp">sessions, ${esc(per)}</div><div class="mn">${sess ? esc(sess.detail) : 'Arrives with the monthly figures.'}</div>`;
-  $('ov-newret').innerHTML = `<div class="mk">New vs returning visitors</div><div class="mv mono dim">Needs GA4</div><div class="mp">not in either data source yet</div><div class="mn">Waiting on GA4 access; see the <a href="#actions" data-goto="actions">setup tasks</a>.</div>`;
+  if (GA4.ready) {
+    const m = GA4.full, p = GA4.part, rs = retShare(m), rp = retShare(p);
+    const bar = (lab, mm) => `<div class="audrow"><span>${lab}</span><i style="width:100%;background:linear-gradient(90deg,var(--s1) ${100 - retShare(mm)}%,var(--s4) 0)"></i><b class="mono">${retShare(mm).toFixed(0)}%</b></div>`;
+    $('ov-newret').innerHTML = `<div class="mk">New vs returning visitors</div><div class="mv mono">${rs.toFixed(0)}% returning</div><div class="mp">${monthName(m.key)}: ${full(m.ru)} returning, ${full(m.nu)} new users</div>
+      <div class="aud">${bar(monthName(m.key).slice(0, 3), m)}${p ? bar(monthName(p.key).slice(0, 3) + ' so far', p) : ''}</div>
+      <div class="mn">Blue is new, orange returning. GA4, weekly pull${GA4.meta.pulled ? ` (${mdy(GA4.meta.pulled)})` : ''}.</div>`;
+  } else {
+    $('ov-newret').innerHTML = `<div class="mk">New vs returning visitors</div><div class="mv mono dim">Coming soon</div><div class="mp">arrives with the weekly GA4 pull</div>`;
+  }
   const series = [['LinkedIn impressions', 's-li'], ['Instagram views', 's-ig'], ['Site users', 's-ga']];
   const yoy = [];
   for (const [label, id] of series) {
@@ -243,6 +290,7 @@ Promise.all([window.ATMDailyReady, window.ATMScoreReady]).then(async ([S, score]
   const tiles = score ? score.tiles : [];
   $('loaded-at').textContent = 'Loaded ' + new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
   if (!S) { $('glance-list').innerHTML = '<li>Daily figures could not load. Try Refresh.</li>'; return; }
+  await loadGA4();
   overview(S, tiles);
   const WIN = { '7': 7, '14': 14, '30': 30, all: 'all' };
   const facts = Object.fromEntries(Object.keys(WIN).map(k => [k, windowFacts(S, WIN[k], tiles)]));

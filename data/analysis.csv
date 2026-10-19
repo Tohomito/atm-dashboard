@@ -22,9 +22,8 @@ action_tag,Check the tag before anything goes live.,"Add one line to the go-live
 action_tag,Search for mis-tags every week.,"Add a weekly step to the daily run: search LinkedIn for recent posts that mention ""At The Moment"" alongside an ATM guest, series or partner name, and list what it finds. Ask the poster to fix the tag while the post is fresh."
 action_tag,Watch the other page's follower jumps.,"The daily run already reads the competitor table. Flag any week ""At The Moment"" gains followers without posting, and line it up with ATM's posts that week: a jump right after a big ATM post points to mis-tags or mis-follows."
 action_tag,Log what you find.,"Add a ""tagged to the wrong page"" column to the tagging audit, so the count shows month to month and you can tell whether the fixes work."
-setup,Matt: get GA4 viewer access and connect it to Claude.,"Ask a GA4 admin for Viewer on property 489265998, then connect GA4 in Claude. This unlocks new against returning visitors and traffic by piece of content, which no current source carries."
 setup,"Rob: share the ""ATM Monthly Audience Reports"" folder with matt@atm.media.","Needed for the monthly files to reach the dashboard automatically, and for the four tracker sheets missing from the handoff."
-setup,Rob: add the GA4 pulls to the monthly run.,"New against returning users by month, and sessions by landing page, source/medium and utm_content. These feed the Overview and the traffic-by-content view."
+setup,Rob: move the Supermetrics data connections to a shared ATM login.,"GA4, Search Console, LinkedIn, Instagram and YouTube all connect through one personal Google login. If it is disconnected, the monthly run and the weekly GA4 pull both stop."
 setup,Rob: settle the Supermetrics plan before the Oct 28 run.,"The trial ended Oct 3. Without a plan, the monthly figures may stop arriving."
 setup,Hannah: point the daily run at the Google Sheet.,Daily figures on this page stop at Oct 4 until the run writes to the sheet again.
 setup,Hannah: share the live optimization log as a Google Doc.,So each analysis can read it directly. Due before the Oct 28 refresh.
@@ -35,6 +34,8 @@ tracking,Every GA4 event is marked as a key event.,"Engaged sessions, bounce rat
 tracking,The Looker subscriber card is stale.,"It has read 5,642 since Aug 31 while beehiiv reports far more. Re-point it, or retire it in favour of beehiiv."
 tracking,No search tracking on the new site search bar.,"If it does not send a GA4 event, the searches people run on the site are lost each day."
 tracking,Episode links on social cuts have no UTM of their own.,"Without one, traffic from the link layer cannot be told apart in GA4."
+tracking,Internal visits count as site traffic.,"In the 30 days to Oct 18, 366 sessions came from Microsoft Teams, Office documents and the site editor, mostly the team and partners opening links. Add an internal-traffic filter in GA4 so they drop out."
+tracking,One piece of content appears under several utm_content spellings.,"GA4 shows the same episode as ""Nick Primola - Group EVP..."", ""NickPrimola-GroupEVP..."" and ""Nick"", and the Deloitte episode three ways. Taking utm_content from the episode URL ending fixes this going forward."
 note,Followers.,"LinkedIn's own total was 3,950 on Oct 4. The daily follower chart tracks organic gains from a fixed starting point, so it reads lower (3,631); use it for the trend, not the total."
 note,Engagement rate.,LinkedIn's own rate counts clicks (about 8.7%). The Overview scorecards leave clicks out (3.25%) so months compare on the same terms.
 note,Time windows.,Daily figures run to Oct 4 (LinkedIn reports a day or two late). Monthly figures cover Sep 1–28. Instagram reach and views are Meta's 28-day rolling totals. Engagement momentum counts posts by the date they were published.
