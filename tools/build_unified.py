@@ -1,0 +1,459 @@
+"""Split Rob's published scorecard into a layout template plus the data files it reads.
+
+usage: python3 -I build_unified.py <rob_handoff_dir> <out_dir>
+"""
+import csv, json, os, re, shutil, sys
+from bs4 import BeautifulSoup, NavigableString
+
+SRC, OUT = sys.argv[1], sys.argv[2]
+HTML = os.path.join(SRC, "01_dashboard_source", "ATM_Audience_Scorecard_v7_published_2026-09-29.html")
+DATA = os.path.join(SRC, "02_data")
+os.makedirs(os.path.join(OUT, "data", "scorecard", "charts"), exist_ok=True)
+os.makedirs(os.path.join(OUT, "data", "scorecard", "tables"), exist_ok=True)
+
+raw = open(HTML, encoding="utf-8").read()
+soup = BeautifulSoup(raw, "html.parser")
+page_text = []  # (key, html)
+
+def inner(el):
+    return "".join(str(c) for c in el.contents).strip()
+
+def bind(el, key):
+    page_text.append((key, inner(el)))
+    el["data-k"] = key
+    el.clear()
+
+# ---------- header ----------
+hdr = soup.find("header")
+bind(hdr.find(class_="eyebrow"), "header.eyebrow")
+bind(hdr.find("h1"), "header.title")
+bind(hdr.find(class_="lede"), "header.lede")
+bind(hdr.find(class_="meta"), "header.meta")
+
+# ---------- sections ----------
+tile_groups = {}   # section label -> list of group sizes, in order
+table_n = 0
+for sec in soup.find_all("section"):
+    head = sec.find(class_="sec-head")
+    if sec.get("id") == "audit":
+        key = "audit"
+        label = "Baseline"
+        bind(sec.find(class_="eyebrow", recursive=False), "audit.eyebrow")
+        bind(sec.find("h2", recursive=False), "audit.headline")
+        bind(sec.find(class_="lede", recursive=False), "audit.lede")
+        bind(sec.find(class_="meta", recursive=False), "audit.meta")
+    else:
+        label = head.find(class_="eyebrow").get_text()
+        key = label.split(" · ")[0].strip()
+        bind(head.find(class_="eyebrow"), f"{key}.eyebrow")
+        bind(head.find("h2"), f"{key}.headline")
+        if head.find("p"):
+            bind(head.find("p"), f"{key}.lede")
+    sec["data-sec"] = key
+
+    # tiles
+    for gi, tg in enumerate(sec.find_all(class_="tiles"), start=1):
+        tile_groups.setdefault(label, []).append(len(tg.find_all(class_="tile")))
+        tg["data-tiles"] = f"{label}|{gi}"
+        tg.clear()
+
+    # verdicts (baseline)
+    v = sec.find(class_="verdicts")
+    if v:
+        v["data-verdicts"] = "Sep 19 baseline verdict"
+        v.clear()
+
+    # team flags
+    p = sec.find(class_="plays")
+    if p:
+        p["data-plays"] = "flag for the team"
+        p.clear()
+
+    # cards
+    n_title = n_note = n_sub = n_leg = 0
+    for card in sec.find_all(class_="card"):
+        figs = card.find_all("figure")
+        if figs:
+            card["data-chart-card"] = figs[0]["id"]
+            for el in card.find_all("h3", recursive=False):
+                el["data-chart-text"] = "card_title"; el.clear()
+            for el in card.find_all(class_="sub", recursive=False):
+                el["data-chart-text"] = "card_subtitle_as_published"; el.clear()
+            for el in card.find_all(class_="sowhat", recursive=False):
+                el["data-chart-text"] = "commentary_as_published"; el.clear()
+            for el in card.find_all(class_="legend", recursive=False):
+                n_leg += 1; bind(el, f"{key}.legend{n_leg}")
+        else:
+            h3 = card.find("h3", recursive=False)
+            if h3:
+                n_title += 1; bind(h3, f"{key}.card{n_title}.title")
+            sub = card.find(class_="sub", recursive=False)
+            if sub:
+                n_sub += 1; bind(sub, f"{key}.card{n_title}.sub")
+            for el in card.find_all(class_="sowhat", recursive=False):
+                n_note += 1; bind(el, f"{key}.note{n_note}")
+        t = card.find("table")
+        if t:
+            table_n += 1
+            rows = t.find_all("tr")
+            ths = rows[0].find_all("th")
+            t["data-table"] = f"table_{table_n}"
+            t["data-th-style"] = json.dumps([th.get("style", "") for th in ths])
+            first = rows[1].find_all("td") if len(rows) > 1 else []
+            t["data-td-class"] = json.dumps([" ".join(td.get("class", [])) for td in first])
+            t.clear()
+    # stand-alone sub-headings
+    for i, h3 in enumerate([h for h in sec.find_all("h3", recursive=False)], start=1):
+        bind(h3, f"{key}.subhead{i}")
+
+# ---------- footer ----------
+for i, span in enumerate(soup.find("footer").find_all("span", recursive=False), start=1):
+    bind(span, f"footer.{i}")
+
+# ---------- script: keep Rob's chart functions, drop his data block ----------
+script = soup.find_all("script")[-1]
+code = script.string
+fn_part = code.split("/* ================= DATA & CHARTS ================= */")[0]
+fn_part = fn_part.replace("(function(){", "", 1)
+script.decompose()
+
+# ---------- data files ----------
+# charts: Rob's CSVs unchanged, plus his chart index
+for f in os.listdir(os.path.join(DATA, "scorecard_charts")):
+    if f.endswith(".csv") and not f.startswith("_"):
+        shutil.copy(os.path.join(DATA, "scorecard_charts", f), os.path.join(OUT, "data", "scorecard", "charts", f))
+shutil.copy(os.path.join(DATA, "scorecard_charts", "_chart_index.csv"), os.path.join(OUT, "data", "scorecard", "chart_index.csv"))
+
+# tables, renamed table_1 .. table_4 in page order
+for f in sorted(os.listdir(os.path.join(DATA, "scorecard_tables"))):
+    n = re.match(r"table_(\d+)_", f).group(1)
+    shutil.copy(os.path.join(DATA, "scorecard_tables", f), os.path.join(OUT, "data", "scorecard", "tables", f"table_{n}.csv"))
+
+shutil.copy(os.path.join(DATA, "scorecard_written_analysis.csv"), os.path.join(OUT, "data", "scorecard", "written_analysis.csv"))
+
+# stat tiles: add a `group` column (which tile row in the section)
+rows = list(csv.DictReader(open(os.path.join(DATA, "scorecard_stat_tiles.csv"), encoding="utf-8")))
+seen = {}
+for r in rows:
+    sizes = tile_groups[r["section"]]
+    i = seen.get(r["section"], 0); seen[r["section"]] = i + 1
+    acc, g = 0, 1
+    for gi, s in enumerate(sizes, start=1):
+        acc += s
+        if i < acc: g = gi; break
+    r["group"] = g
+with open(os.path.join(OUT, "data", "scorecard", "stat_tiles.csv"), "w", newline="", encoding="utf-8") as fh:
+    w = csv.DictWriter(fh, fieldnames=["section", "group", "data_vintage", "value_as_published", "label", "detail"])
+    w.writeheader(); w.writerows(rows)
+
+# page text
+with open(os.path.join(OUT, "data", "scorecard", "page_text.csv"), "w", newline="", encoding="utf-8") as fh:
+    w = csv.writer(fh); w.writerow(["key", "text"]); w.writerows(page_text)
+
+# chart style: everything about how a chart is drawn that is not its data
+CUSTOM = {"c-issues": "pct0", "c-issues2": "pct1", "c-lier": "pct1", "c-ytconv": "dec1", "c-optin": "pct_small2", "c-yt28": "pct0"}
+style = {}
+for c in json.load(open(os.path.join(DATA, "scorecard_charts", "_all_charts.json"), encoding="utf-8")):
+    cid, t, args = c["chart_id"], c["chart_type"], c["args"]
+    s = {"type": t}
+    opts = dict(args[-1])
+    if opts.get("fmt") == "custom_format": opts["fmt"] = CUSTOM[cid]
+    if t == "bullet":
+        s["rows"] = {r["label"]: {"max": r["max"], "fmt": r["fmt"], "marks": {m["label"]: m.get("short", m["label"]) for m in r.get("marks", [])}} for r in args[0]}
+    elif t in ("hbar", "stack100"):
+        s["colors"] = {r["label"]: r["color"] for r in args[0] if r.get("color")}
+    elif t == "vbar":
+        if opts.get("colors"): opts["colors"] = dict(zip(args[0], opts["colors"]))
+        opts.pop("notes", None)  # notes come from the CSV
+    elif t in ("vstack", "line"):
+        s["colors"] = {sr["name"]: sr["color"] for sr in args[1]}
+    s["opts"] = opts
+    style[cid] = s
+json.dump(style, open(os.path.join(OUT, "data", "scorecard", "chart_style.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+
+
+# ---------- daily sections (Hannah's data, Rob's markup style) ----------
+def frag(h):
+    return BeautifulSoup(h, "html.parser")
+
+def segbtns(key, opts, default):
+    return f'<div class="seg" data-for="{key}" role="group">' + "".join(
+        f'<button type="button" data-v="{v}" aria-pressed="{"true" if v == default else "false"}">{l}</button>' for v, l in opts) + '</div>'
+RANGE = [("7", "7d"), ("14", "14d"), ("30", "30d"), ("all", "All")]
+
+hdr.find(attrs={"data-k": "header.meta"}).insert_after(frag(
+    '<div class="meta status-strip" data-added><span id="st-daily">Daily social: loading…</span><span id="st-monthly"></span></div>'))
+
+def chart_card(cid, title, sub, seg_key=None, legend=None, sub_id=None, src="LinkedIn page analytics, daily"):
+    head = f'<div class="head"><h3>{title}</h3>{segbtns(seg_key, RANGE, "7") if seg_key else ""}</div>'
+    return (f'<div class="card">{head}<p class="sub"{f" id={chr(34)}{sub_id}{chr(34)}" if sub_id else ""}>{sub}</p>'
+            f'<figure id="{cid}"></figure>{legend or ""}<p class="src">Source: {src}</p></div>')
+
+now = f"""
+<section id="now" data-added>
+  <div class="sec-head"><span class="eyebrow" id="now-eyebrow">Daily</span><h2>Social over the last 7, 14 and 30 days</h2><p id="now-lede">Loading the latest numbers from the daily sheet…</p></div>
+  <div class="grid two">
+    {chart_card("d-liimpr", "LinkedIn organic impressions per day", "Paid excluded. LinkedIn reports a day or two late.", "liimpr")}
+    {chart_card("d-lifoll", "LinkedIn followers", "Running organic follower count.", "lifoll")}
+    {chart_card("d-igreach", "Instagram reach and views, 28-day rolling", "Meta's 28-day rolling figures.", "igreach", '<div class="legend"><span class="line" style="--c:var(--s2)">Reach</span><span class="line" style="--c:var(--s4)">Views</span></div>', "d-igreach-sub", "Meta Business Suite, daily reads")}
+    {chart_card("d-igfoll", "Instagram followers", "Lifetime follower total.", "igfoll", None, "d-igfoll-sub", "Instagram profile, daily reads")}
+  </div>
+  <h3 style="margin:26px 0 10px">Engagement on posts published in the last 30 days, against the 30 before</h3>
+  <div class="tiles" id="now-delta"></div>
+  <details class="fnote"><summary>How these figures are worked out</summary><p id="now-delta-note"></p></details>
+  <div class="card-row-head" style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin:26px 0 10px"><h3 style="margin:0">Trailing 30-day engagement</h3>{segbtns("eng", [("LinkedIn", "LinkedIn"), ("Instagram", "Instagram")], "LinkedIn")}</div>
+  <div class="grid two">
+    <div class="card"><h3 id="d-eng-t1">Reactions</h3><p class="sub">Total for posts published in the 30 days up to each date.</p><figure id="d-eng-rx"></figure><div class="legend" id="d-eng-legend1"></div><p class="src">Source: LinkedIn page analytics and Meta Business Suite, per post</p></div>
+    <div class="card"><h3 id="d-eng-t2">Comments and reposts</h3><p class="sub">Same window, on their own scale.</p><figure id="d-eng-cm"></figure><div class="legend" id="d-eng-legend2"></div><p class="src">Source: LinkedIn page analytics and Meta Business Suite, per post</p></div>
+  </div>
+</section>
+"""
+READ = """
+<section id="read" class="actions-view" data-added>
+  <div class="sec-head"><span class="eyebrow" id="read-eyebrow"></span><h2 id="read-headline"></h2><p id="read-lede"></p></div>
+  <div class="card"><h3>What happened</h3><ol class="findings two-col" id="read-findings"></ol></div>
+  <div class="card" style="margin-top:18px"><h3>Reading the numbers</h3><ul class="notes" id="read-notes"></ul></div>
+</section>
+"""
+TOOLBAR = """
+<div class="toolbar" data-added>
+  <div class="seg viewsw" data-for="view" role="group" aria-label="View"><button type="button" data-v="data" aria-pressed="true">Data &amp; insights</button><button type="button" data-v="actions" aria-pressed="false">Actions</button></div>
+  <form class="ask" id="ask-form" autocomplete="off"><input id="ask-q" type="text" placeholder="Ask for a custom insight, e.g. Which guests drive the most comments?" aria-label="Ask for a custom insight"><button type="submit">Ask Claude</button></form>
+  <div class="refresh"><button type="button" id="refresh-btn" title="Reload the latest data">&#8635; Refresh</button><span class="dim" id="loaded-at"></span></div>
+  <p class="ask-note dim" id="ask-note" hidden></p>
+</div>
+"""
+OVERVIEW = """
+<section id="overview" data-added>
+  <div class="sec-head"><span class="eyebrow">Overview</span><h2>Where ATM stands</h2></div>
+  <div class="overview">
+    <div class="measure ov-wide" id="ov-audience"><div class="mk">Total audience</div><div class="mp dim">Loading…</div></div>
+    <div class="measure" id="ov-site"><div class="mk">Site traffic</div></div>
+    <div class="measure" id="ov-newret"><div class="mk">New vs returning visitors</div></div>
+    <div class="measure" id="ov-yoy"><div class="mk">Year over year</div></div>
+  </div>
+  <h3 style="margin:22px 0 10px">Scorecards: the last full month against the three before</h3>
+  <div class="tiles" id="a-bench-tiles"></div>
+  <details class="fnote"><summary>How these figures are worked out</summary><p id="a-bench-note"></p></details>
+</section>
+"""
+GLANCE = """
+<section id="glance" data-added>
+  <div class="glance-head"><div><span class="eyebrow">At a glance</span><h2 id="glance-title">The latest</h2></div>
+    <div class="glance-tabs">
+      <div class="seg" data-for="channel" role="group" aria-label="Channel"><button type="button" data-v="all" aria-pressed="true">All</button><button type="button" data-v="li" aria-pressed="false">LinkedIn</button><button type="button" data-v="ig" aria-pressed="false">Instagram</button><button type="button" data-v="yt" aria-pressed="false">YouTube</button><button type="button" data-v="nl" aria-pressed="false">Newsletter</button><button type="button" data-v="site" aria-pressed="false">Site</button></div>
+      <div class="seg" data-for="glance" role="group" aria-label="Time frame"><button type="button" data-v="7" aria-pressed="true">7 days</button><button type="button" data-v="14" aria-pressed="false">14 days</button><button type="button" data-v="30" aria-pressed="false">30 days</button><button type="button" data-v="all" aria-pressed="false">All</button></div>
+    </div></div>
+  <div class="glance-body">
+    <div><p class="glance-headline" id="glance-headline"></p><ul class="glance" id="glance-list"><li class="dim">Loading…</li></ul></div>
+    <div class="card"><figure id="glance-chart"></figure><p class="sub" id="glance-chart-cap"></p></div>
+  </div>
+  <h3 style="margin:22px 0 10px">The measures that matter most</h3>
+  <div class="measures" id="measures"></div>
+  <div id="headline-tiles"></div>
+  <p class="sub" id="measures-note" style="margin-top:10px;max-width:80ch"></p>
+</section>
+"""
+ACTIONS = """
+<section id="actions" class="actions-view" data-added>
+  <div class="sec-head"><span class="eyebrow" id="actions-eyebrow">Actions</span><h2>What to do next</h2><p>Ranked suggestions from the latest analysis, which reads every source on the dashboard together with the optimization log.</p></div>
+  <div class="grid two" id="actions-grid">
+    <div class="card"><h3>Priorities</h3><div class="plays" id="read-actions"></div></div>
+    <div class="card"><h3>Catch posts tagged to the wrong page</h3><p class="sub">"At The Moment" is a separate LinkedIn page with a similar name. These steps catch follows and tags meant for ATM that land there.</p><p class="sub" id="peer-watch"></p><div class="plays" id="tag-actions"></div></div>
+    <div class="card"><h3>Setup tasks</h3><p class="sub">Access and tracking work that unlocks parts of the dashboard. Each names an owner.</p><div class="plays" id="setup-actions"></div></div>
+    <div class="card"><h3>Tracking issues on record</h3><p class="sub">Known tagging and measurement problems that skew the numbers until they are fixed.</p><div class="plays" id="tracking-actions"></div></div>
+  </div>
+</section>
+"""
+hdr.insert_before(frag(TOOLBAR))
+hdr.insert_after(frag(GLANCE))
+hdr.insert_after(frag(OVERVIEW))
+hdr.find_next_sibling("section", id="glance").insert_after(frag(ACTIONS))
+secA = soup.find("section", attrs={"data-sec": "A"})
+secA.insert_before(frag(now))
+secA.decompose()  # its headline numbers now live in the At a glance measures
+# What the numbers say goes to the Actions view, ahead of the actions themselves
+soup.find("section", id="actions").insert_before(frag(READ))
+# the September baseline summary sits between the Overview and At a glance
+_audit = soup.find("section", id="audit").extract()
+_audit.find(attrs={"data-verdicts": True}).insert_after(frag('<p class="sub" data-added style="margin-top:12px">The detail behind each verdict is in sections 01 to 06 further down the page.</p>'))
+soup.find("section", id="glance").insert_before(_audit)
+# 08 (data plumbing) joins the Actions view
+_s08 = soup.find("section", attrs={"data-sec": "08"}).extract()
+_s08["class"] = (_s08.get("class") or []) + ["actions-view"]
+soup.find("section", id="actions").insert_after(_s08)
+# chart carousels for the LinkedIn, Instagram & YouTube, and site sections
+for k in ("03", "04", "05"):
+    sec = soup.find("section", attrs={"data-sec": k})
+    for g in sec.find_all("div", class_="grid", recursive=False):
+        if not g.find("figure"): continue
+        n = len(g.find_all(class_="card", recursive=False))
+        g["class"] = ["carousel-track"]; g["tabindex"] = "0"; g["aria-label"] = f"{n} charts; scroll sideways or use the arrows"
+        wrap = soup.new_tag("div", attrs={"class": "carousel", "data-added": ""})
+        g.wrap(wrap)
+        wrap.insert(0, frag('<div class="carousel-ctl"><button type="button" class="cprev" aria-label="Previous chart">&#8249;</button><span class="ccount dim"></span><button type="button" class="cnext" aria-label="Next chart">&#8250;</button></div>'))
+
+
+secB = soup.find("section", attrs={"data-sec": "B"})
+secB.find(class_="grid").append(frag('<div class="card" data-added><h3>YouTube watch hours per month</h3><p class="sub">Account level. Faded bars are pre-launch or partial months.</p><figure id="d-ytwatch"></figure><p class="sowhat">Watch time follows views: it fell away when the paid flight ended in August.</p><p class="src">Source: YouTube Studio, monthly</p></div>'))
+
+ctrl = ('<div class="ctrl">' + segbtns("posts", [("all", "All"), ("LinkedIn", "LinkedIn"), ("Instagram", "Instagram")], "all") +
+        '<input id="p-search" type="search" placeholder="Search person, company or post" aria-label="Search posts">'
+        '<select id="p-month" aria-label="Month"></select>'
+        '<select id="p-field" aria-label="Search in"><option value="any">Search: anything</option><option value="person">Person only</option><option value="company">Company only</option><option value="title">Post copy only</option></select>'
+        '<span class="dim" id="p-count"></span></div>')
+F = f"""
+<section id="posts" data-added>
+  <div class="sec-head"><span class="eyebrow" id="f-eyebrow">F · Posts</span><h2>Post by post, ranked</h2><p id="f-lede"></p></div>
+  <div class="grid two">
+    <div class="card"><h3>Running benchmarks, all posts</h3><p class="sub">Median is the typical post; the average is pulled up by a few outliers, so set targets on the median.</p><div class="tblwrap"><table id="d-bench"></table></div><p class="src">Source: LinkedIn page analytics and Meta Business Suite, per post</p></div>
+    <div class="card"><h3>Comments by post, LinkedIn</h3><p class="sub" id="d-cmt-sub"></p><figure id="d-cmt"></figure><p class="src">Source: LinkedIn page analytics and Meta Business Suite, per post</p></div>
+  </div>
+  <div class="card" style="margin-top:18px"><div class="head"><h3>Top content, last 30 days</h3>{segbtns("top", [("all", "All"), ("LinkedIn", "LinkedIn"), ("Instagram", "Instagram")], "all")}</div><p class="sub" id="d-top-sub"></p><div class="tblwrap tall"><table id="d-top" class="posts"></table></div></div>
+</section>
+"""
+soup.find("section", attrs={"data-sec": "E"}).insert_after(frag(F))
+soup.find("footer").insert(0, frag('<span id="foot-daily" data-added></span>'))
+_flags = soup.find("section", attrs={"data-sec": "D"}).find(attrs={"data-plays": True}).find_parent(class_="card")
+_flags.extract()
+soup.find(id="actions-grid").append(_flags)
+
+
+# ---------- neutral source wording (sources named by platform, not by person) ----------
+NEUTRAL = {
+ 'page_text.csv': [('read in Rob\'s ""reporting"" Chrome (Sep 29)', 'read directly (Sep 29)'), ("read directly in Rob's Chrome (Sep 19)", 'read directly (Sep 19)'), ("· Hannah's monthly pre-reads ", '· monthly pre-reads '), ("Rob's seat assigned", 'a second seat assigned'), ("The native dashboards were read directly in Rob's Chrome.", 'The native dashboards were read directly.')],
+ 'chart_index.csv': [("Rob's custom channel group", 'A custom channel group'), ("Browser read in a signed-in Chrome on Rob's Mac.", "Read directly from the platform's own dashboard."), ("plus Hannah's August read of the", 'plus an August read of the'), ("plus Hannah Noll's August read of the", 'plus an August read of the')],
+ 'tables/table_3.csv': [("not just Rob's custom group", 'not just one custom report')],
+ 'tables/table_4.csv': [('ask Hannah/Amanda for the Slack channel history', 'ask the team for the Slack channel history')],
+ 'charts/c-lictr.csv': [('(Aug, Hannah)', '(Aug)')],
+ 'chart_style.json': [('(Aug, Hannah)', '(Aug)')],
+}
+# name the baseline by its month, not its day
+BASELINE_MONTH = [('Baseline · Sep 19 internal audience audit', 'Baseline · September internal audience audit'), ('· pulled Sep 19, 2026 ·', '· pulled September 2026 ·'),
+                  ('Sep 19 baseline: ', 'September baseline: '), ('baseline sections prepared Sep 19, 2026', 'baseline sections prepared September 2026'),
+                  ('read directly (Sep 19)', 'read directly (September)'), ('via Supermetrics (Sep 19)', 'via Supermetrics (September)'),
+                  ('Sep 19 2026 baseline audit (not refreshed since)', 'September 2026 baseline (not refreshed since)')]
+for f in ('page_text.csv', 'chart_index.csv', 'stat_tiles.csv'):
+    NEUTRAL.setdefault(f, [])
+for f in ('page_text.csv', 'chart_index.csv', 'stat_tiles.csv'):
+    NEUTRAL[f] = NEUTRAL[f] + BASELINE_MONTH
+SEPARATE_PAGE = {
+ 'page_text.csv': [(', on a 3,806-follower base that is also split in two', ', on a 3,806-follower base'),
+                   ('A second ATM page (""At The Moment"", 1,803 followers) sits in LinkedIn\'s own competitor table.', '""At The Moment"", a separate page with a similar name (1,803 followers), sits in LinkedIn\'s own competitor table and is watched as a peer.')],
+ 'chart_index.csv': [(', on a 3,806-follower base that is also split in two', ', on a 3,806-follower base'),
+                     (" Add the duplicate page's 113/month and ATM is leaving two-fifths of its follower growth on a page nobody posts to.", ' ""At The Moment"", a separate page with a similar name, added 113 in the same 30 days on two posts, so watch it for follows and tags meant for ATM.')],
+ 'stat_tiles.csv': [('Followers on the duplicate ""At The Moment"" page"', 'Followers on ""At The Moment"" (separate page, similar name)"'), ('+113 in 30 days; 2 posts; merge it', '+113 in 30 days on 2 posts; watch for mis-tags')],
+ 'tables/table_2.csv': [('(ATM duplicate)', '(separate page)')],
+ 'tables/table_3.csv': [('"Merge ""At The Moment"" into the ATM page",LinkedIn page-merge request,+113 followers/month stop landing on a page nobody posts to', '"Catch tags and follows meant for ATM that land on ""At The Moment""",LinkedIn mentions and the competitor table,Mis-tagged posts get fixed while they are fresh')],
+ 'tables/table_4.csv': [(' Fix: merge the duplicate ""At The Moment"" page', ' Watch: ""At The Moment"" is a separate page with a similar name; catch mis-tags')],
+}
+SEPARATE_PAGE['page_text.csv'] = SEPARATE_PAGE['page_text.csv'] + [
+    ('06.headline,Incumbents lead on scale. The fast growers grow through people and rooms.', '06.headline,Incumbents lead on scale.'),
+    ('Every peer that grew in 2025–26 did it with mechanics ATM has not yet run: guests sharing their own interviews (FOS), events (Semafor, Marketecture), writer-as-franchise (Puck), awards (Digiday).', 'Newsletter list size for ATM and its peers, from media kits and public statements, 2025–26.'),
+    ('08.headline,Everything is connected. Three instruments are mis-configured.', '08.headline,Data sources: what is connected and what still needs fixing'),
+    ('Supermetrics has all seven sources on the plan as of 5:00pm Sep 19 (AI Chats destination swapped in, a second seat assigned, GA4 property shared, Search Console swapped in for Meta Ads). The native dashboards were read directly. What remains is configuration, not access.', 'Each source as of the September baseline, with the fix it still needs. Open items also appear under Setup tasks and Tracking issues above.'),
+]
+for f, pairs in SEPARATE_PAGE.items():
+    NEUTRAL[f] = NEUTRAL.get(f, []) + pairs
+for f, pairs in NEUTRAL.items():
+    fp = os.path.join(OUT, "data", "scorecard", f)
+    t = open(fp, encoding="utf-8").read()
+    for a, b in pairs:
+        t = t.replace(a, b)
+    open(fp, "w", encoding="utf-8").write(t)
+
+# ---------- write the template ----------
+import time
+BUILD = time.strftime("%Y%m%d%H%M%S")
+EXTRA_CSS = """.card .src{color:var(--muted);font-size:11.5px;margin-top:2px}
+.card .head{display:flex;justify-content:space-between;align-items:flex-start;gap:8px 12px;flex-wrap:wrap}
+.seg{display:inline-flex;border:1px solid var(--ring);border-radius:999px;overflow:hidden;flex:none}
+.seg button{font:500 12px "IBM Plex Sans",system-ui,sans-serif;padding:4px 11px;border:0;background:var(--surface);color:var(--ink2);cursor:pointer}
+.seg button+button{border-left:1px solid var(--ring)}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--plane)}
+.seg button:focus-visible{outline:2px solid var(--s1);outline-offset:-2px}
+.ctrl{display:flex;flex-wrap:wrap;gap:8px 10px;align-items:center;margin:6px 0 10px}
+.ctrl input,.ctrl select{font:13px "IBM Plex Sans",system-ui,sans-serif;padding:5px 8px;border:1px solid var(--ring);border-radius:4px;background:var(--surface);color:var(--ink);max-width:100%}
+.ctrl input{flex:1 1 220px}
+.tblwrap.tall{max-height:560px;overflow:auto}
+.tblwrap.tall th{position:sticky;top:0;background:var(--surface);z-index:1}
+th.sortable{cursor:pointer;white-space:nowrap}
+td.beat{color:var(--goodtext);font-weight:600}
+.dim{color:var(--muted)}
+.findings{margin:6px 0 0;padding-left:20px;display:grid;gap:12px;font-size:14px}
+.findings b{display:block;margin-bottom:2px}
+.notes{margin:6px 0 0;padding-left:18px;display:grid;gap:6px;font-size:13.5px;color:var(--ink2)}
+table.posts td{white-space:nowrap}
+table.posts td.post{white-space:normal;min-width:260px;max-width:440px}
+.toolbar{position:sticky;top:0;z-index:5;display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;padding:10px 0;background:var(--plane);border-bottom:1px solid var(--grid)}
+.toolbar .ask{display:flex;flex:1 1 320px;gap:6px;min-width:0}
+.toolbar .ask input{flex:1;min-width:0;font:13.5px "IBM Plex Sans",system-ui,sans-serif;padding:6px 10px;border:1px solid var(--ring);border-radius:6px;background:var(--surface);color:var(--ink)}
+.toolbar button{font:600 12.5px "IBM Plex Sans",system-ui,sans-serif;padding:6px 12px;border:1px solid var(--ring);border-radius:6px;background:var(--surface);color:var(--ink);cursor:pointer;white-space:nowrap}
+.toolbar .ask button{background:var(--ink);color:var(--plane);border-color:var(--ink)}
+.toolbar .refresh{display:flex;align-items:center;gap:8px;font-size:12px}
+.toolbar .ask-note{flex-basis:100%;margin:0;font-size:12.5px}
+.toolbar button:focus-visible,.toolbar input:focus-visible{outline:2px solid var(--s1);outline-offset:1px}
+@media (max-width:600px){.toolbar{position:static}}
+body[data-view="actions"] .wrap>:not(.toolbar):not(.actions-view):not(#tip){display:none}
+body:not([data-view="actions"]) .actions-view{display:none}
+.fnote{margin-top:10px;max-width:80ch;color:var(--muted);font-size:12.5px}
+.fnote summary{cursor:pointer;font-weight:600;color:var(--ink2);width:max-content;max-width:100%}
+.fnote summary:focus-visible{outline:2px solid var(--s1);outline-offset:2px}
+.fnote p{margin:6px 0 0}
+.hl-head{margin:22px 0 10px;font-size:14px}
+.hl-head .dim{font-weight:400}
+.hl-tiles{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(min(100%,190px),1fr))}
+.hl{border:1px solid var(--ring);border-radius:6px;padding:10px 12px;background:var(--surface);display:grid;gap:3px;align-content:start}
+.hl .hv{font-family:"Archivo",sans-serif;font-size:22px;font-weight:800;line-height:1.1}
+.hl .hk{font-size:12px;font-weight:600;color:var(--ink2)}
+.hl .hd{font-size:11.5px;color:var(--muted)}
+.carousel{margin-top:4px}
+.carousel-ctl{display:flex;align-items:center;justify-content:flex-end;gap:10px;margin:0 0 8px;font-size:12px}
+.carousel-ctl button{font:600 16px/1 "IBM Plex Sans",system-ui,sans-serif;width:32px;height:32px;border:1px solid var(--ring);border-radius:50%;background:var(--surface);color:var(--ink);cursor:pointer}
+.carousel-ctl button:disabled{opacity:.35;cursor:default}
+.carousel-ctl button:focus-visible,.carousel-track:focus-visible{outline:2px solid var(--s1);outline-offset:2px}
+.carousel-track{display:flex;align-items:flex-start;gap:18px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;padding-bottom:8px;scrollbar-width:thin}
+.carousel-track>.card{flex:0 0 calc(50% - 9px);scroll-snap-align:start;min-width:0}
+@media (max-width:860px){.carousel-track>.card{flex-basis:100%}}
+#glance{padding-top:28px}
+.glance-head{display:flex;justify-content:space-between;align-items:flex-end;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.glance{margin:0;padding-left:20px;display:grid;gap:7px;font-size:14.5px;line-height:1.5}
+.glance-headline{font-family:"Archivo",sans-serif;font-size:19px;font-weight:700;line-height:1.3;margin:0 0 10px}
+.glance-tabs{display:flex;flex-wrap:wrap;gap:8px;min-width:0;max-width:100%}
+@media (max-width:600px){.glance-head{flex-wrap:wrap}.glance-tabs{width:100%}.glance-tabs .seg{max-width:100%;overflow-x:auto;scrollbar-width:none}.glance-tabs .seg button{flex:none}}
+.glance-body{display:grid;gap:18px;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);align-items:start}
+@media (max-width:860px){.glance-body{grid-template-columns:1fr}}
+#overview{padding-top:28px}
+.overview{display:grid;gap:12px;grid-template-columns:minmax(0,1.7fr) repeat(3,minmax(0,1fr))}
+@media (max-width:980px){.overview{grid-template-columns:repeat(2,minmax(0,1fr))}.overview .ov-wide{grid-column:span 2}}
+@media (max-width:600px){.overview{grid-template-columns:1fr}.overview .ov-wide{grid-column:auto}}
+.aud{display:grid;gap:5px;margin:4px 0}
+.audrow{display:grid;grid-template-columns:78px 1fr 60px;align-items:center;gap:8px;font-size:12px;color:var(--ink2)}
+.audrow i{display:block;height:8px;border-radius:4px}
+.audrow b{text-align:right;font-weight:600;color:var(--ink)}
+.measures{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr))}
+.measure{background:var(--surface);border:1px solid var(--ring);border-radius:6px;padding:14px 16px;display:grid;gap:6px;align-content:start}
+.measure .mk{font-size:12px;color:var(--ink2);font-weight:600}
+.measure .mv{font-family:"Archivo",sans-serif;font-size:30px;font-weight:800;line-height:1}
+.measure .mp{font-size:11.5px;color:var(--muted)}
+.measure .chip{justify-self:start;font:600 11.5px "IBM Plex Mono",monospace;padding:2px 8px;border-radius:999px;background:var(--grid);color:var(--ink2)}
+.measure .chip.up{background:var(--wash-good);color:var(--goodtext)}
+.measure .chip.down{background:var(--wash-crit);color:var(--crit)}
+.measure .bars{display:grid;gap:3px;margin-top:2px}
+.measure .bar{display:grid;grid-template-columns:62px 1fr;align-items:center;gap:6px;font-size:11px;color:var(--muted)}
+.measure .bar i{display:block;height:7px;border-radius:4px;background:var(--s1)}
+.measure .bar.prev i{background:var(--axis)}
+.measure .mn{font-size:12.5px;color:var(--ink2)}
+.findings.two-col{columns:2 420px;column-gap:28px;display:block}
+.findings.two-col li{break-inside:avoid;margin-bottom:12px}
+.status-strip span{display:inline-flex;align-items:center;gap:6px}
+.status-strip span::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--good)}
+"""
+html = str(soup)
+loader = open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "scorecard_loader.js"), encoding="utf-8").read()
+html = html.replace("</body>", "") if "</body>" in html else html
+html += "\n<script>\n(function(){\n" + fn_part.strip() + "\n\n" + loader + "\nwindow.ATMChart = { el, css, hover, showTip, hideTip, bullet, hbar, vbar, vstack, line, stack100, fmtPct, fmtInt, fmtK };\n})();\n</script>\n<script src=\"js/archive.js?v=" + BUILD + "\"></script>\n<script src=\"js/daily_data.js?v=" + BUILD + "\"></script>\n<script src=\"js/daily_view.js?v=" + BUILD + "\"></script>\n<script src=\"js/glance.js?v=" + BUILD + "\"></script>\n<script src=\"js/carousel.js?v=" + BUILD + "\"></script>\n"
+html = html.replace("</style>", EXTRA_CSS + "</style>", 1)
+html = html.replace("<title>ATM Audience Scorecard</title>", '<title>ATM Audience Dashboard</title><meta name="robots" content="noindex,nofollow">')
+open(os.path.join(OUT, "index.html"), "w", encoding="utf-8").write(html)
+print("page_text keys:", len(page_text), "tile groups:", tile_groups, "tables:", table_n, "charts styled:", len(style))

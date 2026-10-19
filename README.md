@@ -4,11 +4,13 @@ Live at https://atm.mattbecher.com (also https://tohomito.github.io/atm-dashboar
 
 One page, in the Audience Scorecard's design, built from two data sources:
 
+Page order (Data & insights view): Overview, September baseline summary, At a glance, the 7/14/30-day section, B–E, F (posts), baseline detail 01–06. The Actions view holds "What the numbers say", the actions, and 08 (data sources and fixes).
+
 | Sections | Data | Refresh |
 |---|---|---|
-| Now (daily social), the benchmark row in A, YouTube watch hours in B, F (every post) | The ATM Daily Social Pulse Google Sheet, read live each time the page opens, plus `js/archive.js` | Whenever Hannah's daily run writes to the sheet |
-| A–E, Sep 19 baseline (01–08), footer | The files in `data/scorecard/` | When new files from Rob's monthly run are copied in |
-| Header, "The read" (findings) and the Actions view (priorities, tagging steps) | `data/analysis.csv`, written across every source with the optimization log as context | Rewritten each month after the monthly files arrive |
+| The 7/14/30-day section, the Overview scorecards, YouTube watch hours in B, F (posts) | The ATM Daily Social Pulse Google Sheet, read live each time the page opens, plus `js/archive.js` | Whenever the daily run writes to the sheet |
+| Headline numbers (in At a glance), B–E, the September baseline (summary and 01–08), footer | The files in `data/scorecard/` | When new monthly files are copied in |
+| Header, "What the numbers say" and the Actions view | `data/analysis.csv`, written across every source with the optimization log as context | Rewritten each month after the monthly files arrive |
 | "At a glance" and the key measures | Computed in the page from both sources | Every time the page opens |
 
 The header shows the date of each source.
@@ -21,6 +23,8 @@ The header shows the date of each source.
 - `js/daily_view.js`: draws the daily sections with the scorecard's chart code.
 - `js/glance.js`: the toolbar (Data & insights / Actions switch, Refresh, the "Ask Claude" box), the "At a glance" insights for 7 days / 14 days / 30 days / All, and the key-measures panel.
 - `js/archive.js`: history the sheet doesn't hold (posts through Oct 5, 2026; LinkedIn monthly totals May to Sep 2026).
+- `js/carousel.js`: the chart carousels in sections 03, 04 and 05.
+- `tools/build_unified.py` and `tools/scorecard_loader.js`: rebuild `index.html` from the scorecard's published page (layout, section order, wording fixes). Run `python3 -I tools/build_unified.py <handoff folder> .`; the build reads `scorecard_loader.js` from its own folder.
 - `docs/DATA_SPEC.md`: the files Rob's monthly run must save to SharePoint.
 - `tools/build_ask.py`: builds every figure the dashboard cites (analysis, monthly tiles, all chart data, tables, post history) into two private Google Docs in the "ATM Dashboard: Claude data" Drive folder. The "Ask Claude" box links to those Docs, and Claude opens them through the asker's own Google Drive connector, so the full data never sits on the public site. Steps are in the script's header.
 

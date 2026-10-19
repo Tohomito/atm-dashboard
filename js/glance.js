@@ -89,6 +89,7 @@ function windowFacts(S, W, tiles) {
   f.nl = tileBy(tiles, /newsletter active subscribers/i); f.sess = tileBy(tiles, /atm\.media sessions/i); f.clicks = tileBy(tiles, /verified human clicks/i);
   const mv = tiles && tiles[0] && tiles[0].data_vintage.match(/\(([^)]+)\)/);
   f.monthly = mv ? mv[1].replace(/ window/, '') : 'the latest month';
+  const mn = f.monthly.match(/^([A-Z][a-z]{2})/); f.monthlyName = mn ? ({ Jan: 'January', Feb: 'February', Mar: 'March', Apr: 'April', May: 'May', Jun: 'June', Jul: 'July', Aug: 'August', Sep: 'September', Oct: 'October', Nov: 'November', Dec: 'December' })[mn[1]] : 'Latest month';
   return f;
 }
 const who = p => p.person ? `${esc(p.person)}${p.company ? `, ${esc(p.company)}` : ''}` : esc(p.title.split(/ - | \(/)[0].length <= 80 ? p.title.split(/ - | \(/)[0] : p.title.slice(0, 78) + '…');
@@ -167,20 +168,36 @@ async function drawChart(f, ch, S) {
   cap.textContent = ch === 'nl' ? 'Newsletter active subscribers at month end (monthly)' : 'atm.media users per month (monthly)';
 }
 
-/* ---------- key measures ---------- */
-function measureCards(f, tiles) {
+/* ---------- key measures: each card belongs to a channel; "All" shows one or two per channel ---------- */
+function measureCards(f, tiles, chan) {
   const period = f.all ? `since ${mdy(f.from)}` : `last ${f.n} days`, prevLabel = `prior ${f.n}d`;
   const syn = tileBy(tiles, /syndication multiplier/i), clicks = f.clicks;
   let ctrNow = null, ctrWas = null;
   if (clicks) { const m = clicks.detail.match(/rate\s*([\d.]+)%.*?was\s*([\d.]+)%/i); if (m) { ctrNow = +m[1]; ctrWas = +m[2]; } }
-  return [
-    { k: 'LinkedIn comments per post', v: f.cpp != null ? f.cpp.toFixed(1) : '—', p: period, now: f.cpp, prev: f.all ? null : f.cppPrev, prevLabel, fmtB: x => x.toFixed(1), n: f.young ? 'Recent posts are still collecting comments, so a short window reads low against the one before.' : 'Comments follow people: guest and honoree posts draw the most.' },
-    { k: 'Partner-repost lift', v: syn ? syn.value_as_published : '—', p: `${f.monthly}, monthly`, now: null, prev: null, n: syn ? `${syn.detail}; the best posts reached 7–8× with a partner's own repost.` : 'Arrives with the monthly figures.' },
-    { k: 'Instagram reach, 28 days', v: fmt(f.igReach), p: `as of ${f.igReachDate ? mdy(f.igReachDate) : '—'}`, now: f.igReach, prev: f.igReachThen, prevLabel: f.igReachThenDate ? mdy(f.igReachThenDate) : '', fmtB: fmt, n: 'Collabs still win; the reach loss is in the other posts.' },
-    { k: 'YouTube subscribers gained', v: f.ytGain != null ? `${sign(f.ytGain)}${full(f.ytGain)}` : '—', p: f.ytGain != null ? `since ${mdy(f.ytFrom)} · ${full(f.ytTotal)} total` : `${full(f.ytTotal)} total; no reading at the start of this window`, now: f.ytGain, prev: f.all ? null : f.ytGainPrev, prevLabel, fmtB: full, n: 'All organic since the ad flight ended in August.' },
-    { k: 'Newsletter verified-click rate', v: ctrNow != null ? ctrNow.toFixed(2) + '%' : '—', p: `${f.monthly}, monthly, share of delivered email`, now: ctrNow, prev: ctrWas, prevLabel: 'month before', fmtB: x => x.toFixed(2) + '%', n: 'Bot-filtered clicks; list size alone is inflated by imports.' },
-    { k: 'Homepage sign-up rate', v: 'Not yet', p: 'starts with October data', now: null, prev: null, n: 'The subscribe prompt moved up the homepage on Oct 1. Judge it on sign-ups per homepage session, not total subscribers.' }
+  const cards = [
+    { ch: 'li', all: false, k: 'LinkedIn organic impressions', v: full(f.imp), p: period, now: f.imp, prev: f.all ? null : f.impPrev, prevLabel, fmtB: full, n: 'Reach follows the post: guest and honoree posts travel, house posts do not.' },
+    { ch: 'li', all: true, k: 'LinkedIn comments per post', v: f.cpp != null ? f.cpp.toFixed(1) : '—', p: period, now: f.cpp, prev: f.all ? null : f.cppPrev, prevLabel, fmtB: x => x.toFixed(1), n: f.young ? 'Recent posts are still collecting comments, so a short window reads low against the one before.' : 'Comments follow people: guest and honoree posts draw the most.' },
+    { ch: 'li', all: false, k: 'LinkedIn followers gained', v: `${sign(f.liGain)}${full(f.liGain)}`, p: `${period}, organic`, now: f.liGain, prev: f.all ? null : f.liGainPrev, prevLabel, fmtB: full, n: 'Organic gains only; LinkedIn\'s own total is in the Overview.' },
+    { ch: 'li', all: true, k: 'Partner-repost lift', v: syn ? syn.value_as_published : '—', p: `${f.monthly}, monthly`, now: null, prev: null, n: syn ? `${syn.detail}; the best posts reached 7–8× with a partner's own repost.` : 'Arrives with the monthly figures.' },
+    { ch: 'ig', all: true, k: 'Instagram reach, 28 days', v: fmt(f.igReach), p: `as of ${f.igReachDate ? mdy(f.igReachDate) : '—'}`, now: f.igReach, prev: f.igReachThen, prevLabel: f.igReachThenDate ? mdy(f.igReachThenDate) : '', fmtB: fmt, n: 'Collabs still win; the reach loss is in the other posts.' },
+    { ch: 'ig', all: false, k: 'Instagram views, 28 days', v: fmt(f.igViews), p: `as of ${f.igReachDate ? mdy(f.igReachDate) : '—'}`, now: f.igViews, prev: f.igViewsThen, prevLabel: f.igReachThenDate ? mdy(f.igReachThenDate) : '', fmtB: fmt, n: 'Meta\'s rolling 28-day count of Reels, posts and Stories.' },
+    { ch: 'ig', all: false, k: 'Instagram likes on new posts', v: full(f.igreactions), p: `${f.igPosts} posts, ${period}`, now: f.igreactions, prev: f.all ? null : f.igreactionsPrev, prevLabel, fmtB: full, n: f.young ? 'Recent posts are still collecting likes, so a short window reads low.' : 'Lifetime likes on posts published in the window.' },
+    { ch: 'ig', all: false, k: 'Instagram followers', v: full(f.igFoll), p: f.igFollChange != null ? `${sign(f.igFollChange)}${full(f.igFollChange)} ${period}` : 'latest daily read', now: null, prev: null, n: 'Lifetime total from the daily reads.' },
+    { ch: 'yt', all: true, k: 'YouTube subscribers gained', v: f.ytGain != null ? `${sign(f.ytGain)}${full(f.ytGain)}` : '—', p: f.ytGain != null ? `since ${mdy(f.ytFrom)} · ${full(f.ytTotal)} total` : `${full(f.ytTotal)} total; no reading at the start of this window`, now: f.ytGain, prev: f.all ? null : f.ytGainPrev, prevLabel, fmtB: full, n: 'All organic since the ad flight ended in August.' },
+    { ch: 'nl', all: true, k: 'Newsletter verified-click rate', v: ctrNow != null ? ctrNow.toFixed(2) + '%' : '—', p: `${f.monthly}, monthly, share of delivered email`, now: ctrNow, prev: ctrWas, prevLabel: 'month before', fmtB: x => x.toFixed(2) + '%', n: 'Bot-filtered clicks; list size alone is inflated by imports.' },
+    { ch: 'site', all: true, k: 'Homepage sign-up rate', v: 'Not yet', p: 'starts with October data', now: null, prev: null, n: 'The subscribe prompt moved up the homepage on Oct 1. Judge it on sign-ups per homepage session, not total subscribers.' }
   ];
+  return chan && chan !== 'all' ? cards.filter(c => c.ch === chan) : cards.filter(c => c.all);
+}
+/* the monthly headline numbers, filed under the channel each one measures */
+const tileCh = l => /linkedin/i.test(l) ? 'li' : /instagram/i.test(l) ? 'ig' : /youtube/i.test(l) ? 'yt' : /newsletter|verified human clicks/i.test(l) ? 'nl' : /atm\.media|session|site/i.test(l) ? 'site' : null;
+function headlineTiles(tiles, chan) {
+  return (tiles || []).filter(t => /^A\b/.test(t.section) && (chan === 'all' || tileCh(t.label) === chan));
+}
+function headlineHTML(list, f) {
+  if (!list.length) return '';
+  return `<h4 class="hl-head">${esc(f.monthlyName)} headline numbers <span class="dim">· monthly, ${esc(f.monthly)}</span></h4><div class="hl-tiles">` +
+    list.map(t => `<div class="hl"><div class="hv mono">${esc(t.value_as_published)}</div><div class="hk">${esc(t.label)}</div><div class="hd">${esc(t.detail)}</div></div>`).join('') + '</div>';
 }
 function measuresHTML(cards) {
   return cards.map(c => {
@@ -236,13 +253,14 @@ Promise.all([window.ATMDailyReady, window.ATMScoreReady]).then(async ([S, score]
     $('glance-title').textContent = `${CH[chan]} · ${f.all ? `everything since ${longDate(f.from)}` : `the last ${f.n} days, to ${longDate(f.AS_OF)}`}`;
     $('glance-headline').innerHTML = r.headline ? esc(r.headline.charAt(0).toUpperCase() + r.headline.slice(1)) : '';
     $('glance-list').innerHTML = r.bullets.map(x => `<li>${x}</li>`).join('');
-    $('measures').innerHTML = measuresHTML(measureCards(f, tiles));
+    $('measures').innerHTML = measuresHTML(measureCards(f, tiles, chan));
+    $('headline-tiles').innerHTML = headlineHTML(headlineTiles(tiles, chan), f);
     drawChart(f, chan, S);
   };
   const bind = (key, set) => { const box = document.querySelector(`.seg[data-for="${key}"]`); if (!box) return; box.querySelectorAll('button').forEach(b => b.addEventListener('click', () => { box.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', x === b ? 'true' : 'false')); set(b.dataset.v); show(); })); };
   bind('glance', v => { win = v; }); bind('channel', v => { chan = v; });
   show();
-  $('measures-note').textContent = 'Daily measures follow the time frame above. Repost lift and newsletter clicks come from the monthly figures and show the latest month.';
+  $('measures-note').textContent = 'Measures follow the channel and time frame above. Repost lift, newsletter clicks and the headline numbers come from the monthly figures and show the latest month.';
 
   // peer watch in the Actions view
   const peer = S.COMP && S.COMP.peer, atm = S.COMP && S.COMP.atm;
@@ -258,7 +276,7 @@ Promise.all([window.ATMDailyReady, window.ATMScoreReady]).then(async ([S, score]
       for (const c of ['li', 'ig', 'yt'].concat(k === '7' ? [] : ['nl', 'site'])) readout(f, c).bullets.forEach(x => lines.push('- ' + plain(x)));
     }
     lines.push('', 'KEY MEASURES (last 30 days where daily):');
-    measureCards(facts['30'], tiles).forEach(c => lines.push(`- ${c.k}: ${c.v} (${c.p})${c.now != null && c.prev != null ? `, before ${c.fmtB(c.prev)}` : ''}`));
+    measureCards(facts['30'], tiles, 'all').forEach(c => lines.push(`- ${c.k}: ${c.v} (${c.p})${c.now != null && c.prev != null ? `, before ${c.fmtB(c.prev)}` : ''}`));
     // posts newer than the full data file, read live from the sheet
     const end = typeof ARCHIVE_END !== 'undefined' ? ARCHIVE_END : '';
     const recent = (S.POSTS || []).filter(p => p.date > end).sort((a, b) => b.date.localeCompare(a.date));

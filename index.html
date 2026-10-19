@@ -28,8 +28,27 @@ table.posts td.post{white-space:normal;min-width:260px;max-width:440px}
 .toolbar .ask-note{flex-basis:100%;margin:0;font-size:12.5px}
 .toolbar button:focus-visible,.toolbar input:focus-visible{outline:2px solid var(--s1);outline-offset:1px}
 @media (max-width:600px){.toolbar{position:static}}
-body[data-view="actions"] .wrap>:not(.toolbar):not(#actions):not(#tip){display:none}
-body:not([data-view="actions"]) #actions{display:none}
+body[data-view="actions"] .wrap>:not(.toolbar):not(.actions-view):not(#tip){display:none}
+body:not([data-view="actions"]) .actions-view{display:none}
+.fnote{margin-top:10px;max-width:80ch;color:var(--muted);font-size:12.5px}
+.fnote summary{cursor:pointer;font-weight:600;color:var(--ink2);width:max-content;max-width:100%}
+.fnote summary:focus-visible{outline:2px solid var(--s1);outline-offset:2px}
+.fnote p{margin:6px 0 0}
+.hl-head{margin:22px 0 10px;font-size:14px}
+.hl-head .dim{font-weight:400}
+.hl-tiles{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(min(100%,190px),1fr))}
+.hl{border:1px solid var(--ring);border-radius:6px;padding:10px 12px;background:var(--surface);display:grid;gap:3px;align-content:start}
+.hl .hv{font-family:"Archivo",sans-serif;font-size:22px;font-weight:800;line-height:1.1}
+.hl .hk{font-size:12px;font-weight:600;color:var(--ink2)}
+.hl .hd{font-size:11.5px;color:var(--muted)}
+.carousel{margin-top:4px}
+.carousel-ctl{display:flex;align-items:center;justify-content:flex-end;gap:10px;margin:0 0 8px;font-size:12px}
+.carousel-ctl button{font:600 16px/1 "IBM Plex Sans",system-ui,sans-serif;width:32px;height:32px;border:1px solid var(--ring);border-radius:50%;background:var(--surface);color:var(--ink);cursor:pointer}
+.carousel-ctl button:disabled{opacity:.35;cursor:default}
+.carousel-ctl button:focus-visible,.carousel-track:focus-visible{outline:2px solid var(--s1);outline-offset:2px}
+.carousel-track{display:flex;align-items:flex-start;gap:18px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;padding-bottom:8px;scrollbar-width:thin}
+.carousel-track>.card{flex:0 0 calc(50% - 9px);scroll-snap-align:start;min-width:0}
+@media (max-width:860px){.carousel-track>.card{flex-basis:100%}}
 #glance{padding-top:28px}
 .glance-head{display:flex;justify-content:space-between;align-items:flex-end;gap:10px;flex-wrap:wrap;margin-bottom:12px}
 .glance{margin:0;padding-left:20px;display:grid;gap:7px;font-size:14.5px;line-height:1.5}
@@ -194,10 +213,16 @@ a{color:var(--ink)}
 </div>
 <h3 style="margin:22px 0 10px">Scorecards: the last full month against the three before</h3>
 <div class="tiles" id="a-bench-tiles"></div>
-<p class="sub" id="a-bench-note" style="margin-top:10px;max-width:80ch"></p>
+<details class="fnote"><summary>How these figures are worked out</summary><p id="a-bench-note"></p></details>
 </section>
 
-<section data-added="" id="glance">
+<section data-sec="audit" id="audit">
+<span class="eyebrow" data-k="audit.eyebrow"></span>
+<h2 data-k="audit.headline"></h2>
+<p class="lede" data-k="audit.lede"></p>
+<div class="meta" data-k="audit.meta"></div>
+<div class="verdicts" data-verdicts="Sep 19 baseline verdict"></div><p class="sub" data-added="" style="margin-top:12px">The detail behind each verdict is in sections 01 to 06 further down the page.</p>
+</section><section data-added="" id="glance">
 <div class="glance-head"><div><span class="eyebrow">At a glance</span><h2 id="glance-title">The latest</h2></div>
 <div class="glance-tabs">
 <div aria-label="Channel" class="seg" data-for="channel" role="group"><button aria-pressed="true" data-v="all" type="button">All</button><button aria-pressed="false" data-v="li" type="button">LinkedIn</button><button aria-pressed="false" data-v="ig" type="button">Instagram</button><button aria-pressed="false" data-v="yt" type="button">YouTube</button><button aria-pressed="false" data-v="nl" type="button">Newsletter</button><button aria-pressed="false" data-v="site" type="button">Site</button></div>
@@ -209,9 +234,16 @@ a{color:var(--ink)}
 </div>
 <h3 style="margin:22px 0 10px">The measures that matter most</h3>
 <div class="measures" id="measures"></div>
+<div id="headline-tiles"></div>
 <p class="sub" id="measures-note" style="margin-top:10px;max-width:80ch"></p>
 </section>
-<section data-added="" id="actions">
+
+<section class="actions-view" data-added="" id="read">
+<div class="sec-head"><span class="eyebrow" id="read-eyebrow"></span><h2 id="read-headline"></h2><p id="read-lede"></p></div>
+<div class="card"><h3>What happened</h3><ol class="findings two-col" id="read-findings"></ol></div>
+<div class="card" style="margin-top:18px"><h3>Reading the numbers</h3><ul class="notes" id="read-notes"></ul></div>
+</section>
+<section class="actions-view" data-added="" id="actions">
 <div class="sec-head"><span class="eyebrow" id="actions-eyebrow">Actions</span><h2>What to do next</h2><p>Ranked suggestions from the latest analysis, which reads every source on the dashboard together with the optimization log.</p></div>
 <div class="grid two" id="actions-grid">
 <div class="card"><h3>Priorities</h3><div class="plays" id="read-actions"></div></div>
@@ -219,18 +251,15 @@ a{color:var(--ink)}
 <div class="card"><h3>Setup tasks</h3><p class="sub">Access and tracking work that unlocks parts of the dashboard. Each names an owner.</p><div class="plays" id="setup-actions"></div></div>
 <div class="card"><h3>Tracking issues on record</h3><p class="sub">Known tagging and measurement problems that skew the numbers until they are fixed.</p><div class="plays" id="tracking-actions"></div></div>
 <div class="card"><h3 data-k="D.card1.title"></h3><div class="plays" data-plays="flag for the team"></div></div></div>
+</section><section class="actions-view" data-sec="08">
+<div class="sec-head"><span class="eyebrow" data-k="08.eyebrow"></span><h2 data-k="08.headline"></h2><p data-k="08.lede"></p></div>
+<div class="card"><div class="tblwrap"><table data-table="table_4" data-td-class='["", "", ""]' data-th-style='["", "", ""]'></table></div></div>
 </section>
 
 
-
-<section data-added="" id="read">
-<div class="sec-head"><span class="eyebrow" id="read-eyebrow"></span><h2 id="read-headline"></h2><p id="read-lede"></p></div>
-<div class="card"><h3>What happened</h3><ol class="findings two-col" id="read-findings"></ol><p class="sub" style="margin-top:6px">What to do about it is in the <a data-goto="actions" href="#actions">Actions view</a>.</p></div>
-<div class="card" style="margin-top:18px"><h3>Reading the numbers</h3><ul class="notes" id="read-notes"></ul></div>
-</section>
 
 <section data-added="" id="now">
-<div class="sec-head"><span class="eyebrow" id="now-eyebrow">Now · daily</span><h2>This week in social</h2><p id="now-lede">Loading the latest numbers from the daily sheet…</p></div>
+<div class="sec-head"><span class="eyebrow" id="now-eyebrow">Daily</span><h2>Social over the last 7, 14 and 30 days</h2><p id="now-lede">Loading the latest numbers from the daily sheet…</p></div>
 <div class="grid two">
 <div class="card"><div class="head"><h3>LinkedIn organic impressions per day</h3><div class="seg" data-for="liimpr" role="group"><button aria-pressed="true" data-v="7" type="button">7d</button><button aria-pressed="false" data-v="14" type="button">14d</button><button aria-pressed="false" data-v="30" type="button">30d</button><button aria-pressed="false" data-v="all" type="button">All</button></div></div><p class="sub">Paid excluded. LinkedIn reports a day or two late.</p><figure id="d-liimpr"></figure><p class="src">Source: LinkedIn page analytics, daily</p></div>
 <div class="card"><div class="head"><h3>LinkedIn followers</h3><div class="seg" data-for="lifoll" role="group"><button aria-pressed="true" data-v="7" type="button">7d</button><button aria-pressed="false" data-v="14" type="button">14d</button><button aria-pressed="false" data-v="30" type="button">30d</button><button aria-pressed="false" data-v="all" type="button">All</button></div></div><p class="sub">Running organic follower count.</p><figure id="d-lifoll"></figure><p class="src">Source: LinkedIn page analytics, daily</p></div>
@@ -239,17 +268,14 @@ a{color:var(--ink)}
 </div>
 <h3 style="margin:26px 0 10px">Engagement on posts published in the last 30 days, against the 30 before</h3>
 <div class="tiles" id="now-delta"></div>
-<p class="sub" id="now-delta-note" style="margin-top:10px;max-width:80ch"></p>
+<details class="fnote"><summary>How these figures are worked out</summary><p id="now-delta-note"></p></details>
 <div class="card-row-head" style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin:26px 0 10px"><h3 style="margin:0">Trailing 30-day engagement</h3><div class="seg" data-for="eng" role="group"><button aria-pressed="true" data-v="LinkedIn" type="button">LinkedIn</button><button aria-pressed="false" data-v="Instagram" type="button">Instagram</button></div></div>
 <div class="grid two">
 <div class="card"><h3 id="d-eng-t1">Reactions</h3><p class="sub">Total for posts published in the 30 days up to each date.</p><figure id="d-eng-rx"></figure><div class="legend" id="d-eng-legend1"></div><p class="src">Source: LinkedIn page analytics and Meta Business Suite, per post</p></div>
 <div class="card"><h3 id="d-eng-t2">Comments and reposts</h3><p class="sub">Same window, on their own scale.</p><figure id="d-eng-cm"></figure><div class="legend" id="d-eng-legend2"></div><p class="src">Source: LinkedIn page analytics and Meta Business Suite, per post</p></div>
 </div>
 </section>
-<section data-sec="A">
-<div class="sec-head"><span class="eyebrow" data-k="A.eyebrow"></span><h2 data-k="A.headline"></h2><p data-k="A.lede"></p></div>
-<div class="tiles" data-tiles="A · September at a glance|1"></div>
-</section>
+
 <section data-sec="B">
 <div class="sec-head"><span class="eyebrow" data-k="B.eyebrow"></span><h2 data-k="B.headline"></h2><p data-k="B.lede"></p></div>
 <div class="grid two">
@@ -279,22 +305,15 @@ a{color:var(--ink)}
 <p class="sowhat" data-k="E.note1"></p></div>
 </section>
 <section data-added="" id="posts">
-<div class="sec-head"><span class="eyebrow" id="f-eyebrow">F · Every post</span><h2>Post by post, ranked</h2><p id="f-lede"></p></div>
+<div class="sec-head"><span class="eyebrow" id="f-eyebrow">F · Posts</span><h2>Post by post, ranked</h2><p id="f-lede"></p></div>
 <div class="grid two">
 <div class="card"><h3>Running benchmarks, all posts</h3><p class="sub">Median is the typical post; the average is pulled up by a few outliers, so set targets on the median.</p><div class="tblwrap"><table id="d-bench"></table></div><p class="src">Source: LinkedIn page analytics and Meta Business Suite, per post</p></div>
 <div class="card"><h3>Comments by post, LinkedIn</h3><p class="sub" id="d-cmt-sub"></p><figure id="d-cmt"></figure><p class="src">Source: LinkedIn page analytics and Meta Business Suite, per post</p></div>
 </div>
 <div class="card" style="margin-top:18px"><div class="head"><h3>Top content, last 30 days</h3><div class="seg" data-for="top" role="group"><button aria-pressed="true" data-v="all" type="button">All</button><button aria-pressed="false" data-v="LinkedIn" type="button">LinkedIn</button><button aria-pressed="false" data-v="Instagram" type="button">Instagram</button></div></div><p class="sub" id="d-top-sub"></p><div class="tblwrap tall"><table class="posts" id="d-top"></table></div></div>
-<div class="card" style="margin-top:18px"><h3>Every post</h3><div class="ctrl"><div class="seg" data-for="posts" role="group"><button aria-pressed="true" data-v="all" type="button">All</button><button aria-pressed="false" data-v="LinkedIn" type="button">LinkedIn</button><button aria-pressed="false" data-v="Instagram" type="button">Instagram</button></div><input aria-label="Search posts" id="p-search" placeholder="Search person, company or post" type="search"/><select aria-label="Month" id="p-month"></select><select aria-label="Search in" id="p-field"><option value="any">Search: anything</option><option value="person">Person only</option><option value="company">Company only</option><option value="title">Post copy only</option></select><span class="dim" id="p-count"></span></div><div class="tblwrap tall"><table class="posts" id="d-posts"></table></div></div>
 </section>
 
-<section data-sec="audit" id="audit">
-<span class="eyebrow" data-k="audit.eyebrow"></span>
-<h2 data-k="audit.headline"></h2>
-<p class="lede" data-k="audit.lede"></p>
-<div class="meta" data-k="audit.meta"></div>
-<div class="verdicts" data-verdicts="Sep 19 baseline verdict"></div>
-</section>
+
 <!-- 1. Scorecard -->
 <section data-sec="01">
 <div class="sec-head"><span class="eyebrow" data-k="01.eyebrow"></span><h2 data-k="01.headline"></h2><p data-k="01.lede"></p></div>
@@ -349,7 +368,7 @@ a{color:var(--ink)}
 <section data-sec="03">
 <div class="sec-head"><span class="eyebrow" data-k="03.eyebrow"></span><h2 data-k="03.headline"></h2><p data-k="03.lede"></p></div>
 <div class="tiles" data-tiles="03 · LinkedIn|1"></div>
-<div class="grid two" style="margin-top:18px">
+<div class="carousel" data-added=""><div class="carousel-ctl"><button aria-label="Previous chart" class="cprev" type="button">‹</button><span class="ccount dim"></span><button aria-label="Next chart" class="cnext" type="button">›</button></div><div aria-label="9 charts; scroll sideways or use the arrows" class="carousel-track" style="margin-top:18px" tabindex="0">
 <div class="card" data-chart-card="c-li"><h3 data-chart-text="card_title"></h3><p class="sub" data-chart-text="card_subtitle_as_published"></p>
 <figure id="c-li"></figure>
 <p class="sowhat" data-chart-text="commentary_as_published"></p></div>
@@ -377,13 +396,13 @@ a{color:var(--ink)}
 <div class="card"><h3 data-k="03.card1.title"></h3>
 <div class="tblwrap"><table data-table="table_2" data-td-class='["", "num", "num", "num", "num", "num", "num"]' data-th-style='["", "", "", "", "", "", ""]'></table></div>
 <p class="sowhat" data-k="03.note1"></p></div>
-</div>
+</div></div>
 </section>
 <!-- 4. Instagram + YouTube -->
 <section data-sec="04">
 <div class="sec-head"><span class="eyebrow" data-k="04.eyebrow"></span><h2 data-k="04.headline"></h2><p data-k="04.lede"></p></div>
 <div class="tiles" data-tiles="04 · Instagram &amp; YouTube|1"></div>
-<div class="grid two" style="margin-top:18px">
+<div class="carousel" data-added=""><div class="carousel-ctl"><button aria-label="Previous chart" class="cprev" type="button">‹</button><span class="ccount dim"></span><button aria-label="Next chart" class="cnext" type="button">›</button></div><div aria-label="9 charts; scroll sideways or use the arrows" class="carousel-track" style="margin-top:18px" tabindex="0">
 <div class="card" data-chart-card="c-ytsrc"><h3 data-chart-text="card_title"></h3><p class="sub" data-chart-text="card_subtitle_as_published"></p>
 <figure id="c-ytsrc"></figure>
 <p class="sowhat" data-chart-text="commentary_as_published"></p></div>
@@ -415,13 +434,13 @@ a{color:var(--ink)}
 <div class="card" data-chart-card="c-ytsubs"><h3 data-chart-text="card_title"></h3><p class="sub" data-chart-text="card_subtitle_as_published"></p>
 <figure id="c-ytsubs"></figure>
 <p class="sowhat" data-chart-text="commentary_as_published"></p></div>
-</div>
+</div></div>
 </section>
 <!-- 5. Website + search -->
 <section data-sec="05">
 <div class="sec-head"><span class="eyebrow" data-k="05.eyebrow"></span><h2 data-k="05.headline"></h2><p data-k="05.lede"></p></div>
 <div class="tiles" data-tiles="05 · atm.media and search|1"></div>
-<div class="grid two" style="margin-top:18px">
+<div class="carousel" data-added=""><div class="carousel-ctl"><button aria-label="Previous chart" class="cprev" type="button">‹</button><span class="ccount dim"></span><button aria-label="Next chart" class="cnext" type="button">›</button></div><div aria-label="6 charts; scroll sideways or use the arrows" class="carousel-track" style="margin-top:18px" tabindex="0">
 <div class="card" data-chart-card="c-gausers"><h3 data-chart-text="card_title"></h3><p class="sub" data-chart-text="card_subtitle_as_published"></p>
 <figure id="c-gausers"></figure>
 <p class="sowhat" data-chart-text="commentary_as_published"></p></div>
@@ -439,7 +458,7 @@ a{color:var(--ink)}
 <p class="sowhat" data-chart-text="commentary_as_published"></p></div>
 <div class="card"><h3 data-k="05.card1.title"></h3>
 <div class="tblwrap"><table data-table="table_3" data-td-class='["", "", ""]' data-th-style='["width:34%", "", ""]'></table></div></div>
-</div>
+</div></div>
 </section>
 <!-- 6. Competitive set -->
 <section data-sec="06">
@@ -451,10 +470,7 @@ a{color:var(--ink)}
 </div>
 </section>
 <!-- 8. Data connections -->
-<section data-sec="08">
-<div class="sec-head"><span class="eyebrow" data-k="08.eyebrow"></span><h2 data-k="08.headline"></h2><p data-k="08.lede"></p></div>
-<div class="card"><div class="tblwrap"><table data-table="table_4" data-td-class='["", "", ""]' data-th-style='["", "", ""]'></table></div></div>
-</section>
+
 <footer><span data-added="" id="foot-daily"></span>
 <span data-k="footer.1"></span>
 <span data-k="footer.2"></span>
@@ -798,7 +814,8 @@ window.ATMScoreReady = boot().catch(e => {
 window.ATMChart = { el, css, hover, showTip, hideTip, bullet, hbar, vbar, vstack, line, stack100, fmtPct, fmtInt, fmtK };
 })();
 </script>
-<script src="js/archive.js?v=20261018223100"></script>
-<script src="js/daily_data.js?v=20261018223100"></script>
-<script src="js/daily_view.js?v=20261018223100"></script>
-<script src="js/glance.js?v=20261018223100"></script>
+<script src="js/archive.js?v=20261019120011"></script>
+<script src="js/daily_data.js?v=20261019120011"></script>
+<script src="js/daily_view.js?v=20261019120011"></script>
+<script src="js/glance.js?v=20261019120011"></script>
+<script src="js/carousel.js?v=20261019120011"></script>

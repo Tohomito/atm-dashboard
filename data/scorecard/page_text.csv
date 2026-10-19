@@ -54,10 +54,10 @@ audit.meta,"<span>Sources: beehiiv API + cohort segments · YouTube Studio, Link
 05.lede,"GA4 via Supermetrics (property 489265998) and Google Search Console (sc-domain:atm.media, 16 months of history, connected Sep 19). Both instruments have configuration problems, listed at the bottom."
 05.card1.title,"Instrumentation fixes, in order"
 06.eyebrow,06 · Competitive set
-06.headline,Incumbents lead on scale. The fast growers grow through people and rooms.
-06.lede,"Every peer that grew in 2025–26 did it with mechanics ATM has not yet run: guests sharing their own interviews (FOS), events (Semafor, Marketecture), writer-as-franchise (Puck), awards (Digiday)."
+06.headline,Incumbents lead on scale.
+06.lede,"Newsletter list size for ATM and its peers, from media kits and public statements, 2025–26."
 08.eyebrow,08 · Data plumbing
-08.headline,Everything is connected. Three instruments are mis-configured.
-08.lede,"Supermetrics has all seven sources on the plan as of 5:00pm Sep 19 (AI Chats destination swapped in, a second seat assigned, GA4 property shared, Search Console swapped in for Meta Ads). The native dashboards were read directly. What remains is configuration, not access."
+08.headline,Data sources: what is connected and what still needs fixing
+08.lede,"Each source as of the September baseline, with the fix it still needs. Open items also appear under Setup tasks and Tracking issues above."
 footer.1,"Internal. September 2026 update Sep 29, 2026; baseline sections prepared September 2026. Benchmarks: Omeda Newsletter Benchmark Report for Media H1 2026 and Email Engagement Q2 2026 · MailerLite industry benchmarks 2026 · GlueLetter Q1–Q2 2025 · beehiiv State of Newsletters 2026 · Socialinsider LinkedIn & Instagram benchmarks 2026 · Rival IQ Social Media Industry Benchmark Report 2025 · Metricool YouTube & LinkedIn studies 2026 · Litmus email client share Jul 2026 · Digiday, Axios, The Rebooting, Simon Owens, Press Gazette for peer figures. Sep 19 growth-plan, cost and peer-revenue content was removed from this page in the Sep 29 update (measurement only, no financials); it remains in version history."
 footer.2,Derived figures are labeled in the card captions. Sep 18 issue was ~30 hours old at pull time and is still accruing.

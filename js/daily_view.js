@@ -95,7 +95,7 @@ function render(S) {
   const topLI = recent.filter(p => p.ch === "LinkedIn").sort((a, b) => (b.reach || 0) - (a.reach || 0))[0];
   const topIG = recent.filter(p => p.ch === "Instagram").sort((a, b) => (b.views || 0) - (a.views || 0))[0];
   const who = p => p.person ? `${esc(p.person)}${p.company ? `, ${esc(p.company)}` : ""}` : esc(p.title);
-  setHTML('now-eyebrow', `Now · daily · through ${mdy(AS_OF)}`);
+  setHTML('now-eyebrow', `Daily · through ${mdy(AS_OF)}`);
   setHTML('now-lede', [
     `LinkedIn organic impressions were <b>${full(s7)}</b> over the 7 days to ${mdy(AS_OF)}${p7 ? ` (${pctTxt(s7, p7)} on the week before)` : ''}.`,
     `LinkedIn gained <b>${li30 ? full(liLast.li_runf - li30.li_runf) : '—'}</b> organic followers in 30 days; Instagram stands at <b>${full(igFollNow?.ig_runf)}</b> followers.`,
@@ -173,7 +173,7 @@ function render(S) {
   /* ===== F · every post ===== */
   const BENCH = buildBench(POSTS);
   const spanDays = Math.round((new Date(POST_END) - new Date(POST_START)) / 864e5) + 1;
-  setHTML('f-eyebrow', `F · Every post · ${slash(POST_START)} to ${slash(POST_END)}`);
+  setHTML('f-eyebrow', `F · Posts · ${slash(POST_START)} to ${slash(POST_END)}`);
   setHTML('f-lede', `${POSTS.length} organic LinkedIn and Instagram posts over ${spanDays} days. Per-post figures from LinkedIn page analytics and Meta Business Suite; recent posts keep gaining until they mature. Instagram Stories are excluded. LinkedIn engagement rate = (clicks + reactions + comments + reposts) ÷ impressions; Instagram = interactions ÷ reach, so read each against its own median.`);
   const L = BENCH.LinkedIn, I = BENCH.Instagram;
   const brow = (lab, a, b) => `<tr><td>${lab}</td><td class="num">${a}</td><td class="num">${b}</td></tr>`;
@@ -216,19 +216,7 @@ function render(S) {
   seg('top', v => { topCh = v; drawTop(); });
   setHTML('d-top-sub', `Posts published ${slash(winStart)} to ${slash(POST_END)}. Click a header to sort. Green rates beat the channel's median.`);
 
-  let pCh = 'all', pQ = '', pMonth = 'all', pField = 'any';
-  const months = [...new Set(POSTS.map(p => p.date.slice(0, 7)))].sort().reverse();
-  $('p-month').innerHTML = '<option value="all">All months</option>' + months.map(m => `<option value="${m}">${monthName(m)} ${m.slice(0, 4)}</option>`).join('');
-  const hit = r => !pQ || (pField === 'any' ? [r.person, r.company, r.series, r.client, r.title, r.ch] : [r[pField]]).some(v => String(v || '').toLowerCase().includes(pQ));
-  const drawAll = sortable('d-posts', COLS, () => POSTS.filter(r => (pCh === 'all' || r.ch === pCh) && (pMonth === 'all' || r.date.startsWith(pMonth)) && hit(r)), {
-    key: 'reach', onDraw: rows => setHTML('p-count', rows.length === POSTS.length ? `${POSTS.length} posts` : `${rows.length} of ${POSTS.length} posts`)
-  });
-  seg('posts', v => { pCh = v; drawAll(); });
-  $('p-search').addEventListener('input', e => { pQ = e.target.value.trim().toLowerCase(); drawAll(); });
-  $('p-month').addEventListener('change', e => { pMonth = e.target.value; drawAll(); });
-  $('p-field').addEventListener('change', e => { pField = e.target.value; drawAll(); });
-
-  setHTML('foot-daily', `Daily and per-post figures (Now, the benchmark row in A, YouTube watch hours, F) refresh each time the page opens, from LinkedIn page analytics, Meta Business Suite and YouTube Studio reads. Instagram reach and views on the daily series are 28-day rolling figures. Boosted Instagram posts report organic and paid together.`);
+  setHTML('foot-daily', `Daily and per-post figures (the 7/14/30-day section, the Overview scorecards, YouTube watch hours, F) refresh each time the page opens, from LinkedIn page analytics, Meta Business Suite and YouTube Studio reads. Instagram reach and views on the daily series are 28-day rolling figures. Boosted Instagram posts report organic and paid together.`);
   document.documentElement.dataset.dailyReady = '1';
 }
 
