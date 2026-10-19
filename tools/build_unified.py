@@ -400,6 +400,9 @@ body:not([data-view="actions"]) .actions-view{display:none}
 .fnote summary{cursor:pointer;font-weight:600;color:var(--ink2);width:max-content;max-width:100%}
 .fnote summary:focus-visible{outline:2px solid var(--s1);outline-offset:2px}
 .fnote p{margin:6px 0 0}
+.chg{font-weight:600}
+.chg.up{color:var(--goodtext)}
+.chg.down{color:var(--crit)}
 .hl-head{margin:22px 0 10px;font-size:14px}
 .hl-head .dim{font-weight:400}
 .hl-tiles{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(min(100%,190px),1fr))}

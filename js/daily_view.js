@@ -150,19 +150,21 @@ function render(S) {
   const ytBench = ytH ? ytFull.filter(m => m.k < ytH.k && !m.pre).slice(-3) : [];
   const ytBV = mean(ytBench.map(m => m.views)), ytBW = mean(ytBench.map(m => m.watch));
   const span = ks => ks.length ? `${monthShort(ks[0])}–${monthShort(ks.at(-1))}` : '';
-  const pc = (c, b) => c == null || b == null ? 'no benchmark yet' : `${sign(c / b - 1)}${((c / b - 1) * 100).toFixed(0)}% vs benchmark`;
-  const pt = (c, b) => c == null || b == null ? 'no benchmark yet' : `${sign(c - b)}${(c - b).toFixed(1)} pts vs benchmark`;
+  // the change against benchmark, green when better and red when worse (higher is better for every scorecard)
+  const chg = (txt, d) => { const r = Math.round(d * 1000) / 1000; const c = r > 0 ? 'up' : r < 0 ? 'down' : 'flat'; return `<span class="chg ${c}">${c === 'up' ? '▲ ' : c === 'down' ? '▼ ' : ''}${esc(txt)}</span>`; };
+  const pc = (c, b) => c == null || b == null ? 'no benchmark yet' : chg(`${sign(c / b - 1)}${((c / b - 1) * 100).toFixed(0)}% vs benchmark`, (c / b - 1) * 100);
+  const pt = (c, b) => c == null || b == null ? 'no benchmark yet' : chg(`${sign(c - b)}${(c - b).toFixed(1)} pts vs benchmark`, c - b);
   const Hn = monthName(Hm);
   const tiles = [
-    [full(perPost(Hm)), `LinkedIn organic reach per post, ${Hn}`, `${pc(perPost(Hm), B_perPost)} (${full(B_perPost)}, ${span(benchKeys)})`],
+    [full(perPost(Hm)), `LinkedIn organic reach per post, ${Hn}`, `${pc(perPost(Hm), B_perPost)} ${esc(`(${full(B_perPost)}, ${span(benchKeys)})`)}`],
     [engRate(Hm).toFixed(2) + '%', `LinkedIn engagement rate, ${Hn}`, `${pt(engRate(Hm), B_engRate)} (${B_engRate.toFixed(2)}%)`],
     [`${sign(liMoM(Hm))}${liMoM(Hm).toFixed(1)}%`, `LinkedIn follower growth, ${Hn}`, `${pt(liMoM(Hm), B_liMoM)} (${sign(B_liMoM)}${(B_liMoM ?? 0).toFixed(1)}%/mo)`],
     [igH ? `${sign(igH.mom)}${igH.mom.toFixed(1)}%` : '—', `Instagram follower growth, ${Hn}`, `${pt(igH?.mom ?? null, B_igMoM)}${B_igMoM != null ? ` (${sign(B_igMoM)}${B_igMoM.toFixed(1)}%/mo)` : ''}`],
-    [fmt(igNow?.ig_reach), `Instagram reach, 28 days to ${igNow ? mdy(igNow.date) : '—'}`, igPrev ? `${pctTxt(igNow.ig_reach, igPrev.ig_reach)} vs prior 28 days (${fmt(igPrev.ig_reach)})` : ''],
-    [fmt(ytH?.views), `YouTube views, ${ytH ? monthName(ytH.k) : ''}`, `${pc(ytH?.views, ytBV)} (${fmt(ytBV)}/mo, ${span(ytBench.map(m => m.k))})`],
+    [fmt(igNow?.ig_reach), `Instagram reach, 28 days to ${igNow ? mdy(igNow.date) : '—'}`, igPrev ? `${chg(`${pctTxt(igNow.ig_reach, igPrev.ig_reach)} vs prior 28 days`, igNow.ig_reach - igPrev.ig_reach)} (${esc(fmt(igPrev.ig_reach))})` : ''],
+    [fmt(ytH?.views), `YouTube views, ${ytH ? monthName(ytH.k) : ''}`, `${pc(ytH?.views, ytBV)} ${esc(`(${fmt(ytBV)}/mo, ${span(ytBench.map(m => m.k))})`)}`],
     [ytH?.watch != null ? `${full(ytH.watch)} hrs` : '—', `YouTube watch time, ${ytH ? monthName(ytH.k) : ''}`, `${pc(ytH?.watch, ytBW)} (${full(ytBW)} hrs/mo)`]
   ];
-  setHTML('a-bench-tiles', tiles.map(([v, k, d]) => `<div class="tile"><div class="v mono">${esc(v)}</div><div class="k">${esc(k)}</div><div class="d">${esc(d)}</div></div>`).join(''));
+  setHTML('a-bench-tiles', tiles.map(([v, k, d]) => `<div class="tile"><div class="v mono">${esc(v)}</div><div class="k">${esc(k)}</div><div class="d">${d}</div></div>`).join(''));
   const proxy = MOk.find(k => MO[k].proxy);
   setHTML('a-bench-note', `${Hn} ${Hm.slice(0, 4)} is the last full month in the daily sheet; the benchmark is the three months before it, so this row moves forward on its own each month. LinkedIn per-post reach = monthly organic impressions ÷ (days × ${CAD} posts/day).${proxy ? ` From ${monthName(proxy)} on, LinkedIn monthly engagement is summed from posts published that month; earlier months use LinkedIn's Highlights totals.` : ''} Sources: LinkedIn page analytics, Meta Business Suite, YouTube Studio.`);
 
