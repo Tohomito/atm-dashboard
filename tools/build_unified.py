@@ -220,7 +220,41 @@ TOOLBAR = """
   <div class="seg viewsw" data-for="view" role="group" aria-label="View"><button type="button" data-v="data" aria-pressed="true">Data &amp; insights</button><button type="button" data-v="actions" aria-pressed="false">Actions</button></div>
   <form class="ask" id="ask-form" autocomplete="off"><input id="ask-q" type="text" placeholder="Ask for a custom insight, e.g. Which guests drive the most comments?" aria-label="Ask for a custom insight"><button type="submit">Ask Claude</button></form>
   <div class="refresh"><button type="button" id="refresh-btn" title="Reload the latest data">&#8635; Refresh</button><span class="dim" id="loaded-at"></span></div>
+  <button type="button" id="guide-btn" class="guide-btn" aria-haspopup="dialog">How to use</button>
   <p class="ask-note dim" id="ask-note" hidden></p>
+  <dialog id="guide" aria-labelledby="guide-title">
+    <div class="guide-head"><h2 id="guide-title">How to use this dashboard</h2><button type="button" class="guide-close" aria-label="Close the guide">&times;</button></div>
+    <div class="guide-body">
+      <h3>Two views</h3>
+      <p><b>Data &amp; insights</b> (the default) shows the numbers. <b>Actions</b> shows what they mean and what to do: the latest analysis, ranked priorities, steps to catch posts tagged to the wrong page, setup tasks, tracking issues, and the status of each data source. Switch with the buttons at the top left.</p>
+      <h3>Reading the page, top to bottom</h3>
+      <ul>
+        <li><b>Overview:</b> total audience, site traffic, new against returning visitors, and the scorecards. Each scorecard compares the last full month with the three months before it: <span class="chg up">&#9650; green</span> is better, <span class="chg down">&#9660; red</span> is worse.</li>
+        <li><b>September baseline:</b> the audit's verdicts. The detail behind them is at the bottom of the page (sections 01 to 06).</li>
+        <li><b>At a glance:</b> pick a channel and a time frame. The headline, bullets, chart and measures all follow your choice, and the month's headline numbers sit underneath.</li>
+        <li><b>Social over the last 7, 14 and 30 days:</b> daily charts. Each chart has its own time buttons.</li>
+        <li><b>B to F:</b> the year by month, partner reposts, executives featured, what worked, and the top posts of the last 30 days.</li>
+        <li><b>Sections 01 to 06:</b> the baseline detail. Charts in 02 to 05 sit in carousels: use the arrows to page through.</li>
+      </ul>
+      <h3>When the numbers change</h3>
+      <ul>
+        <li><b>Daily social</b> (LinkedIn, Instagram, YouTube): read from the daily sheet each time the page opens. LinkedIn reports a day or two late.</li>
+        <li><b>Site traffic from GA4:</b> every Monday morning.</li>
+        <li><b>Monthly scorecard and analysis:</b> after each monthly run, around the end of the month.</li>
+      </ul>
+      <p>The lines under the page title show how current each source is. <b>Refresh</b> reloads the latest figures.</p>
+      <h3>Notes worth knowing</h3>
+      <ul>
+        <li>Grey "How these figures are worked out" lines open to explain a calculation.</li>
+        <li>"At The Moment" is a separate LinkedIn page with a similar name. It is watched as a peer, never counted as ATM.</li>
+        <li>Newsletter list size includes imported addresses, so verified clicks are the better measure of readers.</li>
+      </ul>
+      <h3>Ask Claude</h3>
+      <p>Type a question in the box at the top and press <b>Ask Claude</b>. A new Claude chat opens with the latest figures and links to the full data. For full answers, connect Google Drive in Claude and make sure you can open the "ATM Dashboard: Claude data" folder. Without that, Claude answers from the figures it was sent and says so. Check any number it gives against the page before you use it.</p>
+      <h3>Questions or ideas</h3>
+      <p>Tell Matt.</p>
+    </div>
+  </dialog>
 </div>
 """
 OVERVIEW = """
@@ -392,6 +426,16 @@ table.posts td.post{white-space:normal;min-width:260px;max-width:440px}
 .toolbar .ask button{background:var(--ink);color:var(--plane);border-color:var(--ink)}
 .toolbar .refresh{display:flex;align-items:center;gap:8px;font-size:12px}
 .toolbar .ask-note{flex-basis:100%;margin:0;font-size:12.5px}
+#guide{width:min(720px,calc(100vw - 32px));max-height:min(86vh,900px);padding:0;border:1px solid var(--ring);border-radius:10px;background:var(--surface);color:var(--ink);box-shadow:0 12px 40px rgba(0,0,0,.18)}
+#guide::backdrop{background:rgba(0,0,0,.35)}
+#guide .guide-head{position:sticky;top:0;display:flex;justify-content:space-between;align-items:center;gap:12px;padding:16px 20px;background:var(--surface);border-bottom:1px solid var(--grid)}
+#guide .guide-head h2{margin:0;font-size:20px}
+#guide .guide-close{font:400 26px/1 "IBM Plex Sans",system-ui,sans-serif;width:36px;height:36px;border:1px solid var(--ring);border-radius:50%;background:var(--surface);color:var(--muted);cursor:pointer;padding:0 0 3px}
+#guide .guide-body{padding:6px 20px 20px;font-size:14px;line-height:1.55;color:var(--ink2);overflow:auto}
+#guide .guide-body h3{margin:16px 0 4px;font-size:14.5px;color:var(--ink)}
+#guide .guide-body p{margin:4px 0}
+#guide .guide-body ul{margin:4px 0;padding-left:18px;display:grid;gap:5px}
+#guide b{color:var(--ink)}
 .toolbar button:focus-visible,.toolbar input:focus-visible{outline:2px solid var(--s1);outline-offset:1px}
 @media (max-width:600px){.toolbar{position:static}}
 body[data-view="actions"] .wrap>:not(.toolbar):not(.actions-view):not(#tip){display:none}

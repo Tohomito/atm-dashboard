@@ -25,7 +25,6 @@ action_tag,Log what you find.,"Add a ""tagged to the wrong page"" column to the 
 setup,"Rob: share the ""ATM Monthly Audience Reports"" folder with matt@atm.media.","Needed for the monthly files to reach the dashboard automatically, and for the four tracker sheets missing from the handoff."
 setup,Rob: move the Supermetrics data connections to a shared ATM login.,"GA4, Search Console, LinkedIn, Instagram and YouTube all connect through one personal Google login. If it is disconnected, the monthly run and the weekly GA4 pull both stop."
 setup,Rob: settle the Supermetrics plan before the Oct 28 run.,"The trial ended Oct 3. Without a plan, the monthly figures may stop arriving."
-setup,Hannah: point the daily run at the Google Sheet.,Daily figures on this page stop at Oct 4 until the run writes to the sheet again.
 setup,Hannah: share the live optimization log as a Google Doc.,So each analysis can read it directly. Due before the Oct 28 refresh.
 setup,Rob and Dan: make utm_content the content ID on every link.,"Use the episode slug as utm_content whatever the source, so several UTM links to one piece of content add up to that piece. Keep a small lookup sheet for older links."
 tracking,utm_partner does not show in GA4 reports.,"It is not a standard GA4 parameter, so it needs a custom dimension before partner data appears. utm_term is standard and unused."

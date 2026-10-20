@@ -365,3 +365,13 @@ Promise.all([window.ATMDailyReady, window.ATMScoreReady]).then(async ([S, score]
   });
 });
 })();
+
+/* ---------- "How to use" guide ---------- */
+(function () {
+  const dlg = document.getElementById('guide'), btn = document.getElementById('guide-btn');
+  if (!dlg || !btn) return;
+  btn.addEventListener('click', () => { if (dlg.showModal) dlg.showModal(); else dlg.setAttribute('open', ''); });
+  dlg.querySelector('.guide-close').addEventListener('click', () => dlg.close ? dlg.close() : dlg.removeAttribute('open'));
+  dlg.addEventListener('click', e => { if (e.target === dlg) dlg.close(); }); // click outside the panel closes it
+  dlg.addEventListener('close', () => btn.focus());
+})();
