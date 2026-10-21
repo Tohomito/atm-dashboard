@@ -34,6 +34,8 @@ The header shows the date of each source.
 - The Google Sheet must stay shared as "Anyone with the link can view" (or edit). If its column layout changes, `js/daily_data.js` needs a matching update.
 - Monthly files must follow `docs/DATA_SPEC.md`. To refresh by hand, replace the files in `data/scorecard/` and commit.
 - After any change to `data/` or `js/archive.js`, refresh the two Google Docs (steps in `tools/build_ask.py`), so the ask box reads current figures.
+- Keep the Actions view to real, open actions. When a setup task, tracking fix or priority is done, delete its row from `data/analysis.csv` in the same change (and at each monthly rewrite, drop anything finished). Principles and reading notes do not go in the Actions view; notes stay in `analysis.csv` as `note` rows for the Ask Claude data only.
+- Date-stamp team flags: they come from the monthly analysis and show the date of the analysis they came from.
 - People who use the ask box need Google Drive connected in Claude and access to the Drive folder.
 - Use the dashboard from its direct address, https://atm.mattbecher.com. The Notion embed is retired.
 

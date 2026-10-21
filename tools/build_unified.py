@@ -212,7 +212,6 @@ READ = """
 <section id="read" class="actions-view" data-added>
   <div class="sec-head"><span class="eyebrow" id="read-eyebrow"></span><h2 id="read-headline"></h2><p id="read-lede"></p></div>
   <div class="card"><h3>What happened</h3><ol class="findings two-col" id="read-findings"></ol></div>
-  <div class="card" style="margin-top:18px"><h3>Reading the numbers</h3><ul class="notes" id="read-notes"></ul></div>
 </section>
 """
 TOOLBAR = """
@@ -226,7 +225,7 @@ TOOLBAR = """
     <div class="guide-head"><h2 id="guide-title">How to use this dashboard</h2><button type="button" class="guide-close" aria-label="Close the guide">&times;</button></div>
     <div class="guide-body">
       <h3>Two views</h3>
-      <p><b>Data &amp; insights</b> (the default) shows the numbers. <b>Actions</b> shows what they mean and what to do: the latest analysis, ranked priorities, steps to catch posts tagged to the wrong page, setup tasks, tracking issues, and the status of each data source. Switch with the buttons at the top left.</p>
+      <p><b>Data &amp; insights</b> (the default) shows the numbers. <b>Actions</b> shows what they mean and what to do: the latest analysis, ranked priorities, steps to catch posts tagged to the wrong page, setup tasks, and tracking and site fixes. Switch with the buttons at the top left.</p>
       <h3>Reading the page, top to bottom</h3>
       <ul>
         <li><b>Overview:</b> total audience, site traffic, new against returning visitors, and the scorecards. Each scorecard compares the last full month with the three months before it: <span class="chg up">&#9650; green</span> is better, <span class="chg down">&#9660; red</span> is worse.</li>
@@ -295,7 +294,7 @@ ACTIONS = """
     <div class="card"><h3>Priorities</h3><div class="plays" id="read-actions"></div></div>
     <div class="card"><h3>Catch posts tagged to the wrong page</h3><p class="sub">"At The Moment" is a separate LinkedIn page with a similar name. These steps catch follows and tags meant for ATM that land there.</p><p class="sub" id="peer-watch"></p><div class="plays" id="tag-actions"></div></div>
     <div class="card"><h3>Setup tasks</h3><p class="sub">Access and tracking work that unlocks parts of the dashboard. Each names an owner.</p><div class="plays" id="setup-actions"></div></div>
-    <div class="card"><h3>Tracking issues on record</h3><p class="sub">Known tagging and measurement problems that skew the numbers until they are fixed.</p><div class="plays" id="tracking-actions"></div></div>
+    <div class="card"><h3>Tracking and site fixes</h3><p class="sub">Known measurement and setup problems that skew the numbers or cost readers until they are fixed.</p><div class="plays" id="tracking-actions"></div></div>
   </div>
 </section>
 """
@@ -312,10 +311,14 @@ soup.find("section", id="actions").insert_before(frag(READ))
 _audit = soup.find("section", id="audit").extract()
 _audit.find(attrs={"data-verdicts": True}).insert_after(frag('<p class="sub" data-added style="margin-top:12px">The detail behind each verdict is in sections 01 to 06 further down the page.</p>'))
 soup.find("section", id="glance").insert_before(_audit)
-# 08 (data plumbing) joins the Actions view
-_s08 = soup.find("section", attrs={"data-sec": "08"}).extract()
-_s08["class"] = (_s08.get("class") or []) + ["actions-view"]
-soup.find("section", id="actions").insert_after(_s08)
+# 08 (data plumbing) is folded into Tracking and site fixes in the analysis, so the section goes
+soup.find("section", attrs={"data-sec": "08"}).decompose()
+# baseline charts that repeat section B or the live GA4 data, and the 05 fixes table (now under Tracking and site fixes)
+for _cid in ("c-li", "c-ytpaid", "c-gausers", "c-igmonthly", "c-gachan"):
+    _f = soup.find("figure", id=_cid)
+    if _f: _f.find_parent(class_="card").decompose()
+_t3 = soup.find(attrs={"data-table": "table_3"})
+if _t3: _t3.find_parent(class_="card").decompose()
 # chart carousels for the LinkedIn, Instagram & YouTube, and site sections
 for k in ("02", "03", "04", "05"):
     sec = soup.find("section", attrs={"data-sec": k})

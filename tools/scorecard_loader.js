@@ -150,6 +150,8 @@ async function boot() {
       const title = cut > 0 ? t.slice(0, cut + 1) : t, why = cut > 0 ? t.slice(cut + 2) : '';
       return `<div class="play"><div class="num">${esc(r.group || i + 1)}</div><div><b>${esc(title)}</b><div class="why">${esc(why)}</div></div></div>`;
     }).join('\n      ');
+    const d = rows[0] && rows[0].block.replace(/\s*flag for the team/i, '').trim();
+    if (d && box.dataset.plays === 'flag for the team' && !box.previousElementSibling?.classList.contains('flag-date')) box.insertAdjacentHTML('beforebegin', `<p class="sub flag-date">From the ${esc(d)} monthly analysis; refreshed with each month's analysis.</p>`);
   });
 
   // tables
