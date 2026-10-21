@@ -168,6 +168,45 @@ function render(S) {
   const proxy = MOk.find(k => MO[k].proxy);
   setHTML('a-bench-note', `${Hn} ${Hm.slice(0, 4)} is the last full month in the daily sheet; the benchmark is the three months before it, so this row moves forward on its own each month. LinkedIn per-post reach = monthly organic impressions ÷ (days × ${CAD} posts/day).${proxy ? ` From ${monthName(proxy)} on, LinkedIn monthly engagement is summed from posts published that month; earlier months use LinkedIn's Highlights totals.` : ''} Sources: LinkedIn page analytics, Meta Business Suite, YouTube Studio.`);
 
+  /* ===== executives featured, in section D ===== */
+  (function () {
+    const parse = t => { const rows = []; let r = [], c = '', q = false; for (let i = 0; i < t.length; i++) { const ch = t[i]; if (q) { if (ch === '"') { if (t[i + 1] === '"') { c += '"'; i++; } else q = false; } else c += ch; } else if (ch === '"') q = true; else if (ch === ',') { r.push(c); c = ''; } else if (ch === '\n') { r.push(c); rows.push(r); r = []; c = ''; } else if (ch !== '\r') c += ch; } if (c || r.length) { r.push(c); rows.push(r); } const [h, ...rest] = rows.filter(x => x.length > 1); return rest.map(x => Object.fromEntries(h.map((k, i) => [k, x[i] || '']))); };
+    const key = n => n.toLowerCase().replace(/[^a-z]/g, '');
+    fetch(`data/execs.csv?v=${Date.now()}`, { cache: 'no-store' }).then(r => r.ok ? r.text() : '').then(t => {
+      const EX = t ? parse(t) : [], TITLE = {};
+      EX.forEach(e => { TITLE[key(e.name)] = e; (e.also_known_as || '').split(';').filter(Boolean).forEach(a => TITLE[key(a)] = e); });
+      const people = p => (p.person || '').split(/, | & /).map(x => x.trim()).filter(x => x && !/^(ATM|At The Moment)/i.test(x));
+      const first = {}, seen = {};
+      [...POSTS].sort((a, b) => a.date.localeCompare(b.date)).forEach(p => people(p).forEach(n => { const k = key(n); if (!first[k]) first[k] = p.date; seen[k] = n; }));
+      // last full month of posts
+      const end = new Date(POST_END + 'T12:00:00'), lastDay = new Date(end.getFullYear(), end.getMonth() + 1, 0).getDate();
+      const mDate = end.getDate() === lastDay ? end : new Date(end.getFullYear(), end.getMonth() - 1, 15);
+      const M = `${mDate.getFullYear()}-${String(mDate.getMonth() + 1).padStart(2, '0')}`, Mn = monthName(M);
+      const label = n => { const e = TITLE[key(n)]; return e ? `${e.title}, ${e.company}` : ''; };
+      const co = (n, p) => label(n) || (p && p.company && !/^(ATM|At The Moment)/i.test(p.company) ? p.company : '');
+      // CEOs
+      const ceos = EX.filter(e => /\bCEO\b/.test(e.title));
+      const feat = ceos.filter(e => first[key(e.name)] || (e.also_known_as && first[key(e.also_known_as)])).map(e => ({ e, d: first[key(e.name)] || first[key(e.also_known_as)] })).sort((a, b) => a.d.localeCompare(b.d));
+      const soon = ceos.filter(e => !feat.some(f => f.e === e));
+      setHTML('d-ceo-sub', `Featured in a LinkedIn or Instagram post since ${mdy(POST_START)}, where the title is on record.`);
+      setHTML('d-ceo', `<div class="exec-n mono">${feat.length}</div><ul class="exec-list">${feat.map(f => `<li><b>${esc(f.e.name)}</b>, ${esc(f.e.title)}, ${esc(f.e.company)} <span class="when">· first featured ${mdy(f.d)}</span></li>`).join('')}</ul>` +
+        (soon.length ? `<p class="sub" style="margin-top:10px">On the board, not yet posted: ${soon.map(e => `${esc(e.name)} (${esc(e.company)})`).join(', ')}.</p>` : ''));
+      // the month's executives
+      const mp = POSTS.filter(p => p.date.startsWith(M)), names = {}, eng = {};
+      mp.forEach(p => people(p).forEach(n => { const k = key(n); names[k] = names[k] || { n, p }; eng[k] = (eng[k] || 0) + (p.reactions || 0) + (p.comments || 0) + (p.amp || 0); }));
+      const ks = Object.keys(names).sort((a, b) => names[a].n.localeCompare(names[b].n));
+      const ret = ks.filter(k => first[k] < M + '-01'), titled = ks.filter(k => TITLE[k]);
+      setHTML('d-execs-title', `Executives featured in ${Mn}`);
+      setHTML('d-execs-sub', `${ks.length - ret.length} new and ${ret.length} returning. Titles on record for ${titled.length} of ${ks.length}; the rest show their company.`);
+      setHTML('d-execs', `<div class="exec-n mono">${ks.length}</div><ul class="exec-list exec-cols">${ks.map(k => `<li><b>${esc(names[k].n)}</b>${co(names[k].n, names[k].p) ? `, ${esc(co(names[k].n, names[k].p))}` : ''}${ret.includes(k) ? ' <span class="when">· returning</span>' : ''}</li>`).join('')}</ul>`);
+      // the month's top executives by engagement
+      const top = ks.map(k => ({ k, v: eng[k] })).sort((a, b) => b.v - a.v).slice(0, 10);
+      setHTML('d-topx-title', `${Mn}'s top executives by engagement`);
+      setHTML('d-topx-sub', `Reactions, comments and reposts on LinkedIn and Instagram posts published in ${Mn}.`);
+      if (top.length && $('d-topx')) C.hbar('d-topx', top.map(x => { const n = names[x.k].n, e = TITLE[x.k], pc = names[x.k].p.company, c = e ? e.company : (pc && !/^(ATM|At The Moment)/i.test(pc) ? pc : ''); return { label: c ? `${n} · ${c}` : n, value: x.v, src: e ? `${n}, ${e.title}, ${e.company}` : n }; }), { fmt: C.fmtInt, labW: 290, rowH: 26, aria: `Top executives by engagement, ${Mn}` });
+    }).catch(e => { console.error(e); setHTML('d-ceo', '<p class="sub">Executive titles could not load.</p>'); });
+  })();
+
   /* ===== YouTube watch time, in section B ===== */
   const ytm = YT.months.filter(m => m.watch != null);
   if (ytm.length && $('d-ytwatch')) C.vbar('d-ytwatch', ytm.map(m => m.m), ytm.map(m => m.watch), { fmt: C.fmtInt, aria: 'YouTube watch hours per month', colors: ytm.map(m => m.pre || m.partial ? css('--muted') : S1), notes: ytm.map(m => m.pre ? 'pre-launch' : m.partial ? 'partial month' : '') });

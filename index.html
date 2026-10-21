@@ -46,6 +46,12 @@ body:not([data-view="actions"]) .actions-view{display:none}
 .fnote p{margin:6px 0 0}
 .verdict{align-content:start}
 .verdict .pill{justify-self:start}
+.exec-n{font-family:"Archivo",sans-serif;font-size:36px;font-weight:800;line-height:1;margin:2px 0 8px}
+.exec-list{list-style:none;padding:0;margin:6px 0 0;display:grid;gap:6px;font-size:13px;color:var(--ink2)}
+.exec-list b{color:var(--ink);font-weight:600}
+.exec-list .when{color:var(--muted);font-size:12px}
+.exec-cols{display:block;columns:2 210px;column-gap:18px}
+.exec-cols li{break-inside:avoid;margin-bottom:6px}
 .chg{font-weight:600}
 .chg.up{color:var(--goodtext)}
 .chg.down{color:var(--crit)}
@@ -344,9 +350,12 @@ a{color:var(--ink)}
 </section>
 <section data-sec="D">
 <div class="sec-head"><span class="eyebrow" data-k="D.eyebrow"></span><h2 data-k="D.headline"></h2><p data-k="D.lede"></p></div>
-<div class="tiles" data-tiles="D · Executive appearance tally|1" style="margin-bottom:18px"></div>
-<div class="grid two">
-<div class="card" data-chart-card="s-sect"><h3 data-chart-text="card_title"></h3><p class="sub" data-chart-text="card_subtitle_as_published"></p><figure id="s-sect"></figure><p class="sowhat" data-chart-text="commentary_as_published"></p></div>
+
+<div class="grid two" data-added="" style="align-items:start">
+<div class="card"><h3>CEOs featured</h3><p class="sub" id="d-ceo-sub"></p><div id="d-ceo"><p class="dim">Loading…</p></div><p class="src">Source: titles from the ATM Kitchen board and post copy; appearances from LinkedIn and Instagram posts</p></div>
+<div class="card"><h3 id="d-execs-title">Executives featured last month</h3><p class="sub" id="d-execs-sub"></p><div id="d-execs"></div><p class="src">Source: titles from the ATM Kitchen board and post copy; appearances from LinkedIn and Instagram posts</p></div>
+</div><div class="grid two">
+<div class="card" data-added=""><h3 id="d-topx-title">Top executives by engagement</h3><p class="sub" id="d-topx-sub"></p><figure id="d-topx"></figure><p class="src">Source: titles from the ATM Kitchen board and post copy; appearances from LinkedIn and Instagram posts</p></div><div class="card" data-chart-card="s-sect"><h3 data-chart-text="card_title"></h3><p class="sub" data-chart-text="card_subtitle_as_published"></p><figure id="s-sect"></figure><p class="sowhat" data-chart-text="commentary_as_published"></p></div>
 
 </div>
 </section>
@@ -865,8 +874,8 @@ window.ATMScoreReady = boot().catch(e => {
 window.ATMChart = { el, css, hover, showTip, hideTip, bullet, hbar, vbar, vstack, line, stack100, fmtPct, fmtInt, fmtK };
 })();
 </script>
-<script src="js/archive.js?v=20261020152446"></script>
-<script src="js/daily_data.js?v=20261020152446"></script>
-<script src="js/daily_view.js?v=20261020152446"></script>
-<script src="js/glance.js?v=20261020152446"></script>
-<script src="js/carousel.js?v=20261020152446"></script>
+<script src="js/archive.js?v=20261021140144"></script>
+<script src="js/daily_data.js?v=20261021140144"></script>
+<script src="js/daily_view.js?v=20261021140144"></script>
+<script src="js/glance.js?v=20261021140144"></script>
+<script src="js/carousel.js?v=20261021140144"></script>

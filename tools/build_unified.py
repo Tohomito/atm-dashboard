@@ -351,6 +351,16 @@ soup.find("footer").insert(0, frag('<span id="foot-daily" data-added></span>'))
 _flags = soup.find("section", attrs={"data-sec": "D"}).find(attrs={"data-plays": True}).find_parent(class_="card")
 _flags.extract()
 soup.find(id="actions-grid").append(_flags)
+# section D: the tally tiles give way to CEOs featured, the month's executives and the month's top executives
+_secD = soup.find("section", attrs={"data-sec": "D"})
+_secD.find(attrs={"data-tiles": True}).decompose()
+_SRC_EX = '<p class="src">Source: titles from the ATM Kitchen board and post copy; appearances from LinkedIn and Instagram posts</p>'
+_secD.find("div", class_="grid").insert_before(frag(f'''<div class="grid two" data-added style="align-items:start">
+  <div class="card"><h3>CEOs featured</h3><p class="sub" id="d-ceo-sub"></p><div id="d-ceo"><p class="dim">Loading…</p></div>{_SRC_EX}</div>
+  <div class="card"><h3 id="d-execs-title">Executives featured last month</h3><p class="sub" id="d-execs-sub"></p><div id="d-execs"></div>{_SRC_EX}</div>
+</div>'''))
+_sect = _secD.find("figure", id="s-sect").find_parent(class_="card")
+_sect.insert_before(frag(f'''<div class="card" data-added><h3 id="d-topx-title">Top executives by engagement</h3><p class="sub" id="d-topx-sub"></p><figure id="d-topx"></figure>{_SRC_EX}</div>'''))
 
 
 # ---------- neutral source wording (sources named by platform, not by person) ----------
@@ -446,6 +456,12 @@ body:not([data-view="actions"]) .actions-view{display:none}
 .fnote p{margin:6px 0 0}
 .verdict{align-content:start}
 .verdict .pill{justify-self:start}
+.exec-n{font-family:"Archivo",sans-serif;font-size:36px;font-weight:800;line-height:1;margin:2px 0 8px}
+.exec-list{list-style:none;padding:0;margin:6px 0 0;display:grid;gap:6px;font-size:13px;color:var(--ink2)}
+.exec-list b{color:var(--ink);font-weight:600}
+.exec-list .when{color:var(--muted);font-size:12px}
+.exec-cols{display:block;columns:2 210px;column-gap:18px}
+.exec-cols li{break-inside:avoid;margin-bottom:6px}
 .chg{font-weight:600}
 .chg.up{color:var(--goodtext)}
 .chg.down{color:var(--crit)}
