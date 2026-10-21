@@ -41,6 +41,7 @@ table.posts td.post{white-space:normal;min-width:260px;max-width:440px}
 body[data-view="actions"] .wrap>:not(.toolbar):not(.actions-view):not(#tip){display:none}
 body:not([data-view="actions"]) .actions-view{display:none}
 .fnote{margin-top:10px;max-width:80ch;color:var(--muted);font-size:12.5px}
+.fnote ul{margin:6px 0 0;padding-left:18px}.fnote li{margin:3px 0}
 .fnote summary{cursor:pointer;font-weight:600;color:var(--ink2);width:max-content;max-width:100%}
 .fnote summary:focus-visible{outline:2px solid var(--s1);outline-offset:2px}
 .fnote p{margin:6px 0 0}
@@ -224,7 +225,7 @@ a{color:var(--ink)}
 <div class="guide-head"><h2 id="guide-title">How to use this dashboard</h2><button aria-label="Close the guide" class="guide-close" type="button">×</button></div>
 <div class="guide-body">
 <h3>Two views</h3>
-<p><b>Data &amp; insights</b> (the default) shows the numbers. <b>Actions</b> shows what they mean and what to do: the latest analysis, ranked priorities, steps to catch posts tagged to the wrong page, setup tasks, and tracking and site fixes. Switch with the buttons at the top left.</p>
+<p><b>Data &amp; insights</b> (the default) shows the numbers. <b>Actions</b> shows what to do: ranked priorities, steps to catch posts tagged to the wrong page, setup tasks, and tracking and site fixes. Switch with the buttons at the top left.</p>
 <h3>Reading the page, top to bottom</h3>
 <ul>
 <li><b>Overview:</b> total audience, site traffic, new against returning visitors, and the scorecards. Each scorecard compares the last full month with the three months before it: <span class="chg up">▲ green</span> is better, <span class="chg down">▼ red</span> is worse.</li>
@@ -243,7 +244,7 @@ a{color:var(--ink)}
 <p>The lines under the page title show how current each source is. <b>Refresh</b> reloads the latest figures.</p>
 <h3>Notes worth knowing</h3>
 <ul>
-<li>Grey "How these figures are worked out" lines open to explain a calculation.</li>
+<li>Grey "How these figures are worked out" lines open to explain a calculation. Grey "What changed and when" lines give the context behind a move, such as a paused ad flight or a new kind of tracking.</li>
 <li>"At The Moment" is a separate LinkedIn page with a similar name. It is watched as a peer, never counted as ATM.</li>
 <li>Newsletter list size includes imported addresses, so verified clicks are the better measure of readers.</li>
 </ul>
@@ -293,11 +294,6 @@ a{color:var(--ink)}
 <div class="measures" id="measures"></div>
 <div id="headline-tiles"></div>
 <p class="sub" id="measures-note" style="margin-top:10px;max-width:80ch"></p>
-</section>
-
-<section class="actions-view" data-added="" id="read">
-<div class="sec-head"><span class="eyebrow" id="read-eyebrow"></span><h2 id="read-headline"></h2><p id="read-lede"></p></div>
-<div class="card"><h3>What happened</h3><ol class="findings two-col" id="read-findings"></ol></div>
 </section>
 <section class="actions-view" data-added="" id="actions">
 <div class="sec-head"><span class="eyebrow" id="actions-eyebrow">Actions</span><h2>What to do next</h2><p>Ranked suggestions from the latest analysis, which reads every source on the dashboard together with the optimization log.</p></div>
@@ -788,8 +784,18 @@ async function boot() {
   put('tracking-actions', plays('tracking'));
   if (one('header_eyebrow')) put('actions-eyebrow', esc('Actions · ' + (one('header_eyebrow').match(/written [^·]+/i) || [''])[0].trim()));
   window.ATMAnalysis = A;
+  // context from the optimization log sits next to the charts it explains (kind=context, title = section)
+  const ctx = {};
+  A.filter(r => r.kind === 'context').forEach(r => (ctx[r.title] = ctx[r.title] || []).push(r.text));
+  for (const [k, items] of Object.entries(ctx)) {
+    const sec = document.getElementById(k) || document.querySelector(`section[data-sec="${k}"]`);
+    const head = sec && sec.querySelector('.sec-head');
+    if (!head) continue;
+    const d = document.createElement('details'); d.className = 'fnote ctx';
+    d.innerHTML = `<summary>What changed and when</summary><ul>${items.map(x => `<li>${esc(x)}</li>`).join('')}</ul>`;
+    head.appendChild(d);
+  }
   put('read-notes', A.filter(r => r.kind === 'note').map(r => `<li><b>${esc(r.title)}</b> ${esc(r.text)}</li>`).join(''));
-  if (!A.length) { const sec = document.getElementById('read'); if (sec) sec.hidden = true; }
   document.querySelectorAll('[data-k]').forEach(e => { if (T[e.dataset.k] != null) e.innerHTML = T[e.dataset.k]; });
 
   // tiles
@@ -859,8 +865,8 @@ window.ATMScoreReady = boot().catch(e => {
 window.ATMChart = { el, css, hover, showTip, hideTip, bullet, hbar, vbar, vstack, line, stack100, fmtPct, fmtInt, fmtK };
 })();
 </script>
-<script src="js/archive.js?v=20261021141247"></script>
-<script src="js/daily_data.js?v=20261021141247"></script>
-<script src="js/daily_view.js?v=20261021141247"></script>
-<script src="js/glance.js?v=20261021141247"></script>
-<script src="js/carousel.js?v=20261021141247"></script>
+<script src="js/archive.js?v=20261021141958"></script>
+<script src="js/daily_data.js?v=20261021141958"></script>
+<script src="js/daily_view.js?v=20261021141958"></script>
+<script src="js/glance.js?v=20261021141958"></script>
+<script src="js/carousel.js?v=20261021141958"></script>

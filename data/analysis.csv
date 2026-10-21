@@ -37,6 +37,12 @@ tracking,Episode pages cannot rank in Google.,"About 190 of 220 episode pages sh
 tracking,Imported newsletter subscribers get no welcome email.,"The welcome flow has enrolled 12 people since July while thousands were imported. Turn on a welcome automation for imports in beehiiv, and decide on double opt-in for cold sources. Referral milestones are also not set up."
 tracking,Instagram follower demographics are not read.,"They need a Meta Business Suite login, which no current run uses."
 tracking,No play counts per episode.,"Vimeo is not connected, so sponsor recaps cannot show plays per episode or per partner series."
+context,overview,"Filming slowed in August, so September had fewer new pieces. Part of LinkedIn's fall in reach was planned, not a loss of interest."
+context,overview,"YouTube's paid flight ran June to August, so September's fall in views is a spend change, not an editorial one."
+context,now,"The LinkedIn bio was rewritten on Sep 30, so October is its first full month. Compare follower growth from October on against September."
+context,B,"YouTube's paid flight ran June to August. September added 50 subscribers with no spend, more than the 41 that 180,000 paid views produced across those three months."
+context,C,"Repost tracking began in September, so it is the first month the lift can be measured. Earlier months have no figure to compare."
+context,02,"September's subscriber growth came almost all from the paid list-growth import, which delivered engaged readers but far fewer than planned."
 note,Followers.,"LinkedIn's own total was 3,950 on Oct 4. The daily follower chart tracks organic gains from a fixed starting point, so it reads lower (3,631); use it for the trend, not the total."
 note,Engagement rate.,LinkedIn's own rate counts clicks (about 8.7%). The Overview scorecards leave clicks out (3.25%) so months compare on the same terms.
 note,Time windows.,Daily figures run to Oct 4 (LinkedIn reports a day or two late). Monthly figures cover Sep 1–28. Instagram reach and views are Meta's 28-day rolling totals. Engagement momentum counts posts by the date they were published.

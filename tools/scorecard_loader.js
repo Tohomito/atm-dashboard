@@ -122,8 +122,18 @@ async function boot() {
   put('tracking-actions', plays('tracking'));
   if (one('header_eyebrow')) put('actions-eyebrow', esc('Actions · ' + (one('header_eyebrow').match(/written [^·]+/i) || [''])[0].trim()));
   window.ATMAnalysis = A;
+  // context from the optimization log sits next to the charts it explains (kind=context, title = section)
+  const ctx = {};
+  A.filter(r => r.kind === 'context').forEach(r => (ctx[r.title] = ctx[r.title] || []).push(r.text));
+  for (const [k, items] of Object.entries(ctx)) {
+    const sec = document.getElementById(k) || document.querySelector(`section[data-sec="${k}"]`);
+    const head = sec && sec.querySelector('.sec-head');
+    if (!head) continue;
+    const d = document.createElement('details'); d.className = 'fnote ctx';
+    d.innerHTML = `<summary>What changed and when</summary><ul>${items.map(x => `<li>${esc(x)}</li>`).join('')}</ul>`;
+    head.appendChild(d);
+  }
   put('read-notes', A.filter(r => r.kind === 'note').map(r => `<li><b>${esc(r.title)}</b> ${esc(r.text)}</li>`).join(''));
-  if (!A.length) { const sec = document.getElementById('read'); if (sec) sec.hidden = true; }
   document.querySelectorAll('[data-k]').forEach(e => { if (T[e.dataset.k] != null) e.innerHTML = T[e.dataset.k]; });
 
   // tiles

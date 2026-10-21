@@ -225,7 +225,7 @@ TOOLBAR = """
     <div class="guide-head"><h2 id="guide-title">How to use this dashboard</h2><button type="button" class="guide-close" aria-label="Close the guide">&times;</button></div>
     <div class="guide-body">
       <h3>Two views</h3>
-      <p><b>Data &amp; insights</b> (the default) shows the numbers. <b>Actions</b> shows what they mean and what to do: the latest analysis, ranked priorities, steps to catch posts tagged to the wrong page, setup tasks, and tracking and site fixes. Switch with the buttons at the top left.</p>
+      <p><b>Data &amp; insights</b> (the default) shows the numbers. <b>Actions</b> shows what to do: ranked priorities, steps to catch posts tagged to the wrong page, setup tasks, and tracking and site fixes. Switch with the buttons at the top left.</p>
       <h3>Reading the page, top to bottom</h3>
       <ul>
         <li><b>Overview:</b> total audience, site traffic, new against returning visitors, and the scorecards. Each scorecard compares the last full month with the three months before it: <span class="chg up">&#9650; green</span> is better, <span class="chg down">&#9660; red</span> is worse.</li>
@@ -244,7 +244,7 @@ TOOLBAR = """
       <p>The lines under the page title show how current each source is. <b>Refresh</b> reloads the latest figures.</p>
       <h3>Notes worth knowing</h3>
       <ul>
-        <li>Grey "How these figures are worked out" lines open to explain a calculation.</li>
+        <li>Grey "How these figures are worked out" lines open to explain a calculation. Grey "What changed and when" lines give the context behind a move, such as a paused ad flight or a new kind of tracking.</li>
         <li>"At The Moment" is a separate LinkedIn page with a similar name. It is watched as a peer, never counted as ATM.</li>
         <li>Newsletter list size includes imported addresses, so verified clicks are the better measure of readers.</li>
       </ul>
@@ -305,8 +305,6 @@ hdr.find_next_sibling("section", id="glance").insert_after(frag(ACTIONS))
 secA = soup.find("section", attrs={"data-sec": "A"})
 secA.insert_before(frag(now))
 secA.decompose()  # its headline numbers now live in the At a glance measures
-# What the numbers say goes to the Actions view, ahead of the actions themselves
-soup.find("section", id="actions").insert_before(frag(READ))
 # the September baseline summary sits between the Overview and At a glance
 _audit = soup.find("section", id="audit").extract()
 _audit.find(attrs={"data-verdicts": True}).insert_after(frag('<p class="sub" data-added style="margin-top:12px">The detail behind each verdict is in sections 01 to 06 further down the page.</p>'))
@@ -454,6 +452,7 @@ table.posts td.post{white-space:normal;min-width:260px;max-width:440px}
 body[data-view="actions"] .wrap>:not(.toolbar):not(.actions-view):not(#tip){display:none}
 body:not([data-view="actions"]) .actions-view{display:none}
 .fnote{margin-top:10px;max-width:80ch;color:var(--muted);font-size:12.5px}
+.fnote ul{margin:6px 0 0;padding-left:18px}.fnote li{margin:3px 0}
 .fnote summary{cursor:pointer;font-weight:600;color:var(--ink2);width:max-content;max-width:100%}
 .fnote summary:focus-visible{outline:2px solid var(--s1);outline-offset:2px}
 .fnote p{margin:6px 0 0}
