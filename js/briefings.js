@@ -1,10 +1,8 @@
-/* Briefings view: three short reads for three audiences.
+/* Briefings view: two short reads for two audiences.
    - Editorial decisions (Hannah): patterns and experiments from data/briefings.csv, rewritten weekly,
      with the supporting posts drawn live from the post data.
-   - Client and partner proof (Rob and Christine): three proof points worked out live from the posts,
-     filterable by partner, series or industry (data/companies.csv maps companies to partners and industries).
-   - What needs attention (the team): new problems, blockers and decisions from data/briefings.csv, plus
-     data-health checks worked out on the page. Execution stays in Notion. */
+   - Client and partner proof (Rob and Christine): proof points worked out live from the posts,
+     filterable by partner, series or industry (data/companies.csv maps companies to partners and industries). */
 (function () {
 const D = window.ATMDaily;
 const { fmt, full, esc, mdy, median, round, addDays } = D;
@@ -35,7 +33,7 @@ function setTab(t, push) {
   if (push) history.replaceState(null, '', '#briefings/' + t);
 }
 document.querySelectorAll('#brief-tabs button').forEach(b => b.addEventListener('click', () => setTab(b.dataset.b, true)));
-const fromHash = () => { const m = location.hash.match(/^#briefings\/(\w+)/); return m && ['editorial', 'proof', 'attention'].includes(m[1]) ? m[1] : 'editorial'; };
+const fromHash = () => { const m = location.hash.match(/^#briefings\/(\w+)/); return m && ['editorial', 'proof'].includes(m[1]) ? m[1] : 'editorial'; };
 setTab(fromHash(), false);
 window.addEventListener('hashchange', () => { if (location.hash.startsWith('#briefings')) setTab(fromHash(), false); });
 
@@ -178,40 +176,14 @@ function proof(S, companies, syn, senior, func) {
   draw();
 }
 
-/* ---------- what needs attention ---------- */
-function attention(B, S, ga4, analysis) {
-  const items = B.filter(r => r.kind === 'attention').map(r => Object.assign({}, r));
-  // data-health checks worked out on the page, so a stalled feed shows up without anyone writing it down
-  const today = localISO();
-  const smAge = daysSince(S.SM && S.SM.pulled);
-  if (smAge != null && smAge > 2) items.unshift({ status: 'New problem', title: 'The daily social pull has stopped.', text: `LinkedIn, Instagram and YouTube figures were last pulled ${dateTxt(S.SM.pulled)}.`, owner: 'Matt', next_step: 'Check the scheduled pull for a Supermetrics error (licence or expired connection).', raised: today, auto: true });
-  const gaAge = daysSince(ga4 && ga4.pulled);
-  if (gaAge != null && gaAge > 9) items.unshift({ status: 'New problem', title: 'The weekly GA4 pull has stopped.', text: `Site figures were last pulled ${dateTxt(ga4.pulled)}.`, owner: 'Matt', next_step: 'Check the weekly GA4 task for a Supermetrics error.', raised: today, auto: true });
-  const w = ((analysis || []).find(r => r.kind === 'header_eyebrow') || {}).text || '';
-  const m = w.match(/written ([A-Z][a-z]{2}) (\d{1,2}), (\d{4})/);
-  if (m) { const iso = new Date(`${m[1]} ${m[2]}, ${m[3]} 12:00`).toISOString().slice(0, 10); if (daysSince(iso) > 35) items.unshift({ status: 'New problem', title: 'The monthly analysis is out of date.', text: `It was written ${dateTxt(iso)}.`, owner: 'Rob', next_step: 'Run the monthly refresh.', raised: today, auto: true }); }
-  const ORDER = ['Decision', 'Blocker', 'New problem'], HEAD = { 'Decision': 'Decisions needed', 'Blocker': 'Unresolved blockers', 'New problem': 'New problems' };
-  const CLS = { 'Decision': 'warn', 'Blocker': 'crit', 'New problem': 'new' };
-  $('brief-attention-list').innerHTML = ORDER.map(st => {
-    const xs = items.filter(r => r.status === st); if (!xs.length) return '';
-    return `<h3 class="att-head">${HEAD[st]} <span class="dim">(${xs.length})</span></h3>` + xs.map(r => {
-      const age = daysSince(r.raised);
-      return `<article class="att-row"><span class="pill ${CLS[st]}"><i></i>${esc(st)}</span><div class="att-body"><b>${esc(r.title)}</b><p>${esc(r.text)}</p>
-        <dl><div><dt>Owner</dt><dd>${esc(r.owner || '—')}</dd></div><div><dt>Next step</dt><dd>${esc(r.next_step || '—')}</dd></div><div><dt>Open</dt><dd>${r.auto ? 'found by today\'s check' : age != null ? (age <= 0 ? 'raised today' : `since ${dateTxt(r.raised)} (${age} day${age === 1 ? '' : 's'})`) : '—'}</dd></div></dl></div></article>`;
-    }).join('');
-  }).join('') || '<p class="dim">Nothing new, stuck or waiting on a decision.</p>';
-  const n = items.length; const btn = document.querySelector('#brief-tabs [data-b="attention"] .count'); if (btn) btn.textContent = n ? ` ${n}` : '';
-}
-
 Promise.all([window.ATMDailyReady, window.ATMScoreReady]).then(async ([S]) => {
   if (!S || !S.POSTS) return;
-  const [B, companies, syn, senior, func, ga4] = await Promise.all([getCSV('data/briefings.csv'), getCSV('data/companies.csv'),
-    getCSV('data/scorecard/charts/s-syn.csv'), getCSV('data/scorecard/charts/c-senior.csv'), getCSV('data/scorecard/charts/c-func.csv'), getJSON('data/ga4/meta.json')]);
+  const [B, companies, syn, senior, func] = await Promise.all([getCSV('data/briefings.csv'), getCSV('data/companies.csv'),
+    getCSV('data/scorecard/charts/s-syn.csv'), getCSV('data/scorecard/charts/c-senior.csv'), getCSV('data/scorecard/charts/c-func.csv')]);
   const meta = B.find(r => r.kind === 'meta');
   if (meta) $('brief-eyebrow').textContent = `Briefings · ${meta.title}`;
   try { editorial(B, S); } catch (e) { console.error('editorial briefing', e); }
   try { proof(S, companies, syn, senior, func); } catch (e) { console.error('proof briefing', e); }
-  try { attention(B, S, ga4, window.ATMAnalysis); } catch (e) { console.error('attention briefing', e); }
   document.documentElement.dataset.briefReady = '1';
 });
 })();

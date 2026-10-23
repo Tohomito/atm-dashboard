@@ -216,11 +216,10 @@ READ = """
 """
 BRIEF = """
 <section id="briefings" class="brief-view" data-added>
-  <div class="sec-head"><span class="eyebrow" id="brief-eyebrow">Briefings</span><h2>Three short reads, one for each job</h2><p>Each briefing keeps to what its reader needs this week. The editorial briefing is rewritten every Monday; proof points and data checks update when the page opens.</p></div>
+  <div class="sec-head"><span class="eyebrow" id="brief-eyebrow">Briefings</span><h2>Two short reads, one for each job</h2><p>Each briefing keeps to what its reader needs. The editorial briefing is rewritten every Monday; proof points update when the page opens.</p></div>
   <div class="brief-tabs" id="brief-tabs" role="tablist" aria-label="Briefings">
     <button type="button" role="tab" data-b="editorial" aria-selected="true">This week's editorial decisions<span class="who">For Hannah</span></button>
     <button type="button" role="tab" data-b="proof" aria-selected="false">Client and partner proof<span class="who">For Rob and Christine</span></button>
-    <button type="button" role="tab" data-b="attention" aria-selected="false">What needs attention<span class="count"></span><span class="who">For the team</span></button>
   </div>
   <div class="brief-panel" id="brief-editorial" role="tabpanel">
     <p class="brief-intro" id="brief-editorial-meta"></p>
@@ -242,15 +241,11 @@ BRIEF = """
     <div class="grid three proof-grid"><div class="card proof" id="pp-audience"></div><div class="card proof" id="pp-content"></div><div class="card proof" id="pp-amp"></div></div>
     <details class="fnote"><summary>How these are worked out</summary><p>Posts from May 21 on, LinkedIn and Instagram. Partner and industry come from data/companies.csv, which maps each company named in a post to its parent partner and an industry; edit it to regroup. Series comes from the post's tag where Hannah has set one, otherwise from series names in the post text, until the confirmed series list replaces it. The strongest example is the post with the highest reach against its channel's median, among posts at or above the median engagement rate (a post that reached far with little engagement is usually boosted). Repost lift is from September's repost tracking, the only month recorded so far.</p></details>
   </div>
-  <div class="brief-panel" id="brief-attention" role="tabpanel" hidden>
-    <p class="brief-intro">Only what is new, stuck or waiting on a decision, each with an owner and a next step. Track the work itself in Notion; an item leaves this list once it is decided or unblocked. Checks on the data feeds run each time the page opens.</p>
-    <div id="brief-attention-list"></div>
-  </div>
 </section>
 """
 TOOLBAR = """
 <div class="toolbar" data-added>
-  <div class="seg viewsw" data-for="view" role="group" aria-label="View"><button type="button" data-v="data" aria-pressed="true">Data &amp; insights</button><button type="button" data-v="actions" aria-pressed="false">Actions</button><button type="button" data-v="briefings" aria-pressed="false">Briefings</button></div>
+  <div class="seg viewsw" data-for="view" role="group" aria-label="View"><button type="button" data-v="data" aria-pressed="true">Data &amp; insights</button><button type="button" data-v="briefings" aria-pressed="false">Briefings</button><button type="button" data-v="actions" aria-pressed="false">Actions</button></div>
   <form class="ask" id="ask-form" autocomplete="off"><input id="ask-q" type="text" placeholder="Ask for a custom insight, e.g. Which guests drive the most comments?" aria-label="Ask for a custom insight"><button type="submit">Ask Claude</button></form>
   <div class="refresh"><button type="button" id="refresh-btn" title="Reload the latest data">&#8635; Refresh</button><span class="dim" id="loaded-at"></span></div>
   <button type="button" id="guide-btn" class="guide-btn" aria-haspopup="dialog">How to use</button>
@@ -259,7 +254,7 @@ TOOLBAR = """
     <div class="guide-head"><h2 id="guide-title">How to use this dashboard</h2><button type="button" class="guide-close" aria-label="Close the guide">&times;</button></div>
     <div class="guide-body">
       <h3>Three views</h3>
-      <p><b>Data &amp; insights</b> (the default) shows the numbers. <b>Actions</b> shows what to do: ranked priorities, steps to catch posts tagged to the wrong page, setup tasks, and tracking and site fixes. <b>Briefings</b> holds three short reads: this week's editorial decisions (patterns, supporting posts and two experiments), client and partner proof (three proof points you can filter by partner, series or industry and copy into a pitch), and what needs attention (only new problems, blockers and decisions, each with an owner). Switch with the buttons at the top left. Links ending #actions or #briefings/proof open a view directly.</p>
+      <p><b>Data &amp; insights</b> (the default) shows the numbers. <b>Briefings</b> holds two short reads: this week's editorial decisions (patterns, supporting posts and two experiments) and client and partner proof (proof points you can filter by partner, series or industry and copy into a pitch). <b>Actions</b> shows what to do: ranked priorities, steps to catch posts tagged to the wrong page, setup tasks, and tracking and site fixes. Switch with the buttons at the top left. Links ending #actions or #briefings/proof open a view directly.</p>
       <h3>Reading the page, top to bottom</h3>
       <ul>
         <li><b>Overview:</b> total audience, site traffic, new against returning visitors, and the scorecards. Each scorecard compares the last full month with the three months before it: <span class="chg up">&#9650; green</span> is better, <span class="chg down">&#9660; red</span> is worse.</li>

@@ -61,10 +61,9 @@ Where these overlap the daily sheet they win. The sheet still supplies the Linke
 
 ## Briefings (weekly)
 
-The Briefings view has three tabs. `data/briefings.csv` holds the written parts, rewritten every Monday by a scheduled task:
+The Briefings view has two tabs. `data/briefings.csv` holds the written parts of the editorial briefing, rewritten every Monday by a scheduled task:
 
-- `meta`: the week's label and what the editorial briefing covers.
-- `pattern` (three) and `experiment` (two): this week's editorial decisions for Hannah. `posts` lists supporting posts as `li:<post_id>` or `ig:<media_id>` from `data/sm/`; the page fills in their numbers. `tags` names the dimensions (Topic, Format, Guest participation, Distribution).
-- `attention`: only new problems, unresolved blockers and decisions, each with `status` (New problem, Blocker or Decision), `owner`, `next_step` and the date `raised`. Drop an item once it is decided or unblocked; execution is tracked in Notion. The page adds its own checks when a data feed goes stale.
+- `meta`: the week's label and what the briefing covers.
+- `pattern` (three) and `experiment` (two): this week's editorial decisions for Hannah. `posts` lists supporting posts as `li:<post_id>` or `ig:<media_id>` from `data/sm/`; the page fills in their numbers. `tags` names the dimensions (Topic, Format, Guest participation, Distribution). Experiments carry an `owner` and a `next_step` saying how to measure them.
 
 Client and partner proof is worked out on the page from the posts. `data/companies.csv` maps each company named in a post to a parent partner and an industry; add a row when a new company appears, or edit one to regroup. Series come from post tags where set, otherwise from series names in the post text.
