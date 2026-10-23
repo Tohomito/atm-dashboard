@@ -274,7 +274,7 @@ function smPosts(li, ig) {
   const L = li.map(r => {
     const impr = num(r.impressions), clicks = num(r.clicks), likes = num(r.likes), cm = num(r.comments), sh = num(r.shares);
     const who = personFromLinkedIn(r.text) || {};
-    return { ch: "LinkedIn", fmt: r.media === "VIDEO" ? "Video" : r.media === "IMAGE" ? "Image" : (r.media ? r.media[0] + r.media.slice(1).toLowerCase() : "Image"),
+    return { id: "li:" + r.post_id, ch: "LinkedIn", fmt: r.media === "VIDEO" ? "Video" : r.media === "IMAGE" ? "Image" : (r.media ? r.media[0] + r.media.slice(1).toLowerCase() : "Image"),
       date: r.date, person: who.person || "", company: who.company || "", role: who.role || "", series: "", client: "", title: firstSentence(r.text), text: clean(r.text),
       reach: impr, views: null, clicks, reactions: likes, comments: cm, amp: sh,
       er: impr ? round(((clicks || 0) + (likes || 0) + (cm || 0) + (sh || 0)) / impr * 100, 2) : null, src: "sm" };
@@ -285,7 +285,7 @@ function smPosts(li, ig) {
     // the same guest usually has a LinkedIn post within a few days; it carries a cleaner name and company
     const near = L.filter(p => p.person && Math.abs(new Date(p.date) - new Date(r.date)) <= 3 * 864e5 && clean(r.caption).toLowerCase().includes(lastName(p.person)));
     if (near.length) who = { person: near[0].person, company: near[0].company };
-    return { ch: "Instagram", fmt: r.type === "REELS" ? "Reel" : r.type === "FEED" ? "Post" : (r.type || ""), date: r.date, person: who?.person || "", company: who?.company || "", series: "", client: "",
+    return { id: "ig:" + r.media_id, url: r.url || "", ch: "Instagram", fmt: r.type === "REELS" ? "Reel" : r.type === "FEED" ? "Post" : (r.type || ""), date: r.date, person: who?.person || "", company: who?.company || "", series: "", client: "",
       title: firstSentence(r.caption), text: clean(r.caption), reach, views: num(r.views), clicks: null, reactions: num(r.likes), comments: num(r.comments), amp: num(r.shares),
       er: reach ? round((inter || 0) / reach * 100, 2) : null, src: "sm" };
   });

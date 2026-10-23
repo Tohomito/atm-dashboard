@@ -39,6 +39,53 @@ table.posts td.post{white-space:normal;min-width:260px;max-width:440px}
 .toolbar button:focus-visible,.toolbar input:focus-visible{outline:2px solid var(--s1);outline-offset:1px}
 @media (max-width:600px){.toolbar{position:static}}
 body[data-view="actions"] .wrap>:not(.toolbar):not(.actions-view):not(#tip){display:none}
+body[data-view="briefings"] .wrap>:not(.toolbar):not(.brief-view):not(#tip){display:none}
+body:not([data-view="briefings"]) .brief-view{display:none}
+.brief-tabs{display:flex;gap:8px;flex-wrap:wrap;margin:4px 0 18px;border-bottom:1px solid var(--ring)}
+.brief-tabs button{font:inherit;font-weight:600;font-size:14px;background:none;border:0;border-bottom:3px solid transparent;color:var(--ink2);padding:8px 4px 10px;margin-right:14px;cursor:pointer;text-align:left}
+.brief-tabs button .who{display:block;font-weight:400;font-size:12px;color:var(--muted)}
+.brief-tabs button .count{font:600 11px "IBM Plex Mono",monospace;margin-left:6px;padding:1px 6px;border-radius:999px;background:var(--wash-crit);color:var(--crit)}
+.brief-tabs button .count:empty{display:none}
+.brief-tabs button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--s1)}
+.brief-tabs button:focus-visible{outline:2px solid var(--s1);outline-offset:2px}
+.brief-intro{max-width:80ch;color:var(--ink2);margin:0 0 14px}
+.brief-h{margin:22px 0 10px;font-size:16px}
+.brief-list{display:grid;gap:14px}
+.brief-card{display:grid;grid-template-columns:34px minmax(0,1fr);gap:12px;align-items:start}
+.brief-card h3{margin:0 0 6px}
+.brief-card p{margin:8px 0 0;max-width:80ch}
+.brief-num{font:800 20px "Archivo",sans-serif;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:var(--grid);color:var(--ink)}
+.brief-card.exp .brief-num{background:var(--wash-good);color:var(--goodtext)}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{font:600 11px "IBM Plex Mono",monospace;padding:2px 8px;border-radius:999px;background:var(--grid);color:var(--ink2)}
+.brief-card .brief-measure{color:var(--ink2);font-size:13.5px;border-left:3px solid var(--s1);padding-left:10px}
+table.mini .nw{white-space:nowrap}
+.brief-card .owner{font-size:13px;color:var(--muted)}
+.tbl-wrap{overflow-x:auto;margin-top:6px}
+table.mini{border-collapse:collapse;font-size:12.5px;width:100%;min-width:520px}
+table.mini th,table.mini td{padding:5px 8px;border-bottom:1px solid var(--ring);text-align:left;vertical-align:top}
+table.mini th{font-weight:600;color:var(--muted);font-size:11.5px}
+table.mini .num{text-align:right;font-family:"IBM Plex Mono",monospace;white-space:nowrap}
+.pf-row{display:flex;gap:12px;flex-wrap:wrap;align-items:end;margin-bottom:10px}
+.pf-row label{display:grid;gap:4px;font-size:12px;font-weight:600;color:var(--ink2)}
+.pf-row select{font:inherit;font-size:14px;padding:7px 10px;border:1px solid var(--ring);border-radius:8px;background:var(--surface);color:var(--ink);max-width:260px}
+.pf-row button,.copy-btn{font:inherit;font-size:13px;padding:7px 12px;border:1px solid var(--ring);border-radius:8px;background:var(--surface);color:var(--ink);cursor:pointer}
+.grid.three{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+@media (max-width:900px){.grid.three{grid-template-columns:1fr}}
+.card.proof{display:flex;flex-direction:column;gap:6px}
+.card.proof .mk{font-size:12px;color:var(--ink2);font-weight:600;text-transform:uppercase;letter-spacing:.05em}
+.card.proof .mv{font-family:"Archivo",sans-serif;font-size:34px;font-weight:800;line-height:1.05}
+.card.proof p{margin:0}
+.card.proof .copy-btn{align-self:start;margin-top:auto}
+.att-head{margin:20px 0 8px;font-size:16px}
+.att-row{display:grid;grid-template-columns:130px minmax(0,1fr);gap:12px;padding:12px 0;border-top:1px solid var(--ring)}
+.att-row .pill{justify-self:start;align-self:start;height:auto;white-space:nowrap}
+.att-body p{margin:4px 0 8px;max-width:80ch;color:var(--ink2)}
+.att-body dl{display:flex;gap:18px;flex-wrap:wrap;margin:0;font-size:13px}
+.att-body dt{color:var(--muted);font-size:11.5px;font-weight:600}
+.att-body dd{margin:0}
+.pill.new i{background:var(--s1)}
+@media (max-width:640px){.brief-tabs{flex-wrap:nowrap;overflow-x:auto}.brief-tabs button{flex:0 0 auto}.att-row{grid-template-columns:minmax(0,1fr)}.pf-row label,.pf-row select{width:100%;max-width:none}.pf-row{display:grid}.brief-tabs button{margin-right:6px}}
 body:not([data-view="actions"]) .actions-view{display:none}
 .fnote{margin-top:10px;max-width:80ch;color:var(--muted);font-size:12.5px}
 .fnote ul{margin:6px 0 0;padding-left:18px}.fnote li{margin:3px 0}
@@ -216,7 +263,7 @@ a{color:var(--ink)}
 <div class="wrap">
 
 <div class="toolbar" data-added="">
-<div aria-label="View" class="seg viewsw" data-for="view" role="group"><button aria-pressed="true" data-v="data" type="button">Data &amp; insights</button><button aria-pressed="false" data-v="actions" type="button">Actions</button></div>
+<div aria-label="View" class="seg viewsw" data-for="view" role="group"><button aria-pressed="true" data-v="data" type="button">Data &amp; insights</button><button aria-pressed="false" data-v="actions" type="button">Actions</button><button aria-pressed="false" data-v="briefings" type="button">Briefings</button></div>
 <form autocomplete="off" class="ask" id="ask-form"><input aria-label="Ask for a custom insight" id="ask-q" placeholder="Ask for a custom insight, e.g. Which guests drive the most comments?" type="text"/><button type="submit">Ask Claude</button></form>
 <div class="refresh"><button id="refresh-btn" title="Reload the latest data" type="button">↻ Refresh</button><span class="dim" id="loaded-at"></span></div>
 <button aria-haspopup="dialog" class="guide-btn" id="guide-btn" type="button">How to use</button>
@@ -224,8 +271,8 @@ a{color:var(--ink)}
 <dialog aria-labelledby="guide-title" id="guide">
 <div class="guide-head"><h2 id="guide-title">How to use this dashboard</h2><button aria-label="Close the guide" class="guide-close" type="button">×</button></div>
 <div class="guide-body">
-<h3>Two views</h3>
-<p><b>Data &amp; insights</b> (the default) shows the numbers. <b>Actions</b> shows what to do: ranked priorities, steps to catch posts tagged to the wrong page, setup tasks, and tracking and site fixes. Switch with the buttons at the top left.</p>
+<h3>Three views</h3>
+<p><b>Data &amp; insights</b> (the default) shows the numbers. <b>Actions</b> shows what to do: ranked priorities, steps to catch posts tagged to the wrong page, setup tasks, and tracking and site fixes. <b>Briefings</b> holds three short reads: this week's editorial decisions (patterns, supporting posts and two experiments), client and partner proof (three proof points you can filter by partner, series or industry and copy into a pitch), and what needs attention (only new problems, blockers and decisions, each with an owner). Switch with the buttons at the top left. Links ending #actions or #briefings/proof open a view directly.</p>
 <h3>Reading the page, top to bottom</h3>
 <ul>
 <li><b>Overview:</b> total audience, site traffic, new against returning visitors, and the scorecards. Each scorecard compares the last full month with the three months before it: <span class="chg up">▲ green</span> is better, <span class="chg down">▼ red</span> is worse.</li>
@@ -304,6 +351,39 @@ a{color:var(--ink)}
 <div class="card"><h3>Tracking and site fixes</h3><p class="sub">Known measurement and setup problems that skew the numbers or cost readers until they are fixed.</p><div class="plays" id="tracking-actions"></div></div>
 <div class="card"><h3 data-k="D.card1.title"></h3><div class="plays" data-plays="flag for the team"></div></div></div>
 </section>
+<section class="brief-view" data-added="" id="briefings">
+<div class="sec-head"><span class="eyebrow" id="brief-eyebrow">Briefings</span><h2>Three short reads, one for each job</h2><p>Each briefing keeps to what its reader needs this week. The editorial briefing is rewritten every Monday; proof points and data checks update when the page opens.</p></div>
+<div aria-label="Briefings" class="brief-tabs" id="brief-tabs" role="tablist">
+<button aria-selected="true" data-b="editorial" role="tab" type="button">This week's editorial decisions<span class="who">For Hannah</span></button>
+<button aria-selected="false" data-b="proof" role="tab" type="button">Client and partner proof<span class="who">For Rob and Christine</span></button>
+<button aria-selected="false" data-b="attention" role="tab" type="button">What needs attention<span class="count"></span><span class="who">For the team</span></button>
+</div>
+<div class="brief-panel" id="brief-editorial" role="tabpanel">
+<p class="brief-intro" id="brief-editorial-meta"></p>
+<h3 class="brief-h">Three patterns worth acting on</h3>
+<div class="brief-list" id="brief-patterns"></div>
+<h3 class="brief-h">Two experiments for next week</h3>
+<div class="grid two" id="brief-experiments"></div>
+<p class="sub" id="brief-editorial-note" style="margin-top:12px;max-width:80ch"></p>
+</div>
+<div class="brief-panel" hidden="" id="brief-proof" role="tabpanel">
+<p class="brief-intro">Three proof points for a pitch or renewal: who the audience is, a piece of content that worked, and what partners add when they share it. Filter to a partner, series or industry; each point names its source and can be copied as written.</p>
+<div class="pf-row">
+<label>Partner<select id="pf-partner"></select></label>
+<label>Series<select id="pf-series"></select></label>
+<label>Industry<select id="pf-industry"></select></label>
+<button id="pf-clear" type="button">Clear</button>
+</div>
+<p class="sub" id="pf-scope"></p>
+<div class="grid three proof-grid"><div class="card proof" id="pp-audience"></div><div class="card proof" id="pp-content"></div><div class="card proof" id="pp-amp"></div></div>
+<details class="fnote"><summary>How these are worked out</summary><p>Posts from May 21 on, LinkedIn and Instagram. Partner and industry come from data/companies.csv, which maps each company named in a post to its parent partner and an industry; edit it to regroup. Series comes from the post's tag where Hannah has set one, otherwise from series names in the post text, until the confirmed series list replaces it. The strongest example is the post with the highest reach against its channel's median, among posts at or above the median engagement rate (a post that reached far with little engagement is usually boosted). Repost lift is from September's repost tracking, the only month recorded so far.</p></details>
+</div>
+<div class="brief-panel" hidden="" id="brief-attention" role="tabpanel">
+<p class="brief-intro">Only what is new, stuck or waiting on a decision, each with an owner and a next step. Track the work itself in Notion; an item leaves this list once it is decided or unblocked. Checks on the data feeds run each time the page opens.</p>
+<div id="brief-attention-list"></div>
+</div>
+</section>
+
 
 
 
@@ -866,8 +946,9 @@ window.ATMScoreReady = boot().catch(e => {
 window.ATMChart = { el, css, hover, showTip, hideTip, bullet, hbar, vbar, vstack, line, stack100, fmtPct, fmtInt, fmtK };
 })();
 </script>
-<script src="js/archive.js?v=20261023113821"></script>
-<script src="js/daily_data.js?v=20261023113821"></script>
-<script src="js/daily_view.js?v=20261023113821"></script>
-<script src="js/glance.js?v=20261023113821"></script>
-<script src="js/carousel.js?v=20261023113821"></script>
+<script src="js/archive.js?v=20261023115026"></script>
+<script src="js/daily_data.js?v=20261023115026"></script>
+<script src="js/daily_view.js?v=20261023115026"></script>
+<script src="js/glance.js?v=20261023115026"></script>
+<script src="js/carousel.js?v=20261023115026"></script>
+<script src="js/briefings.js?v=20261023115026"></script>

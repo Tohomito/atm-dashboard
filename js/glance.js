@@ -15,12 +15,13 @@ const num = v => { const n = parseFloat(String(v ?? '').replace(/[,%×x]/g, ''))
 function setView(v, push) {
   document.body.dataset.view = v;
   document.querySelectorAll('.seg[data-for="view"] button').forEach(b => b.setAttribute('aria-pressed', b.dataset.v === v ? 'true' : 'false'));
-  if (push) { history.replaceState(null, '', v === 'actions' ? '#actions' : location.pathname + location.search); window.scrollTo(0, 0); }
+  if (push) { history.replaceState(null, '', v === 'actions' ? '#actions' : v === 'briefings' ? '#briefings' + (location.hash.match(/^#briefings(\/\w+)/) || ['', ''])[1] : location.pathname + location.search); window.scrollTo(0, 0); }
 }
+const viewFromHash = () => location.hash === '#actions' ? 'actions' : location.hash.startsWith('#briefings') ? 'briefings' : 'data';
 document.querySelectorAll('.seg[data-for="view"] button').forEach(b => b.addEventListener('click', () => setView(b.dataset.v, true)));
 document.addEventListener('click', e => { const a = e.target.closest('[data-goto="actions"]'); if (a) { e.preventDefault(); setView('actions', true); } });
-setView(location.hash === '#actions' ? 'actions' : 'data', false);
-window.addEventListener('hashchange', () => setView(location.hash === '#actions' ? 'actions' : 'data', false));
+setView(viewFromHash(), false);
+window.addEventListener('hashchange', () => setView(viewFromHash(), false));
 $('refresh-btn').addEventListener('click', () => { const u = new URL(location.href); u.searchParams.set('r', Date.now()); location.replace(u.toString()); });
 
 /* ---------- monthly chart files (newsletter, site, social by month) ---------- */
