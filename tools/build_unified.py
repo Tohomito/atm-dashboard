@@ -230,7 +230,7 @@ BRIEF = """
     <p class="sub" id="brief-editorial-note" style="margin-top:12px;max-width:80ch"></p>
   </div>
   <div class="brief-panel" id="brief-proof" role="tabpanel" hidden>
-    <p class="brief-intro">Three proof points for a pitch or renewal: who the audience is, a piece of content that worked, and what partners add when they share it. Filter to a partner, series or industry; each point names its source and can be copied as written.</p>
+    <p class="brief-intro">Proof points for a pitch or renewal. With no filter, three for ATM as a whole: who the audience is, a piece of content that worked, and what partners add when they share it. Pick a partner, series or industry to get a profile of it instead. Each point names its source and can be copied as written.</p>
     <div class="pf-row">
       <label>Partner<select id="pf-partner"></select></label>
       <label>Series<select id="pf-series"></select></label>
@@ -239,7 +239,7 @@ BRIEF = """
     </div>
     <p class="sub" id="pf-scope"></p>
     <div class="grid three proof-grid"><div class="card proof" id="pp-audience"></div><div class="card proof" id="pp-content"></div><div class="card proof" id="pp-amp"></div></div>
-    <details class="fnote"><summary>How these are worked out</summary><p>Posts from May 21 on, LinkedIn and Instagram. Partner and industry come from data/companies.csv, which maps each company named in a post to its parent partner and an industry; edit it to regroup. Series comes from the post's tag where Hannah has set one, otherwise from series names in the post text, until the confirmed series list replaces it. The strongest example is the post with the highest reach against its channel's median, among posts at or above the median engagement rate (a post that reached far with little engagement is usually boosted). Repost lift is from September's repost tracking, the only month recorded so far.</p></details>
+    <details class="fnote"><summary>How these are worked out</summary><p>Posts from May 21 on, LinkedIn and Instagram. Partner and industry come from data/companies.csv, which maps each company named in a post to its parent partner and an industry; edit it to regroup. Series comes from the post's tag where Hannah has set one, otherwise from series names in the post text, until the confirmed series list replaces it. The strongest example is the post with the highest reach against its channel's median, among posts at or above the median engagement rate (a post that reached far with little engagement is usually boosted). Repost lift is from September's repost tracking, the only month recorded so far. A partner profile shows who appeared (titles from the ATM Kitchen board and post copy), how many of its posts beat ATM's median, and its posts by month. A series profile shows the run, whether reach is rising (later half against earlier half), and how it compares with all other posts. An industry profile shows its share of posts, its top partners and the seniority of its guests. When more than one filter is set, the partner profile wins, then the series profile.</p></details>
   </div>
 </section>
 """
@@ -517,6 +517,13 @@ table.mini .num{text-align:right;font-family:"IBM Plex Mono",monospace;white-spa
 .card.proof .mk{font-size:12px;color:var(--ink2);font-weight:600;text-transform:uppercase;letter-spacing:.05em}
 .card.proof .mv{font-family:"Archivo",sans-serif;font-size:34px;font-weight:800;line-height:1.05}
 .card.proof p{margin:0}
+.plist{margin:4px 0 0;padding-left:18px;font-size:13.5px}
+.plist li{margin:3px 0}
+.mbars{display:flex;align-items:flex-end;gap:6px;height:84px;margin:4px 0 6px}
+.mb{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;min-width:0}
+.mb i{display:block;width:100%;max-width:26px;background:var(--s1);border-radius:3px 3px 0 0}
+.mbv{font:600 11px "IBM Plex Mono",monospace;color:var(--ink2);margin-bottom:2px}
+.mbl{font-size:11px;color:var(--muted);margin-top:4px}
 .card.proof .copy-btn{align-self:start;margin-top:auto}
 .att-head{margin:20px 0 8px;font-size:16px}
 .att-row{display:grid;grid-template-columns:130px minmax(0,1fr);gap:12px;padding:12px 0;border-top:1px solid var(--ring)}
