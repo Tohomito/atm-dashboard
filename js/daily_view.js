@@ -1,3 +1,7 @@
+window.ATMApplyAsOf = () => {
+  const e = document.querySelector('[data-k="header.eyebrow"]');
+  if (e && window.ATMDailyAsOf) e.innerHTML = e.innerHTML.replace(/daily figures through [A-Z][a-z]{2} \d{1,2}/i, 'daily figures through ' + window.ATMDailyAsOf);
+};
 /* Daily social sections of the ATM Audience Dashboard.
    Reads Hannah's sheet through ATMDaily and draws with the scorecard's chart code (ATMChart),
    so the whole page shares one look. */
@@ -77,6 +81,9 @@ function render(S) {
   const css = C.css, S1 = css('--s1'), S2 = css('--s2'), S3 = css('--s3'), S4 = css('--s4');
   const liDays = DAILY.filter(d => d.li_org != null);
   const AS_OF = liDays.at(-1).date;
+  // the header's "daily figures through …" follows the newest day in the daily sheet
+  window.ATMDailyAsOf = new Date(AS_OF + 'T12:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+  window.ATMApplyAsOf();
   const POST_END = POSTS.reduce((m, p) => p.date > m ? p.date : m, "");
   const POST_START = POSTS.reduce((m, p) => p.date < m ? p.date : m, "9999");
   const liLast = liDays.at(-1), igFollNow = DAILY.filter(d => d.ig_runf != null).at(-1);

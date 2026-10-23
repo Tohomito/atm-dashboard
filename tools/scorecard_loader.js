@@ -135,6 +135,7 @@ async function boot() {
   }
   put('read-notes', A.filter(r => r.kind === 'note').map(r => `<li><b>${esc(r.title)}</b> ${esc(r.text)}</li>`).join(''));
   document.querySelectorAll('[data-k]').forEach(e => { if (T[e.dataset.k] != null) e.innerHTML = T[e.dataset.k]; });
+  if (window.ATMApplyAsOf) window.ATMApplyAsOf();
 
   // tiles
   document.querySelectorAll('[data-tiles]').forEach(g => {

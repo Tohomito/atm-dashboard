@@ -797,6 +797,7 @@ async function boot() {
   }
   put('read-notes', A.filter(r => r.kind === 'note').map(r => `<li><b>${esc(r.title)}</b> ${esc(r.text)}</li>`).join(''));
   document.querySelectorAll('[data-k]').forEach(e => { if (T[e.dataset.k] != null) e.innerHTML = T[e.dataset.k]; });
+  if (window.ATMApplyAsOf) window.ATMApplyAsOf();
 
   // tiles
   document.querySelectorAll('[data-tiles]').forEach(g => {
@@ -865,8 +866,8 @@ window.ATMScoreReady = boot().catch(e => {
 window.ATMChart = { el, css, hover, showTip, hideTip, bullet, hbar, vbar, vstack, line, stack100, fmtPct, fmtInt, fmtK };
 })();
 </script>
-<script src="js/archive.js?v=20261021141958"></script>
-<script src="js/daily_data.js?v=20261021141958"></script>
-<script src="js/daily_view.js?v=20261021141958"></script>
-<script src="js/glance.js?v=20261021141958"></script>
-<script src="js/carousel.js?v=20261021141958"></script>
+<script src="js/archive.js?v=20261023111714"></script>
+<script src="js/daily_data.js?v=20261023111714"></script>
+<script src="js/daily_view.js?v=20261023111714"></script>
+<script src="js/glance.js?v=20261023111714"></script>
+<script src="js/carousel.js?v=20261023111714"></script>
