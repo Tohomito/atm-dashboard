@@ -230,6 +230,125 @@ function buildCompetitors(rows) {
   return { rows: out, note, atm: out.find(r => /\(ATM\)/.test(r.company)) || null, peer: out.find(r => /^At The Moment$/i.test(r.company)) || null };
 }
 
+
+/* ---------- Supermetrics pulls (data/sm/, refreshed daily by a scheduled run) ----------
+   LinkedIn Pages, Instagram Insights and YouTube through Supermetrics. Where these overlap the
+   sheet they win (same platform numbers, read directly); the sheet still supplies the peer set and
+   the hand-tagged person, company and series on each post. */
+async function readSM(name) {
+  try {
+    const r = await fetch(`data/sm/${name}?t=${Date.now()}`, { cache: "no-store" });
+    if (!r.ok) return [];
+    const rows = parseCSV(await r.text()).filter(x => x.length > 1);
+    const h = rows.shift() || [];
+    return rows.map(x => Object.fromEntries(h.map((k, i) => [k, x[i]])));
+  } catch (e) { return []; }
+}
+const clean = s => String(s || "").replace(/\s+/g, " ").trim();
+const firstSentence = t => { t = clean(t); const m = t.match(/^(.{20,110}?[.!?])(\s|$)/); return m ? m[1] : (t.length > 100 ? t.slice(0, 98) + "…" : t); };
+const splitTitle = seg => {
+  seg = clean(seg).replace(/\s*\(.*?\)\s*/g, " ").trim();
+  let i = seg.lastIndexOf(" at ");
+  if (i > 0) return { title: seg.slice(0, i).trim(), company: seg.slice(i + 4).trim() };
+  i = seg.indexOf(" of ");
+  if (i > 0) return { title: seg.slice(0, i).trim(), company: seg.slice(i + 4).trim() };
+  return { title: seg, company: "" };
+};
+const NAME = "\\p{Lu}[\\p{L}.'’-]+(?: (?:\\p{Lu}[\\p{L}.'’-]+|de|la|van|von)){1,4}";
+function personFromLinkedIn(text) {
+  const t = clean(text).replace(/\s*\((?:he|she|they)[^)]*\)/ig, "");
+  let m = t.match(new RegExp(`^(${NAME}), ([^,]{3,120}?), (?:says|said|is|was|tells|wants|grew|built|on|shares|believes|launched|joins|explains|talks|thinks|knows|has|reflects)\\b`, "u"));
+  if (!m) m = t.match(new RegExp(`honou?ring (${NAME}), ([^,]{3,120}?), as\\b`, "u"));
+  if (!m) return null;
+  const tc = splitTitle(m[2]);
+  return { person: m[1].trim(), role: tc.title, company: tc.company.replace(/\s+(LLC|Inc\.?|Ltd\.?)$/i, "").replace(/^the /i, "") };
+}
+function personFromInstagram(text) {
+  const t = clean(text);
+  const m = t.match(new RegExp(`(?:^|[.!?]\\s+|[\\u{1F300}-\\u{1FAFF}\\u2600-\\u27BF]\\s*)(${NAME})(?:, [^.]{2,80}?)? at (?:the )?@?([\\p{L}\\d.&' -]{2,40}?) (?:on|about|shares|explains)\\b`, "u"));
+  return m ? { person: m[1].trim(), company: m[2].trim() } : null;
+}
+const lastName = n => (n || "").trim().split(/\s+/).at(-1).toLowerCase();
+
+function smPosts(li, ig) {
+  const L = li.map(r => {
+    const impr = num(r.impressions), clicks = num(r.clicks), likes = num(r.likes), cm = num(r.comments), sh = num(r.shares);
+    const who = personFromLinkedIn(r.text) || {};
+    return { ch: "LinkedIn", fmt: r.media === "VIDEO" ? "Video" : r.media === "IMAGE" ? "Image" : (r.media ? r.media[0] + r.media.slice(1).toLowerCase() : "Image"),
+      date: r.date, person: who.person || "", company: who.company || "", role: who.role || "", series: "", client: "", title: firstSentence(r.text), text: clean(r.text),
+      reach: impr, views: null, clicks, reactions: likes, comments: cm, amp: sh,
+      er: impr ? round(((clicks || 0) + (likes || 0) + (cm || 0) + (sh || 0)) / impr * 100, 2) : null, src: "sm" };
+  });
+  const I = ig.filter(r => r.type !== "STORY").map(r => {
+    const reach = num(r.reach), inter = num(r.interactions);
+    let who = personFromInstagram(r.caption);
+    // the same guest usually has a LinkedIn post within a few days; it carries a cleaner name and company
+    const near = L.filter(p => p.person && Math.abs(new Date(p.date) - new Date(r.date)) <= 3 * 864e5 && clean(r.caption).toLowerCase().includes(lastName(p.person)));
+    if (near.length) who = { person: near[0].person, company: near[0].company };
+    return { ch: "Instagram", fmt: r.type === "REELS" ? "Reel" : r.type === "FEED" ? "Post" : (r.type || ""), date: r.date, person: who?.person || "", company: who?.company || "", series: "", client: "",
+      title: firstSentence(r.caption), text: clean(r.caption), reach, views: num(r.views), clicks: null, reactions: num(r.likes), comments: num(r.comments), amp: num(r.shares),
+      er: reach ? round((inter || 0) / reach * 100, 2) : null, src: "sm" };
+  });
+  return L.concat(I);
+}
+
+function applySM(S, sm) {
+  const { liDaily, liPosts, igPosts, ig28, yt, ytm, totals } = sm;
+  const byDate = Object.fromEntries(S.DAILY.map(d => [d.date, d]));
+  const row = d => byDate[d] ??= { date: d };
+  // LinkedIn daily
+  for (const r of liDaily) {
+    const d = row(r.date), impr = num(r.impressions);
+    if (impr == null) continue;
+    d.li_org = impr; d.li_spon = d.li_spon ?? 0; d.li_total = impr + (d.li_spon || 0);
+    if (num(r.page_views) != null) d.li_pv = num(r.page_views);
+    if (num(r.new_followers) != null) d.li_newf = num(r.new_followers);
+    d.li_eng = (num(r.likes) || 0) + Math.max(0, num(r.comments) || 0) + (num(r.shares) || 0);
+  }
+  // Instagram 28-day windows and follower totals; YouTube and LinkedIn totals
+  for (const r of ig28) { const d = row(r.end_date); d.ig_reach = num(r.reach); d.ig_views = num(r.views); }
+  for (const r of totals) { if (num(r.ig_followers) != null) row(r.date).ig_runf = num(r.ig_followers); }
+  S.DAILY = Object.values(byDate).sort((a, b) => a.date < b.date ? -1 : 1);
+  // the organic follower line runs on from the sheet's last reading, adding LinkedIn's daily gains
+  let runf = null;
+  for (const d of S.DAILY) {
+    if (d.li_runf != null) { runf = d.li_runf; continue; }
+    if (runf != null && d.li_org != null) { runf += d.li_newf || 0; d.li_runf = runf; }
+  }
+  const tot = totals.filter(r => num(r.li_followers) != null).at(-1);
+  if (tot) S.LI_TOTAL = { value: num(tot.li_followers), date: tot.date };
+  // YouTube: monthly totals, subscriber count and the last 28 days
+  const months = Object.fromEntries(S.YT.months.map(m => [m.k, m]));
+  for (const r of ytm) {
+    const k = r.month, m = months[k] ??= { k, m: monthShort(k), pre: false };
+    m.views = num(r.views); m.watch = round(num(r.minutes) / 60, 1); m.subs = (num(r.subs_gained) || 0) - (num(r.subs_lost) || 0);
+    m.partial = !!r.through && r.through.slice(8) !== String(daysIn(k)).padStart(2, "0");
+  }
+  S.YT.months = Object.values(months).sort((a, b) => a.k < b.k ? -1 : 1);
+  for (const r of totals) if (num(r.yt_subscribers) != null && !S.YT.subsRows.some(x => x.date === r.date)) S.YT.subsRows.push({ date: r.date, ch: "YouTube", metric: "Subscribers (channel total)", value: num(r.yt_subscribers) });
+  S.YT.subsRows.sort((a, b) => a.date < b.date ? -1 : 1);
+  const sNow = S.YT.subsRows.at(-1);
+  if (sNow) { S.YT.total_subs = sNow.value; S.YT.subsDate = sNow.date; const back = S.YT.subsRows.filter(r => r.date <= addDays(sNow.date, -28)).at(-1); S.YT.subs28 = back ? sNow.value - back.value : S.YT.subs28; }
+  if (yt.length) {
+    const end = yt.at(-1).date, w = yt.filter(r => r.date > addDays(end, -28));
+    S.YT.last28 = { views: w.reduce((s, r) => s + (num(r.views) || 0), 0), watch: round(w.reduce((s, r) => s + (num(r.minutes) || 0), 0) / 60, 1), date: end };
+  }
+  // posts: Supermetrics lists every post, so it replaces sheet rows on the days it covers, keeping the sheet's tags
+  const SMP = smPosts(liPosts, igPosts);
+  for (const ch of ["LinkedIn", "Instagram"]) {
+    const mine = SMP.filter(p => p.ch === ch); if (!mine.length) continue;
+    const start = mine.reduce((m, p) => p.date < m ? p.date : m, "9999");
+    const old = S.POSTS.filter(p => p.ch === ch && p.date >= start && p.date > ARCHIVE_END);
+    for (const p of mine) {
+      const hit = old.find(o => o.date === p.date && o.person && p.text.toLowerCase().includes(lastName(o.person)));
+      if (hit) { p.person = hit.person; p.company = hit.company || p.company; p.series = hit.series || ""; p.client = hit.client || ""; }
+    }
+    S.POSTS = S.POSTS.filter(p => !(p.ch === ch && p.date >= start && p.date > ARCHIVE_END)).concat(mine.filter(p => p.date > ARCHIVE_END));
+  }
+  S.POSTS.sort((a, b) => a.date < b.date ? 1 : -1);
+  S.SM = sm.meta || null;
+}
+
 async function load() {
   const [daily, creative, flat, comp] = await Promise.all(["Daily Pulse", "Creative", "Flat Feed", "Competitors"].map(n => readTab(n).catch(e => n === "Competitors" ? [] : Promise.reject(e))));
   const DAILY = buildDaily(daily);
@@ -238,10 +357,13 @@ async function load() {
   const POSTS = mergePosts(ARCHIVE_POSTS, buildCreativePosts(creative, asOf));
   const F = buildFlat(flat);
   const S = { DAILY, POSTS, YT: buildYouTube(F), GA: buildGA(F) };
-  S.MO = buildMonths(DAILY, POSTS);
+  const [liDaily, liPosts, igPosts, ig28, yt, ytm, totals, meta] = await Promise.all(["li_daily.csv", "li_posts.csv", "ig_posts.csv", "ig_28d.csv", "yt_daily.csv", "yt_monthly.csv", "totals.csv"].map(readSM)
+    .concat(fetch(`data/sm/meta.json?t=${Date.now()}`, { cache: "no-store" }).then(r => r.ok ? r.json() : null).catch(() => null)));
+  applySM(S, { liDaily, liPosts, igPosts, ig28, yt, ytm, totals, meta });
+  S.MO = buildMonths(S.DAILY, S.POSTS);
   S.COMP = buildCompetitors(comp);
   return S;
 }
 
-window.ATMDaily = { load, CAD, addDays, daysIn, prevMonth, monthName, monthShort, mdy, longDate, slash, fmt, full, sign, esc, median, mean, round, igMonthEnds, windowTotals, buildBench };
+window.ATMDaily = { load, personFromLinkedIn, personFromInstagram, CAD, addDays, daysIn, prevMonth, monthName, monthShort, mdy, longDate, slash, fmt, full, sign, esc, median, mean, round, igMonthEnds, windowTotals, buildBench };
 })();

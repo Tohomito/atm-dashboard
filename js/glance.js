@@ -251,13 +251,13 @@ function measuresHTML(cards) {
 /* ---------- overview band ---------- */
 async function overview(S, tiles) {
   const igf = S.DAILY.filter(d => d.ig_runf != null).at(-1);
-  const comp = S.COMP || {}, liTotal = comp.atm ? comp.atm.total : num((tileBy(tiles, /^linkedin followers$/i) || {}).value_as_published);
+  const comp = S.COMP || {}, liTotal = S.LI_TOTAL ? S.LI_TOTAL.value : comp.atm ? comp.atm.total : num((tileBy(tiles, /^linkedin followers$/i) || {}).value_as_published);
   const nlTile = tileBy(tiles, /newsletter active subscribers/i), nlSubs = nlTile ? num(nlTile.value_as_published) : null;
   const parts = [['LinkedIn', liTotal, '--s1'], ['Instagram', igf?.ig_runf, '--s2'], ['Newsletter', nlSubs, '--s3'], ['YouTube', S.YT.total_subs, '--s4']].filter(p => p[1] != null);
   const total = parts.reduce((s, p) => s + p[1], 0), mx = Math.max(...parts.map(p => p[1]));
   $('ov-audience').innerHTML = `<div class="mk">Total audience</div><div class="mv mono">${full(total)}</div><div class="mp">follows and subscriptions across channels, not unique people</div>
     <div class="aud">${parts.map(p => `<div class="audrow"><span>${p[0]}</span><i style="width:${Math.max(3, p[1] / mx * 100)}%;background:var(${p[2]})"></i><b class="mono">${full(p[1])}</b></div>`).join('')}</div>
-    <div class="mn">LinkedIn ${comp.atm ? 'total from the latest competitor read' : 'from the monthly figures'}; Instagram and YouTube from the latest daily reads; newsletter from the monthly figures.</div>`;
+    <div class="mn">${S.LI_TOTAL ? `LinkedIn, Instagram and YouTube from the daily platform pull (${esc(S.LI_TOTAL.date.slice(5).replace('-', '/').replace(/^0/, ''))})` : `LinkedIn ${comp.atm ? 'total from the latest competitor read' : 'from the monthly figures'}; Instagram and YouTube from the latest daily reads`}; newsletter from the monthly figures.</div>`;
   const sess = tileBy(tiles, /atm\.media sessions/i);
   const per = tiles && tiles[0] ? (tiles[0].data_vintage.match(/\(([^)]+)\)/) || ['', 'latest month'])[1].replace(/ window/, '') : '';
   $('ov-site').innerHTML = `<div class="mk">Site traffic</div><div class="mv mono">${sess ? esc(sess.value_as_published) : '—'}</div><div class="mp">sessions, ${esc(per)}</div><div class="mn">${sess ? esc(sess.detail) : 'Arrives with the monthly figures.'}</div>`;

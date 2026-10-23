@@ -42,3 +42,19 @@ The header shows the date of each source.
 ## GA4 (weekly)
 
 `data/ga4/` holds the site figures from GA4 (property 489265998, read through Supermetrics): new vs returning users by month (`new_returning.csv`), sessions by channel for the last 30 days (`channels_30d.csv`, grouped from `sources_raw_30d.csv`), top landing pages and event counts, plus `meta.json` with the pull date and window. A scheduled task rewrites these files every Monday morning; the page reads them when it opens. They feed the Overview's new-vs-returning card and the Site tab in At a glance.
+
+## LinkedIn, Instagram and YouTube (daily)
+
+`data/sm/` holds the platform figures read through Supermetrics (LinkedIn Pages account 105562357, Instagram Insights 17841471383675991, YouTube channel UCWvL_mFJEBQBEtnT5INEgIQ). A scheduled task adds the newest days every morning with `tools/sm_upsert.py`, which merges new rows by key and never drops old ones.
+
+| File | Key | Columns |
+|---|---|---|
+| `li_daily.csv` | date | impressions, clicks, likes, comments, shares, page_views, new_followers (organic) |
+| `li_posts.csv` | post_id | post date, media, lifetime impressions, clicks, likes, comments, shares, first 160 characters of the text |
+| `ig_posts.csv` | media_id | post date, type, url, views, reach, likes, comments, shares, saves, interactions, first 160 characters of the caption |
+| `ig_28d.csv` | end_date | reach and views for the 28 days ending that date |
+| `yt_daily.csv` | date | views, minutes watched, subscribers gained and lost |
+| `yt_monthly.csv` | month | the same by month, with the last day covered for the current month |
+| `totals.csv` | date | LinkedIn followers, Instagram followers, YouTube subscribers |
+
+Where these overlap the daily sheet they win. The sheet still supplies the LinkedIn peer set and the hand-tagged person, company and series on each post; posts without a tag get the guest's name and company from the post text. Posts before Oct 6, 2026 stay in `js/archive.js`.
