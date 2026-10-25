@@ -216,7 +216,7 @@ READ = """
 """
 BRIEF = """
 <section id="briefings" class="brief-view" data-added>
-  <div class="sec-head"><span class="eyebrow" id="brief-eyebrow">Briefings</span><h2>Two short reads, one for each job</h2><p>Each briefing keeps to what its reader needs. The editorial briefing is rewritten every Monday; proof points update when the page opens.</p></div>
+  <div class="sec-head"><span class="eyebrow" id="brief-eyebrow">Briefings</span><h2>Two short reads, one for each job</h2><p>Each briefing keeps to what its reader needs. The editorial briefing and the record of past tests are rewritten every Monday; proof points update when the page opens.</p></div>
   <div class="brief-tabs" id="brief-tabs" role="tablist" aria-label="Briefings">
     <button type="button" role="tab" data-b="editorial" aria-selected="true">This week's editorial decisions<span class="who">For Hannah</span></button>
     <button type="button" role="tab" data-b="proof" aria-selected="false">Client and partner proof<span class="who">For Rob and Christine</span></button>
@@ -227,6 +227,10 @@ BRIEF = """
     <div class="brief-list" id="brief-patterns"></div>
     <h3 class="brief-h">Two experiments for next week</h3>
     <div class="grid two" id="brief-experiments"></div>
+    <h3 class="brief-h">What we've tested</h3>
+    <p class="sub" style="max-width:80ch;margin-top:0">Past tests and standing practices, with what each did, whether the team still follows it and what to do next. Updated with the weekly briefing.</p>
+    <div class="seg test-seg" id="test-seg" role="group" aria-label="Filter tests"></div>
+    <div id="brief-tests"></div>
     <p class="sub" id="brief-editorial-note" style="margin-top:12px;max-width:80ch"></p>
   </div>
   <div class="brief-panel" id="brief-proof" role="tabpanel" hidden>
@@ -533,6 +537,15 @@ table.mini .num{text-align:right;font-family:"IBM Plex Mono",monospace;white-spa
 .att-body dt{color:var(--muted);font-size:11.5px;font-weight:600}
 .att-body dd{margin:0}
 .pill.new i{background:var(--s1)}
+.test-seg{display:flex;width:max-content;max-width:100%;overflow-x:auto;margin:6px 0 10px}.test-seg button{white-space:nowrap}
+.test-row{display:grid;grid-template-columns:150px minmax(0,1fr);gap:12px;padding:12px 0;border-top:1px solid var(--ring)}
+.test-row .pill{justify-self:start;align-self:start;white-space:nowrap}
+.test-row h4{margin:0 0 4px;font-size:14.5px}
+.test-row .when{font-weight:400;color:var(--muted);font-size:12.5px;margin-left:6px}
+.test-row p{margin:4px 0;max-width:80ch;color:var(--ink2);font-size:13.5px}
+.test-row .meta{font-size:12.5px;color:var(--muted)}
+.pill.keep i{background:var(--good)} .pill.run i{background:var(--s1)} .pill.none i{background:var(--warn)} .pill.stop i{background:var(--crit)} .pill.open i{background:var(--muted)}
+@media (max-width:640px){.test-row{grid-template-columns:minmax(0,1fr)}}
 @media (max-width:640px){.brief-tabs{flex-wrap:nowrap;overflow-x:auto}.brief-tabs button{flex:0 0 auto}.att-row{grid-template-columns:minmax(0,1fr)}.pf-row label,.pf-row select{width:100%;max-width:none}.pf-row{display:grid}.brief-tabs button{margin-right:6px}}
 body:not([data-view="actions"]) .actions-view{display:none}
 .fnote{margin-top:10px;max-width:80ch;color:var(--muted);font-size:12.5px}

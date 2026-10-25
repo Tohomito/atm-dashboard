@@ -66,4 +66,6 @@ The Briefings view has two tabs. `data/briefings.csv` holds the written parts of
 - `meta`: the week's label and what the briefing covers.
 - `pattern` (three) and `experiment` (two): this week's editorial decisions for Hannah. `posts` lists supporting posts as `li:<post_id>` or `ig:<media_id>` from `data/sm/`; the page fills in their numbers. `tags` names the dimensions (Topic, Format, Guest participation, Distribution). Experiments carry an `owner` and a `next_step` saying how to measure them.
 
+`data/tests.csv` is the record of past tests and standing practices shown under the editorial briefing: `id`, `name`, `started`, `area` (Topic, Format, Guest participation, Distribution, separated by ;), `verdict` (Running, Keep doing, No clear effect, Not decided, Not measured, Stopped), `evidence` (numbers that support the verdict), `adherence` (whether the team still does it), `next_step` and `source`. The weekly task adds each new experiment as Running and gives it a verdict once the data is in.
+
 Client and partner proof is worked out on the page from the posts. `data/companies.csv` maps each company named in a post to a parent partner and an industry; add a row when a new company appears, or edit one to regroup. Series come from post tags where set, otherwise from series names in the post text.

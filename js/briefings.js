@@ -274,13 +274,39 @@ function proof(S, companies, syn, senior, func, execs) {
   draw();
 }
 
+
+/* ---------- record of past tests and standing practices (data/tests.csv) ---------- */
+function tests(T) {
+  const ORDER = ['Running', 'Keep doing', 'No clear effect', 'Not decided', 'Not measured', 'Stopped'];
+  const CLS = { 'Running': 'run', 'Keep doing': 'keep', 'No clear effect': 'none', 'Not decided': 'open', 'Not measured': 'open', 'Stopped': 'stop' };
+  const rows = T.filter(r => r.name).sort((a, b) => (ORDER.indexOf(a.verdict) - ORDER.indexOf(b.verdict)) || (a.started < b.started ? 1 : -1));
+  const present = ORDER.filter(v => rows.some(r => r.verdict === v));
+  let cur = '';
+  const seg = $('test-seg');
+  const draw = () => {
+    seg.innerHTML = [['', `All (${rows.length})`]].concat(present.map(v => [v, `${v} (${rows.filter(r => r.verdict === v).length})`]))
+      .map(([v, l]) => `<button type="button" data-v="${esc(v)}" aria-pressed="${v === cur}">${esc(l)}</button>`).join('');
+    seg.querySelectorAll('button').forEach(b => b.onclick = () => { cur = b.dataset.v; draw(); });
+    $('brief-tests').innerHTML = rows.filter(r => !cur || r.verdict === cur).map(r => `<article class="test-row">
+      <span class="pill ${CLS[r.verdict] || 'open'}"><i></i>${esc(r.verdict)}</span>
+      <div><h4>${esc(r.name)}<span class="when">since ${esc(dateTxt(r.started))}</span></h4>
+      <div class="chips">${(r.area || '').split(';').filter(Boolean).map(t => `<span class="chip">${esc(t)}</span>`).join('')}</div>
+      <p>${esc(r.evidence)}</p>
+      ${r.adherence ? `<p><b>Followed:</b> ${esc(r.adherence)}</p>` : ''}
+      ${r.next_step ? `<p><b>Next:</b> ${esc(r.next_step)}</p>` : ''}
+      <p class="meta">Source: ${esc(r.source || '—')}</p></div></article>`).join('') || '<p class="dim">Nothing recorded yet.</p>';
+  };
+  draw();
+}
+
 Promise.all([window.ATMDailyReady, window.ATMScoreReady]).then(async ([S]) => {
   if (!S || !S.POSTS) return;
-  const [B, companies, syn, senior, func, execs] = await Promise.all([getCSV('data/briefings.csv'), getCSV('data/companies.csv'),
-    getCSV('data/scorecard/charts/s-syn.csv'), getCSV('data/scorecard/charts/c-senior.csv'), getCSV('data/scorecard/charts/c-func.csv'), getCSV('data/execs.csv')]);
+  const [B, companies, syn, senior, func, execs, T] = await Promise.all([getCSV('data/briefings.csv'), getCSV('data/companies.csv'),
+    getCSV('data/scorecard/charts/s-syn.csv'), getCSV('data/scorecard/charts/c-senior.csv'), getCSV('data/scorecard/charts/c-func.csv'), getCSV('data/execs.csv'), getCSV('data/tests.csv')]);
   const meta = B.find(r => r.kind === 'meta');
   if (meta) $('brief-eyebrow').textContent = `Briefings · ${meta.title}`;
   try { editorial(B, S); } catch (e) { console.error('editorial briefing', e); }
+  try { tests(T); } catch (e) { console.error('tests', e); }
   try { proof(S, companies, syn, senior, func, execs); } catch (e) { console.error('proof briefing', e); }
   document.documentElement.dataset.briefReady = '1';
 });
