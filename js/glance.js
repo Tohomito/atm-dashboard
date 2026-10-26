@@ -43,8 +43,10 @@ async function loadGA4() {
   const meta = await fetch(`data/ga4/meta.json?v=${Date.now()}`, { cache: 'no-store' }).then(r => r.ok ? r.json() : {}).catch(() => ({}));
   /* internal sources (channels_30d.csv internal=yes) stay out of the headline figures and are reported on their own;
      new_returning_external.csv is the same monthly pull with those sources filtered out */
-  const nr = nrExt.length ? nrExt : nrAll, chn = chnAll.filter(r => r.internal !== 'yes'), chnInt = chnAll.filter(r => r.internal === 'yes');
-  Object.assign(GA4, { nr, chn, chnInt, lp, ev, meta, extOnly: nrExt.length > 0, ready: nr.length > 0 && chn.length > 0 });
+  /* the external file is only trusted when this week's meta.json says the pull wrote it (internal_split), so a stale copy is never used */
+  const useExt = nrExt.length > 0 && meta.internal_split === true;
+  const nr = useExt ? nrExt : nrAll, chn = chnAll.filter(r => r.internal !== 'yes'), chnInt = chnAll.filter(r => r.internal === 'yes');
+  Object.assign(GA4, { nr, chn, chnInt, lp, ev, meta, extOnly: useExt, ready: nr.length > 0 && chn.length > 0 });
   if (GA4.ready) {
     const n = x => +x || 0;
     GA4.months = nr.map(r => ({ key: r.month, nu: n(r.new_users), ru: n(r.returning_users), partial: r.month === meta.partial_month }));
