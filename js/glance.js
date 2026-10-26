@@ -39,14 +39,18 @@ const getMonthly = id => fetch(`data/scorecard/charts/${id}.csv?v=${Date.now()}`
 const GA4 = { ready: false };
 async function loadGA4() {
   const get = f => fetch(`data/ga4/${f}?v=${Date.now()}`, { cache: 'no-store' }).then(r => r.ok ? r.text() : '').then(t => t ? parseCSV(t) : []).catch(() => []);
-  const [nr, chn, lp, ev] = await Promise.all(['new_returning.csv', 'channels_30d.csv', 'landing_pages_30d.csv', 'events_30d.csv'].map(get));
+  const [nrAll, nrExt, chnAll, lp, ev] = await Promise.all(['new_returning.csv', 'new_returning_external.csv', 'channels_30d.csv', 'landing_pages_30d.csv', 'events_30d.csv'].map(get));
   const meta = await fetch(`data/ga4/meta.json?v=${Date.now()}`, { cache: 'no-store' }).then(r => r.ok ? r.json() : {}).catch(() => ({}));
-  Object.assign(GA4, { nr, chn, lp, ev, meta, ready: nr.length > 0 && chn.length > 0 });
+  /* internal sources (channels_30d.csv internal=yes) stay out of the headline figures and are reported on their own;
+     new_returning_external.csv is the same monthly pull with those sources filtered out */
+  const nr = nrExt.length ? nrExt : nrAll, chn = chnAll.filter(r => r.internal !== 'yes'), chnInt = chnAll.filter(r => r.internal === 'yes');
+  Object.assign(GA4, { nr, chn, chnInt, lp, ev, meta, extOnly: nrExt.length > 0, ready: nr.length > 0 && chn.length > 0 });
   if (GA4.ready) {
     const n = x => +x || 0;
     GA4.months = nr.map(r => ({ key: r.month, nu: n(r.new_users), ru: n(r.returning_users), partial: r.month === meta.partial_month }));
     GA4.full = GA4.months.filter(m => !m.partial).at(-1); GA4.part = GA4.months.find(m => m.partial);
     GA4.sess30 = chn.reduce((a, r) => a + n(r.sessions), 0);
+    GA4.int30 = chnInt.reduce((a, r) => a + n(r.sessions), 0);
     GA4.w = meta.window_30d || [];
   }
   return GA4;
@@ -167,7 +171,9 @@ function readout(f, ch) {
       const rs = retShare(g.full), rp = retShare(g.part);
       B.push(`GA4 figures cover ${w}, whatever time frame is selected above.`,
         `Where visits came from: ${chs.map(c => `${esc(c.channel.toLowerCase())} <b>${full(+c.sessions)}</b>`).join(', ')}.`,
-        rs != null ? `Returning visitors: <b>${rs.toFixed(0)}%</b> of ${monthName(g.full.key)}'s users (${full(g.full.ru)} of ${full(g.full.nu + g.full.ru)})${rp != null ? `; ${rp.toFixed(0)}% so far in ${monthName(g.part.key)}` : ''}.` : '',
+        g.int30 ? `Left out of these figures: <b>${full(g.int30)}</b> internal sessions (${g.chnInt.map(c => `${esc(c.channel.replace(/^Internal:\s*/i, ''))} ${full(+c.sessions)}`).join(', ')}).` : '',
+        `Share of sessions that were return visits: ${g.chn.filter(c => +c.sessions >= 100).map(c => `${esc(c.channel.toLowerCase())} ${Math.round(+c.returning_sessions / +c.sessions * 100)}%`).join(', ')}.`,
+        rs != null ? `Returning visitors: <b>${rs.toFixed(0)}%</b> of ${monthName(g.full.key)}'s users (${full(g.full.ru)} of ${full(g.full.nu + g.full.ru)})${rp != null ? `; ${rp.toFixed(0)}% so far in ${monthName(g.part.key)}` : ''}${g.extOnly ? ', internal sources left out' : ''}.` : '',
         `Top landing pages: ${g.lp.filter(r => r.landing_page !== '(not set)').slice(0, 3).map(r => `${esc(r.landing_page)} (${full(+r.sessions)})`).join(', ')}.`,
         site(),
         'Engagement and conversion rates mean nothing yet: every GA4 event is marked as a key event (see Tracking issues).');
@@ -195,7 +201,7 @@ async function drawChart(f, ch, S) {
   if (ch === 'site' && GA4.ready) {
     host.innerHTML = '';
     C.hbar('glance-chart', GA4.chn.map(r => ({ label: r.channel, value: +r.sessions })), { fmt: C.fmtInt, labW: 230, rowH: 26, aria: 'Site sessions by source, last 30 days' });
-    cap.textContent = `Site sessions by source, ${mdy(GA4.w[0])} to ${mdy(GA4.w[1])} (GA4)`; return;
+    cap.textContent = `Site sessions by source, ${mdy(GA4.w[0])} to ${mdy(GA4.w[1])} (GA4)${GA4.int30 ? `; ${full(GA4.int30)} internal sessions not shown` : ''}`; return;
   }
   const mrows = await getMonthly(ch === 'nl' ? 's-nl' : 's-ga');
   host.innerHTML = '';
@@ -222,7 +228,7 @@ function measureCards(f, tiles, chan) {
     { ch: 'yt', all: true, k: 'YouTube subscribers gained', v: f.ytGain != null ? `${sign(f.ytGain)}${full(f.ytGain)}` : '—', p: f.ytGain != null ? `since ${mdy(f.ytFrom)} · ${full(f.ytTotal)} total` : `${full(f.ytTotal)} total; no reading at the start of this window`, now: f.ytGain, prev: f.all ? null : f.ytGainPrev, prevLabel, fmtB: full, n: 'All organic since the ad flight ended in August.' },
     { ch: 'nl', all: true, k: 'Newsletter verified-click rate', v: ctrNow != null ? ctrNow.toFixed(2) + '%' : '—', p: `${f.monthly}, monthly, share of delivered email`, now: ctrNow, prev: ctrWas, prevLabel: 'month before', fmtB: x => x.toFixed(2) + '%', n: 'Bot-filtered clicks; list size alone is inflated by imports.' },
     ...(GA4.ready ? [
-      { ch: 'site', all: false, k: 'Site sessions, last 30 days', v: full(GA4.sess30), p: `to ${mdy(GA4.w[1])}, GA4`, now: null, prev: null, n: GA4.lp[0] ? `${GA4.lp[0].landing_page} alone drew ${full(+GA4.lp[0].sessions)}.` : '' },
+      { ch: 'site', all: false, k: 'Site sessions, last 30 days', v: full(GA4.sess30), p: `to ${mdy(GA4.w[1])}, GA4${GA4.int30 ? ', internal left out' : ''}`, now: null, prev: null, n: (GA4.lp[0] ? `${GA4.lp[0].landing_page} alone drew ${full(+GA4.lp[0].sessions)}.` : '') + (GA4.int30 ? ` Plus ${full(GA4.int30)} internal sessions, counted separately.` : '') },
       { ch: 'site', all: false, k: 'Returning visitors', v: retShare(GA4.full) != null ? retShare(GA4.full).toFixed(1) + '%' : '—', p: `${monthName(GA4.full.key)}, share of users`, now: null, prev: null, n: GA4.part ? `${monthName(GA4.part.key)} so far: ${retShare(GA4.part).toFixed(1)}%. Almost every visit is a first visit.` : '' }
     ] : []),
     { ch: 'site', all: true, k: 'Homepage sign-up rate', v: 'Not yet', p: 'starts with October data', now: null, prev: null, n: 'The subscribe prompt moved up the homepage on Oct 1. Judge it on sign-ups per homepage session, not total subscribers.' }
@@ -267,7 +273,7 @@ async function overview(S, tiles) {
     const bar = (lab, mm) => `<div class="audrow"><span>${lab}</span><i style="width:100%;background:linear-gradient(90deg,var(--s1) ${100 - retShare(mm)}%,var(--s4) 0)"></i><b class="mono">${retShare(mm).toFixed(0)}%</b></div>`;
     $('ov-newret').innerHTML = `<div class="mk">New vs returning visitors</div><div class="mv mono">${rs.toFixed(0)}% returning</div><div class="mp">${monthName(m.key)}: ${full(m.ru)} returning, ${full(m.nu)} new users</div>
       <div class="aud">${bar(monthName(m.key).slice(0, 3), m)}${p ? bar(monthName(p.key).slice(0, 3) + ' so far', p) : ''}</div>
-      <div class="mn">Blue is new, orange returning. GA4, weekly pull${GA4.meta.pulled ? ` (${mdy(GA4.meta.pulled)})` : ''}.</div>`;
+      <div class="mn">Blue is new, orange returning. GA4, weekly pull${GA4.meta.pulled ? ` (${mdy(GA4.meta.pulled)})` : ''}${GA4.extOnly ? '; internal sources left out' : ''}.</div>`;
   } else {
     $('ov-newret').innerHTML = `<div class="mk">New vs returning visitors</div><div class="mv mono dim">Coming soon</div><div class="mp">arrives with the weekly GA4 pull</div>`;
   }

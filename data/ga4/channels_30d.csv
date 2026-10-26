@@ -1,9 +1,10 @@
-channel,sessions,returning_sessions
-Direct (no source),5158,537
-Newsletter and email,2875,135
-LinkedIn,863,247
-Teams and Office links (internal),703,220
-Search,697,240
-Instagram,366,17
-Other sites,342,64
-Facebook and Meta,131,18
+channel,sessions,returning_sessions,internal
+Direct (no source),5158,537,no
+Newsletter and email,2875,135,no
+LinkedIn,863,247,no
+Search,697,240,no
+Teams and Office links,638,155,no
+Instagram,366,17,no
+Other sites,342,64,no
+Facebook and Meta,131,18,no
+Internal: site editor (Wix),65,65,yes
