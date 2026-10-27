@@ -38,14 +38,15 @@ setTab(fromHash(), false);
 window.addEventListener('hashchange', () => { if (location.hash.startsWith('#briefings')) setTab(fromHash(), false); });
 
 /* ---------- series and partner tagging ---------- */
+// ATM's defined series (Hannah, Oct 27). Moment Maker, client series and the Awards are programs, not series.
 const SERIES = [
-  [/future of growth|\bFoG\b/i, 'The Future of Growth'], [/full frame/i, 'Full Frame'], [/moment maker/i, 'Moment Maker'],
-  [/masterclass|secret talent/i, 'Masterclass'], [/trend watch/i, 'Trend Watch'], [/inside scoop/i, 'Inside Scoop'],
-  [/movers|new roles|moves keep coming/i, 'Movers and Shakers'], [/disney decoded/i, 'Disney Decoded'], [/newsroom/i, 'ATM Newsroom'],
-  [/moment awards|top 20|honou?ring|of the year|nominee|voting/i, 'ATM Moment Awards']
+  [/on the record/i, 'On The Record'], [/insider? scoop|industry scoop/i, 'Insider Scoop'], [/trend watch/i, 'Trend Watch'],
+  [/masterclass|off duty|secret talent/i, 'Masterclass Off Duty'], [/brand digest/i, 'Brand Digest'], [/media diet/i, 'Media Diet'],
+  [/heart ?beat/i, 'The Heart Beat'], [/newsroom/i, 'Newsroom'], [/movers|industry moves|new roles|moves keep coming/i, 'Industry Movers & Shakers']
 ];
 function seriesOf(p) {
-  if (p.series) { const hit = SERIES.find(([re]) => re.test(p.series)); return hit ? hit[1] : p.series; }
+  const tagged = p.series && SERIES.find(([re]) => re.test(p.series));
+  if (tagged) return tagged[1];
   const t = `${p.title || ''} ${p.text || ''}`;
   const hit = SERIES.find(([re]) => re.test(t));
   return hit ? hit[1] : '';
