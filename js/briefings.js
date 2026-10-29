@@ -38,7 +38,7 @@ setTab(fromHash(), false);
 window.addEventListener('hashchange', () => { if (location.hash.startsWith('#briefings')) setTab(fromHash(), false); });
 
 /* ---------- series and partner tagging ---------- */
-// ATM's defined series (Hannah, Oct 27). Moment Maker, client series and the Awards are programs, not series.
+// ATM's defined series (Hannah, Oct 27). Moment Maker, client series, the Awards, Moments That Matter and Events are programs, not series.
 const SERIES = [
   [/on the record/i, 'On The Record'], [/insider? scoop|industry scoop/i, 'Insider Scoop'], [/trend watch/i, 'Trend Watch'],
   [/masterclass|off duty|secret talent/i, 'Masterclass Off Duty'], [/brand digest/i, 'Brand Digest'], [/media diet/i, 'Media Diet'],
