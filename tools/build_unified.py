@@ -248,6 +248,7 @@ BRIEF = """
 </section>
 """
 TOOLBAR = """
+<div class="brand-bar" data-added><div class="in"><img src="assets/atm-logo-white.png" alt="ATM, at the moment" width="88" height="40"><div class="t">Audience Dashboard<span>Social, site and newsletter, in one place</span></div></div></div>
 <div class="toolbar" data-added>
   <div class="seg viewsw" data-for="view" role="group" aria-label="View"><button type="button" data-v="data" aria-pressed="true">Data &amp; insights</button><button type="button" data-v="briefings" aria-pressed="false">Briefings</button><button type="button" data-v="actions" aria-pressed="false">Actions</button></div>
   <form class="ask" id="ask-form" autocomplete="off"><input id="ask-q" type="text" placeholder="Ask for a custom insight, e.g. Which guests drive the most comments?" aria-label="Ask for a custom insight"><button type="submit">Ask Claude</button></form>
@@ -620,6 +621,15 @@ loader = open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "scorecar
 html = html.replace("</body>", "") if "</body>" in html else html
 html += "\n<script>\n(function(){\n" + fn_part.strip() + "\n\n" + loader + "\nwindow.ATMChart = { el, css, hover, showTip, hideTip, bullet, hbar, vbar, vstack, line, stack100, fmtPct, fmtInt, fmtK };\n})();\n</script>\n<script src=\"js/archive.js?v=" + BUILD + "\"></script>\n<script src=\"js/daily_data.js?v=" + BUILD + "\"></script>\n<script src=\"js/daily_view.js?v=" + BUILD + "\"></script>\n<script src=\"js/glance.js?v=" + BUILD + "\"></script>\n<script src=\"js/carousel.js?v=" + BUILD + "\"></script>\n<script src=\"js/briefings.js?v=" + BUILD + "\"></script>\n"
 html = html.replace("</style>", EXTRA_CSS + "</style>", 1)
+# ATM brand (2026 guidelines): Montserrat everywhere, brand theme layered over the token block
+OLD_FONTS = "https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;family=IBM+Plex+Mono:wght@400;500&amp;display=swap"
+assert OLD_FONTS in html, "font link moved; update the brand step"
+html = html.replace(OLD_FONTS, "https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&amp;display=swap", 1)
+for f in ('"Archivo"', '"IBM Plex Sans"', '"IBM Plex Mono"'):
+    html = html.replace(f, '"Montserrat"')
+TIP = '<div aria-live="polite" id="tip" role="status"></div>'
+assert TIP in html, "tip div moved; update the brand step"
+html = html.replace(TIP, '<link rel="stylesheet" href="assets/brand.css?v=' + BUILD + '">' + TIP, 1)
 html = html.replace("<title>ATM Audience Scorecard</title>", '<title>ATM Audience Dashboard</title><meta name="robots" content="noindex,nofollow">')
 open(os.path.join(OUT, "index.html"), "w", encoding="utf-8").write(html)
 print("page_text keys:", len(page_text), "tile groups:", tile_groups, "tables:", table_n, "charts styled:", len(style))

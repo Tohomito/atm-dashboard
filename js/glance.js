@@ -275,7 +275,7 @@ async function overview(S, tiles) {
     const bar = (lab, mm) => `<div class="audrow"><span>${lab}</span><i style="width:100%;background:linear-gradient(90deg,var(--s1) ${100 - retShare(mm)}%,var(--s4) 0)"></i><b class="mono">${retShare(mm).toFixed(0)}%</b></div>`;
     $('ov-newret').innerHTML = `<div class="mk">New vs returning visitors</div><div class="mv mono">${rs.toFixed(0)}% returning</div><div class="mp">${monthName(m.key)}: ${full(m.ru)} returning, ${full(m.nu)} new users</div>
       <div class="aud">${bar(monthName(m.key).slice(0, 3), m)}${p ? bar(monthName(p.key).slice(0, 3) + ' so far', p) : ''}</div>
-      <div class="mn">Blue is new, orange returning. GA4, weekly pull${GA4.meta.pulled ? ` (${mdy(GA4.meta.pulled)})` : ''}${GA4.extOnly ? '; internal sources left out' : ''}.</div>`;
+      <div class="mn">Blue is new, magenta returning. GA4, weekly pull${GA4.meta.pulled ? ` (${mdy(GA4.meta.pulled)})` : ''}${GA4.extOnly ? '; internal sources left out' : ''}.</div>`;
   } else {
     $('ov-newret').innerHTML = `<div class="mk">New vs returning visitors</div><div class="mv mono dim">Coming soon</div><div class="mp">arrives with the weekly GA4 pull</div>`;
   }

@@ -2,12 +2,12 @@
 <html><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1,viewport-fit=cover" name="viewport"/><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}.card .src{color:var(--muted);font-size:11.5px;margin-top:2px}
 .card .head{display:flex;justify-content:space-between;align-items:flex-start;gap:8px 12px;flex-wrap:wrap}
 .seg{display:inline-flex;border:1px solid var(--ring);border-radius:999px;overflow:hidden;flex:none}
-.seg button{font:500 12px "IBM Plex Sans",system-ui,sans-serif;padding:4px 11px;border:0;background:var(--surface);color:var(--ink2);cursor:pointer}
+.seg button{font:500 12px "Montserrat",system-ui,sans-serif;padding:4px 11px;border:0;background:var(--surface);color:var(--ink2);cursor:pointer}
 .seg button+button{border-left:1px solid var(--ring)}
 .seg button[aria-pressed="true"]{background:var(--ink);color:var(--plane)}
 .seg button:focus-visible{outline:2px solid var(--s1);outline-offset:-2px}
 .ctrl{display:flex;flex-wrap:wrap;gap:8px 10px;align-items:center;margin:6px 0 10px}
-.ctrl input,.ctrl select{font:13px "IBM Plex Sans",system-ui,sans-serif;padding:5px 8px;border:1px solid var(--ring);border-radius:4px;background:var(--surface);color:var(--ink);max-width:100%}
+.ctrl input,.ctrl select{font:13px "Montserrat",system-ui,sans-serif;padding:5px 8px;border:1px solid var(--ring);border-radius:4px;background:var(--surface);color:var(--ink);max-width:100%}
 .ctrl input{flex:1 1 220px}
 .tblwrap.tall{max-height:560px;overflow:auto}
 .tblwrap.tall th{position:sticky;top:0;background:var(--surface);z-index:1}
@@ -21,8 +21,8 @@ table.posts td{white-space:nowrap}
 table.posts td.post{white-space:normal;min-width:260px;max-width:440px}
 .toolbar{position:sticky;top:0;z-index:5;display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;padding:10px 0;background:var(--plane);border-bottom:1px solid var(--grid)}
 .toolbar .ask{display:flex;flex:1 1 320px;gap:6px;min-width:0}
-.toolbar .ask input{flex:1;min-width:0;font:13.5px "IBM Plex Sans",system-ui,sans-serif;padding:6px 10px;border:1px solid var(--ring);border-radius:6px;background:var(--surface);color:var(--ink)}
-.toolbar button{font:600 12.5px "IBM Plex Sans",system-ui,sans-serif;padding:6px 12px;border:1px solid var(--ring);border-radius:6px;background:var(--surface);color:var(--ink);cursor:pointer;white-space:nowrap}
+.toolbar .ask input{flex:1;min-width:0;font:13.5px "Montserrat",system-ui,sans-serif;padding:6px 10px;border:1px solid var(--ring);border-radius:6px;background:var(--surface);color:var(--ink)}
+.toolbar button{font:600 12.5px "Montserrat",system-ui,sans-serif;padding:6px 12px;border:1px solid var(--ring);border-radius:6px;background:var(--surface);color:var(--ink);cursor:pointer;white-space:nowrap}
 .toolbar .ask button{background:var(--ink);color:var(--plane);border-color:var(--ink)}
 .toolbar .refresh{display:flex;align-items:center;gap:8px;font-size:12px}
 .toolbar .ask-note{flex-basis:100%;margin:0;font-size:12.5px}
@@ -30,7 +30,7 @@ table.posts td.post{white-space:normal;min-width:260px;max-width:440px}
 #guide::backdrop{background:rgba(0,0,0,.35)}
 #guide .guide-head{position:sticky;top:0;display:flex;justify-content:space-between;align-items:center;gap:12px;padding:16px 20px;background:var(--surface);border-bottom:1px solid var(--grid)}
 #guide .guide-head h2{margin:0;font-size:20px}
-#guide .guide-close{font:400 26px/1 "IBM Plex Sans",system-ui,sans-serif;width:36px;height:36px;border:1px solid var(--ring);border-radius:50%;background:var(--surface);color:var(--muted);cursor:pointer;padding:0 0 3px}
+#guide .guide-close{font:400 26px/1 "Montserrat",system-ui,sans-serif;width:36px;height:36px;border:1px solid var(--ring);border-radius:50%;background:var(--surface);color:var(--muted);cursor:pointer;padding:0 0 3px}
 #guide .guide-body{padding:6px 20px 20px;font-size:14px;line-height:1.55;color:var(--ink2);overflow:auto}
 #guide .guide-body h3{margin:16px 0 4px;font-size:14.5px;color:var(--ink)}
 #guide .guide-body p{margin:4px 0}
@@ -44,7 +44,7 @@ body:not([data-view="briefings"]) .brief-view{display:none}
 .brief-tabs{display:flex;gap:8px;flex-wrap:wrap;margin:4px 0 18px;border-bottom:1px solid var(--ring)}
 .brief-tabs button{font:inherit;font-weight:600;font-size:14px;background:none;border:0;border-bottom:3px solid transparent;color:var(--ink2);padding:8px 4px 10px;margin-right:14px;cursor:pointer;text-align:left}
 .brief-tabs button .who{display:block;font-weight:400;font-size:12px;color:var(--muted)}
-.brief-tabs button .count{font:600 11px "IBM Plex Mono",monospace;margin-left:6px;padding:1px 6px;border-radius:999px;background:var(--wash-crit);color:var(--crit)}
+.brief-tabs button .count{font:600 11px "Montserrat",monospace;margin-left:6px;padding:1px 6px;border-radius:999px;background:var(--wash-crit);color:var(--crit)}
 .brief-tabs button .count:empty{display:none}
 .brief-tabs button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--s1)}
 .brief-tabs button:focus-visible{outline:2px solid var(--s1);outline-offset:2px}
@@ -54,10 +54,10 @@ body:not([data-view="briefings"]) .brief-view{display:none}
 .brief-card{display:grid;grid-template-columns:34px minmax(0,1fr);gap:12px;align-items:start}
 .brief-card h3{margin:0 0 6px}
 .brief-card p{margin:8px 0 0;max-width:80ch}
-.brief-num{font:800 20px "Archivo",sans-serif;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:var(--grid);color:var(--ink)}
+.brief-num{font:800 20px "Montserrat",sans-serif;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:var(--grid);color:var(--ink)}
 .brief-card.exp .brief-num{background:var(--wash-good);color:var(--goodtext)}
 .chips{display:flex;gap:6px;flex-wrap:wrap}
-.chip{font:600 11px "IBM Plex Mono",monospace;padding:2px 8px;border-radius:999px;background:var(--grid);color:var(--ink2)}
+.chip{font:600 11px "Montserrat",monospace;padding:2px 8px;border-radius:999px;background:var(--grid);color:var(--ink2)}
 .brief-card .brief-measure{color:var(--ink2);font-size:13.5px;border-left:3px solid var(--s1);padding-left:10px}
 table.mini .nw{white-space:nowrap}
 .brief-card .owner{font-size:13px;color:var(--muted)}
@@ -65,7 +65,7 @@ table.mini .nw{white-space:nowrap}
 table.mini{border-collapse:collapse;font-size:12.5px;width:100%;min-width:520px}
 table.mini th,table.mini td{padding:5px 8px;border-bottom:1px solid var(--ring);text-align:left;vertical-align:top}
 table.mini th{font-weight:600;color:var(--muted);font-size:11.5px}
-table.mini .num{text-align:right;font-family:"IBM Plex Mono",monospace;white-space:nowrap}
+table.mini .num{text-align:right;font-family:"Montserrat",monospace;white-space:nowrap}
 .pf-row{display:flex;gap:12px;flex-wrap:wrap;align-items:end;margin-bottom:10px}
 .pf-row label{display:grid;gap:4px;font-size:12px;font-weight:600;color:var(--ink2)}
 .pf-row select{font:inherit;font-size:14px;padding:7px 10px;border:1px solid var(--ring);border-radius:8px;background:var(--surface);color:var(--ink);max-width:260px}
@@ -74,14 +74,14 @@ table.mini .num{text-align:right;font-family:"IBM Plex Mono",monospace;white-spa
 @media (max-width:900px){.grid.three{grid-template-columns:1fr}}
 .card.proof{display:flex;flex-direction:column;gap:6px}
 .card.proof .mk{font-size:12px;color:var(--ink2);font-weight:600;text-transform:uppercase;letter-spacing:.05em}
-.card.proof .mv{font-family:"Archivo",sans-serif;font-size:34px;font-weight:800;line-height:1.05}
+.card.proof .mv{font-family:"Montserrat",sans-serif;font-size:34px;font-weight:800;line-height:1.05}
 .card.proof p{margin:0}
 .plist{margin:4px 0 0;padding-left:18px;font-size:13.5px}
 .plist li{margin:3px 0}
 .mbars{display:flex;align-items:flex-end;gap:6px;height:84px;margin:4px 0 6px}
 .mb{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;min-width:0}
 .mb i{display:block;width:100%;max-width:26px;background:var(--s1);border-radius:3px 3px 0 0}
-.mbv{font:600 11px "IBM Plex Mono",monospace;color:var(--ink2);margin-bottom:2px}
+.mbv{font:600 11px "Montserrat",monospace;color:var(--ink2);margin-bottom:2px}
 .mbl{font-size:11px;color:var(--muted);margin-top:4px}
 .card.proof .copy-btn{align-self:start;margin-top:auto}
 .att-head{margin:20px 0 8px;font-size:16px}
@@ -110,7 +110,7 @@ body:not([data-view="actions"]) .actions-view{display:none}
 .fnote p{margin:6px 0 0}
 .verdict{align-content:start}
 .verdict .pill{justify-self:start}
-.exec-n{font-family:"Archivo",sans-serif;font-size:36px;font-weight:800;line-height:1;margin:2px 0 8px}
+.exec-n{font-family:"Montserrat",sans-serif;font-size:36px;font-weight:800;line-height:1;margin:2px 0 8px}
 .exec-list{list-style:none;padding:0;margin:6px 0 0;display:grid;gap:6px;font-size:13px;color:var(--ink2)}
 .exec-list b{color:var(--ink);font-weight:600}
 .exec-list .when{color:var(--muted);font-size:12px}
@@ -123,13 +123,13 @@ body:not([data-view="actions"]) .actions-view{display:none}
 .hl-head .dim{font-weight:400}
 .hl-tiles{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(min(100%,190px),1fr))}
 .hl{border:1px solid var(--ring);border-radius:6px;padding:10px 12px;background:var(--surface);display:grid;gap:3px;align-content:start}
-.hl .hv{font-family:"Archivo",sans-serif;font-size:22px;font-weight:800;line-height:1.1}
+.hl .hv{font-family:"Montserrat",sans-serif;font-size:22px;font-weight:800;line-height:1.1}
 .hl .hk{font-size:12px;font-weight:600;color:var(--ink2)}
 .hl .hd{font-size:11.5px;color:var(--muted)}
 .carousel{margin-top:18px}
 .carousel-ctl{display:flex;align-items:center;justify-content:flex-end;gap:12px;margin:0 0 18px;font-size:15px;font-weight:600;color:var(--ink2)}
 .carousel-ctl .ccount{min-width:5.5em;text-align:center}
-.carousel-ctl button{font:600 24px/1 "IBM Plex Sans",system-ui,sans-serif;width:44px;height:44px;display:inline-flex;align-items:center;justify-content:center;padding:0 0 3px;border:1px solid var(--ring);border-radius:50%;background:#fff;color:var(--muted);cursor:pointer;box-shadow:0 1px 2px rgba(0,0,0,.06)}
+.carousel-ctl button{font:600 24px/1 "Montserrat",system-ui,sans-serif;width:44px;height:44px;display:inline-flex;align-items:center;justify-content:center;padding:0 0 3px;border:1px solid var(--ring);border-radius:50%;background:#fff;color:var(--muted);cursor:pointer;box-shadow:0 1px 2px rgba(0,0,0,.06)}
 .carousel-ctl button:not(:disabled):hover{color:var(--ink2);border-color:var(--muted)}
 .carousel-ctl button:disabled{opacity:.35;cursor:default}
 .carousel-ctl button:focus-visible,.carousel-track:focus-visible{outline:2px solid var(--s1);outline-offset:2px}
@@ -139,7 +139,7 @@ body:not([data-view="actions"]) .actions-view{display:none}
 #glance{padding-top:28px}
 .glance-head{display:flex;justify-content:space-between;align-items:flex-end;gap:10px;flex-wrap:wrap;margin-bottom:12px}
 .glance{margin:0;padding-left:20px;display:grid;gap:7px;font-size:14.5px;line-height:1.5}
-.glance-headline{font-family:"Archivo",sans-serif;font-size:19px;font-weight:700;line-height:1.3;margin:0 0 10px}
+.glance-headline{font-family:"Montserrat",sans-serif;font-size:19px;font-weight:700;line-height:1.3;margin:0 0 10px}
 .glance-tabs{display:flex;flex-wrap:wrap;gap:8px;min-width:0;max-width:100%}
 @media (max-width:600px){.glance-head{flex-wrap:wrap}.glance-tabs{width:100%}.glance-tabs .seg{max-width:100%;overflow-x:auto;scrollbar-width:none}.glance-tabs .seg button{flex:none}}
 .glance-body{display:grid;gap:18px;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);align-items:start}
@@ -155,9 +155,9 @@ body:not([data-view="actions"]) .actions-view{display:none}
 .measures{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr))}
 .measure{background:var(--surface);border:1px solid var(--ring);border-radius:6px;padding:14px 16px;display:grid;gap:6px;align-content:start}
 .measure .mk{font-size:12px;color:var(--ink2);font-weight:600}
-.measure .mv{font-family:"Archivo",sans-serif;font-size:30px;font-weight:800;line-height:1}
+.measure .mv{font-family:"Montserrat",sans-serif;font-size:30px;font-weight:800;line-height:1}
 .measure .mp{font-size:11.5px;color:var(--muted)}
-.measure .chip{justify-self:start;font:600 11.5px "IBM Plex Mono",monospace;padding:2px 8px;border-radius:999px;background:var(--grid);color:var(--ink2)}
+.measure .chip{justify-self:start;font:600 11.5px "Montserrat",monospace;padding:2px 8px;border-radius:999px;background:var(--grid);color:var(--ink2)}
 .measure .chip.up{background:var(--wash-good);color:var(--goodtext)}
 .measure .chip.down{background:var(--wash-crit);color:var(--crit)}
 .measure .bars{display:grid;gap:3px;margin-top:2px}
@@ -171,7 +171,7 @@ body:not([data-view="actions"]) .actions-view{display:none}
 .status-strip span::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--good)}
 </style></head><body>
 <title>ATM Audience Dashboard</title><meta name="robots" content="noindex,nofollow">
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;family=IBM+Plex+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&amp;display=swap" rel="stylesheet"/>
 <style>
 :root{
   color-scheme:light;
@@ -201,15 +201,15 @@ body:not([data-view="actions"]) .actions-view{display:none}
   --wash-good:rgba(12,163,12,.16); --wash-warn:rgba(250,178,25,.16); --wash-crit:rgba(208,59,59,.18);
 }
 *{box-sizing:border-box}
-body{margin:0;background:var(--plane);color:var(--ink);font-family:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;font-size:15px;line-height:1.5;padding-block:0 64px;padding-inline:16px}
+body{margin:0;background:var(--plane);color:var(--ink);font-family:"Montserrat",system-ui,-apple-system,"Segoe UI",sans-serif;font-size:15px;line-height:1.5;padding-block:0 64px;padding-inline:16px}
 .wrap{max-width:1120px;margin:0 auto}
-h1,h2,h3{font-family:"Archivo","IBM Plex Sans",system-ui,sans-serif;text-wrap:balance;margin:0}
+h1,h2,h3{font-family:"Montserrat","Montserrat",system-ui,sans-serif;text-wrap:balance;margin:0}
 h1{font-size:clamp(28px,4.5vw,44px);font-weight:800;letter-spacing:-.02em;line-height:1.05}
 h2{font-size:clamp(20px,2.6vw,26px);font-weight:700;letter-spacing:-.01em;margin-bottom:6px}
 h3{font-size:15px;font-weight:700;margin-bottom:2px}
 p{margin:0}
-.eyebrow{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
-.mono{font-family:"IBM Plex Mono",ui-monospace,monospace;font-variant-numeric:tabular-nums}
+.eyebrow{font-family:"Montserrat",ui-monospace,monospace;font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.mono{font-family:"Montserrat",ui-monospace,monospace;font-variant-numeric:tabular-nums}
 header{padding-block:40px 24px;border-bottom:1px solid var(--grid);display:grid;gap:14px}
 header .lede{font-size:17px;color:var(--ink2);max-width:72ch}
 .meta{display:flex;flex-wrap:wrap;gap:8px 18px;color:var(--muted);font-size:12.5px}
@@ -224,7 +224,7 @@ section:last-of-type{border-bottom:0}
 .card .sowhat{color:var(--ink2);font-size:13px;border-top:1px dashed var(--grid);padding-top:8px;margin-top:4px}
 .card figure{margin:8px 0 0}
 .card svg{display:block;width:100%;height:auto;overflow:visible}
-.card svg text{font-family:"IBM Plex Sans",system-ui,sans-serif;fill:var(--ink2)}
+.card svg text{font-family:"Montserrat",system-ui,sans-serif;fill:var(--ink2)}
 .card svg .tick{fill:var(--muted);font-size:11px;font-variant-numeric:tabular-nums}
 .card svg .lbl{fill:var(--ink);font-size:12.5px}
 .card svg .val{fill:var(--ink);font-size:12px;font-weight:600;font-variant-numeric:tabular-nums}
@@ -240,22 +240,22 @@ section:last-of-type{border-bottom:0}
 .verdicts{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));margin-top:22px}
 .verdict{border-radius:6px;padding:16px 18px;display:grid;gap:8px;border:1px solid var(--ring)}
 .verdict.good{background:var(--wash-good)} .verdict.warn{background:var(--wash-warn)} .verdict.crit{background:var(--wash-crit)}
-.verdict .n{font-family:"Archivo",sans-serif;font-size:40px;font-weight:800;line-height:1}
+.verdict .n{font-family:"Montserrat",sans-serif;font-size:40px;font-weight:800;line-height:1}
 .verdict ul{margin:0;padding-left:18px;font-size:13.5px;display:grid;gap:4px}
-.pill{display:inline-flex;align-items:center;gap:6px;font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;padding:2px 8px;border-radius:999px;border:1px solid var(--ring);background:var(--surface);color:var(--ink)}
+.pill{display:inline-flex;align-items:center;gap:6px;font-family:"Montserrat",monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;padding:2px 8px;border-radius:999px;border:1px solid var(--ring);background:var(--surface);color:var(--ink)}
 .pill i{width:8px;height:8px;border-radius:50%;display:inline-block}
 .pill.good i{background:var(--good)} .pill.warn i{background:var(--warn)} .pill.crit i{background:var(--crit)}
 /* stat tiles */
 .tiles{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(min(100%,150px),1fr))}
 .tile{background:var(--surface);border:1px solid var(--ring);border-radius:6px;padding:12px 14px;display:grid;gap:2px}
-.tile .v{font-family:"Archivo",sans-serif;font-size:26px;font-weight:800;line-height:1.1}
+.tile .v{font-family:"Montserrat",sans-serif;font-size:26px;font-weight:800;line-height:1.1}
 .tile .k{font-size:12px;color:var(--ink2)}
 .tile .d{font-size:11.5px;color:var(--muted)}
 /* tables */
 .tblwrap{overflow-x:auto}
 table{border-collapse:collapse;width:100%;font-size:13.5px}
 th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--grid);vertical-align:top}
-th{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:500}
+th{font-family:"Montserrat",monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:500}
 td.num{font-variant-numeric:tabular-nums;white-space:nowrap}
 .status{display:inline-flex;align-items:center;gap:6px;font-weight:600;font-size:12.5px}
 .status i{width:9px;height:9px;border-radius:50%;display:inline-block}
@@ -263,9 +263,9 @@ td.num{font-variant-numeric:tabular-nums;white-space:nowrap}
 /* playbook */
 .plays{display:grid;gap:10px}
 .play{display:grid;grid-template-columns:44px 1fr;gap:12px;background:var(--surface);border:1px solid var(--ring);border-radius:6px;padding:12px 14px}
-.play .num{font-family:"Archivo",sans-serif;font-size:22px;font-weight:800;color:var(--muted);line-height:1.1}
+.play .num{font-family:"Montserrat",sans-serif;font-size:22px;font-weight:800;color:var(--muted);line-height:1.1}
 .play .why{font-size:13px;color:var(--ink2);margin-top:2px}
-.play .target{font-family:"IBM Plex Mono",monospace;font-size:11.5px;color:var(--ink);margin-top:6px}
+.play .target{font-family:"Montserrat",monospace;font-size:11.5px;color:var(--ink);margin-top:6px}
 /* tooltip */
 #tip{position:fixed;pointer-events:none;background:var(--tip-bg);color:var(--tip-ink);font-size:12px;line-height:1.35;padding:6px 9px;border-radius:4px;z-index:9;opacity:0;transform:translate(-50%,calc(-100% - 10px));white-space:nowrap;font-variant-numeric:tabular-nums;transition:opacity .08s}
 #tip b{font-weight:600}
@@ -275,9 +275,10 @@ a{color:var(--ink)}
 @media (prefers-reduced-motion:reduce){#tip{transition:none}}
 @media (max-width:520px){.play{grid-template-columns:1fr}.play .num{font-size:18px}}
 </style>
-<div aria-live="polite" id="tip" role="status"></div>
+<link rel="stylesheet" href="assets/brand.css?v=20261029123849"><div aria-live="polite" id="tip" role="status"></div>
 <div class="wrap">
 
+<div class="brand-bar" data-added=""><div class="in"><img alt="ATM, at the moment" height="40" src="assets/atm-logo-white.png" width="88"/><div class="t">Audience Dashboard<span>Social, site and newsletter, in one place</span></div></div></div>
 <div class="toolbar" data-added="">
 <div aria-label="View" class="seg viewsw" data-for="view" role="group"><button aria-pressed="true" data-v="data" type="button">Data &amp; insights</button><button aria-pressed="false" data-v="briefings" type="button">Briefings</button><button aria-pressed="false" data-v="actions" type="button">Actions</button></div>
 <form autocomplete="off" class="ask" id="ask-form"><input aria-label="Ask for a custom insight" id="ask-q" placeholder="Ask for a custom insight, e.g. Which guests drive the most comments?" type="text"/><button type="submit">Ask Claude</button></form>
@@ -961,9 +962,9 @@ window.ATMScoreReady = boot().catch(e => {
 window.ATMChart = { el, css, hover, showTip, hideTip, bullet, hbar, vbar, vstack, line, stack100, fmtPct, fmtInt, fmtK };
 })();
 </script>
-<script src="js/archive.js?v=20261027143002"></script>
-<script src="js/daily_data.js?v=20261027143002"></script>
-<script src="js/daily_view.js?v=20261027143002"></script>
-<script src="js/glance.js?v=20261027143002"></script>
-<script src="js/carousel.js?v=20261027143002"></script>
-<script src="js/briefings.js?v=20261027143002"></script>
+<script src="js/archive.js?v=20261029123849"></script>
+<script src="js/daily_data.js?v=20261029123849"></script>
+<script src="js/daily_view.js?v=20261029123849"></script>
+<script src="js/glance.js?v=20261029123849"></script>
+<script src="js/carousel.js?v=20261029123849"></script>
+<script src="js/briefings.js?v=20261029123849"></script>

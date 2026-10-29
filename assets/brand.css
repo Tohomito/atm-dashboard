@@ -1,0 +1,66 @@
+/* ATM brand theme (2026 guidelines): monochrome palette, Montserrat, black brand bar with the fine-line wave.
+   Chart colors come from the logo's approved background colors. */
+:root{
+  color-scheme:light;
+  --plane:#ffffff; --surface:#ffffff; --ink:#000000; --ink2:#4c4d4e; --muted:#7e8083;
+  --grid:#dadbdd; --axis:#b9babd; --ring:rgba(0,0,0,.12);
+  --s1:#1a0aa8; --s2:#e600c8; --s3:#00a45a; --s4:#f02d2d; --s7:#4c4d4e;
+  --good:#00a45a; --warn:#e8b400; --crit:#f02d2d; --goodtext:#007a43;
+  --wash-good:rgba(0,164,90,.10); --wash-warn:rgba(255,218,94,.22); --wash-crit:rgba(240,45,45,.10);
+  --tip-bg:#000000; --tip-ink:#ffffff;
+  --brand-bar:#000000;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --plane:#000000; --surface:#111112; --ink:#ffffff; --ink2:#dadbdd; --muted:#b9babd;
+    --grid:#2a2a2c; --axis:#4c4d4e; --ring:rgba(255,255,255,.14);
+    --s1:#7a6dff; --s2:#ff4df0; --s3:#1fd17a; --s4:#ff4d4d; --s7:#b9babd;
+    --good:#1fd17a; --warn:#ffda5e; --crit:#ff4d4d; --goodtext:#1fd17a;
+    --wash-good:rgba(31,209,122,.16); --wash-warn:rgba(255,218,94,.16); --wash-crit:rgba(255,77,77,.18);
+    --tip-bg:#ffffff; --tip-ink:#000000;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --plane:#000000; --surface:#111112; --ink:#ffffff; --ink2:#dadbdd; --muted:#b9babd;
+  --grid:#2a2a2c; --axis:#4c4d4e; --ring:rgba(255,255,255,.14);
+  --s1:#7a6dff; --s2:#ff4df0; --s3:#1fd17a; --s4:#ff4d4d; --s7:#b9babd;
+  --good:#1fd17a; --warn:#ffda5e; --crit:#ff4d4d; --goodtext:#1fd17a;
+  --wash-good:rgba(31,209,122,.16); --wash-warn:rgba(255,218,94,.16); --wash-crit:rgba(255,77,77,.18);
+  --tip-bg:#ffffff; --tip-ink:#000000;
+}
+
+/* one typeface, as the guidelines ask: Montserrat in four weights */
+body,button,input,select,.card svg text{font-family:"Montserrat",system-ui,-apple-system,"Segoe UI",sans-serif !important}
+h1,h2,h3,h4,.glance-headline,.verdict .n,.measure .mv,.hl .hv,.exec-n,.card.proof .mv,.brief-num{font-family:"Montserrat",system-ui,sans-serif !important}
+h1{font-weight:900;letter-spacing:-.02em;line-height:1.05}
+h2{font-weight:800;letter-spacing:-.01em}
+h3{font-weight:700}
+.measure .mv,.hl .hv,.verdict .n,.exec-n,.card.proof .mv{font-weight:800;letter-spacing:-.02em}
+.eyebrow,.pill,.chip,.mono,table.mini .num,.measure .chip,.brief-tabs .count{font-family:"Montserrat",system-ui,sans-serif !important}
+.eyebrow{font-weight:600;letter-spacing:.14em}
+.mono,table.mini .num{font-variant-numeric:tabular-nums;font-weight:600}
+body{font-size:14.5px}
+
+/* black brand bar with the logo and the guideline's fine-line wave */
+.brand-bar{position:relative;margin:0 calc(50% - 50vw);padding:26px max(16px, env(safe-area-inset-left, 0px));
+  background:var(--brand-bar) url("wave.jpg") 85% 40% / 70% auto no-repeat;color:#fff;overflow:hidden}
+.brand-bar .in{max-width:1120px;margin:0 auto;display:flex;align-items:center;gap:18px}
+.brand-bar img{height:40px;width:auto;display:block}
+.brand-bar .t{font-weight:800;font-size:15px;letter-spacing:.02em;text-transform:uppercase;border-left:1px solid rgba(255,255,255,.35);padding-left:18px}
+.brand-bar .t span{display:block;font-weight:400;font-size:12px;letter-spacing:.06em;color:#b9babd;text-transform:none}
+
+/* buttons and tabs: black pills, as on atm.media */
+.seg{border-color:var(--ink) !important;border-radius:999px}
+.seg button[aria-pressed="true"]{background:var(--ink) !important;color:var(--plane) !important}
+.ask button[type="submit"]{background:var(--ink) !important;color:var(--plane) !important;border-radius:999px}
+.brief-tabs button[aria-selected="true"]{border-bottom-color:var(--ink)}
+.card{border-radius:10px}
+header{border-bottom:2px solid var(--ink)}
+
+/* Montserrat runs wider and taller than the old face: trim chart labels so they keep their spacing */
+svg .tick{font-size:10px !important}
+svg .lbl{font-size:11.5px !important;letter-spacing:-.01em}
+svg .val{font-size:11.5px !important}
+svg .benchlbl{font-size:9.5px !important}
