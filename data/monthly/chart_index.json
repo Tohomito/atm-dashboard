@@ -1,0 +1,49 @@
+{
+ "s-li": {
+  "section_headline": "Where October sits in the year",
+  "card_subtitle_as_published": "Organic only. Sponsored impressions (Nov 2025–Jun 2026) left out.",
+  "commentary_as_published": "October is above September on more posts (56 originals against about 38); reach per post fell. July and August remain the two biggest months.",
+  "data_vintage": "Oct 28 2026 report (Oct 1-27 window)",
+  "source_platform_and_window": "LinkedIn page admin analytics (organic), read Oct 28 2026; Oct = Oct 1–26"
+ },
+ "s-ig": {
+  "section_headline": "Where October sits in the year",
+  "commentary_as_published": "Below September and well below the spring and summer. Posts with an accepted collaborator averaged 1,634 views against 412 without.",
+  "data_vintage": "Oct 28 2026 report (Oct 1-27 window)",
+  "source_platform_and_window": "Instagram Insights via Supermetrics (IGI 17841471383675991), pulled Oct 30 2026; Oct = Oct 1–27"
+ },
+ "s-yt": {
+  "section_headline": "Where October sits in the year",
+  "commentary_as_published": "All organic since September. 60% of the last 28 days' views came from YouTube search.",
+  "data_vintage": "Oct 28 2026 report (Oct 1-27 window)",
+  "source_platform_and_window": "YouTube via Supermetrics (YT2), daily pull; Oct = Oct 1–27; no ADVERTISING traffic since August"
+ },
+ "s-ga": {
+  "section_headline": "Where October sits in the year",
+  "card_title": "atm.media sessions per month (GA4)",
+  "card_subtitle_as_published": "Sessions.",
+  "commentary_as_published": "Moment Awards voting doubled the site: /vote drew 6,108 views from 4,768 people, and episode pages still grew 13%. Voting ran to Oct 30, after this window.",
+  "data_vintage": "Oct 28 2026 report (Oct 1-27 window)",
+  "source_platform_and_window": "GA4 489265998, native reports, read Oct 28 2026; Oct = Oct 1–27"
+ },
+ "s-nl": {
+  "section_headline": "Where October sits in the year",
+  "card_subtitle_as_published": "beehiiv subscriber history; Oct = Oct 27.",
+  "commentary_as_published": "The step-ups are imports (5,588 of 5,753 October adds; 3,045 on Oct 26–27, after the last send). Open rate fell to 34.4% as the list grew; verified clicks per delivered email held at 0.53%.",
+  "data_vintage": "Oct 28 2026 report (Oct 1-27 window)",
+  "source_platform_and_window": "beehiiv subscriber history, read Oct 28 2026"
+ },
+ "s-syn": {
+  "section_headline": "Partners reposted, but rarely with their own words",
+  "card_title": "September: organic vs syndicated engagement, posts with commentary reposts",
+  "commentary_as_published": "September's lift came from WPP Media, Nancy Hall and Versant reposting with their own copy. In October partners mostly reposted without it: 35 syndicated engagements on 1,608 organic. Hand partners and guests repost copy on publish day."
+ },
+ "s-sect": {
+  "section_headline": "243 executives featured since launch",
+  "card_title": "October appearances by sector",
+  "card_subtitle_as_published": "49 appearances.",
+  "commentary_as_published": "Ad tech and brands lead. Publicis and IPG voices are missing, and CPG beyond PepsiCo and pharma beyond Organon are thin.",
+  "data_vintage": "Oct 28 2026 report (Oct 1-27 window)",
+  "source_platform_and_window": "October report: post log, monday.com and Teams live links; sector assigned by hand"
+ }
+}

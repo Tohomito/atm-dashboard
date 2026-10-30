@@ -77,3 +77,15 @@ Client and partner proof is worked out on the page from the posts. `data/compani
 ## Brand theme
 
 The page follows ATM's 2026 brand guidelines. `assets/brand.css` sets the brand palette, Montserrat and the black brand bar, and is layered over the token block by `tools/build_unified.py`. The build also swaps the old fonts (Archivo, IBM Plex) for Montserrat. Channel colours come from the logo's approved backgrounds: LinkedIn blue, Instagram magenta, newsletter green, YouTube red. `assets/atm-logo-white.png` and `assets/wave.jpg` come from the guidelines PDF.
+
+## Monthly figures (data/monthly/)
+
+The monthly sections (A to E: headline numbers, the last 12 months, syndication, the executive tally and top posts) come from the latest monthly measurement report. Each run writes `data/monthly/`:
+- `stat_tiles.csv`: section A (8 tiles, section key `A · September at a glance`, kept as the template's key) and section C (3 tiles). `data_vintage` reads like `Oct 28 2026 report (Oct 1-27 window)`; the Overview reads the month from the bracket. The verified-clicks tile detail must contain `rate X% of delivered (was Y%)`.
+- `page_text.csv`: key,text overrides for A–E headings and ledes.
+- `chart_index.json`: per-chart caption overrides (card_title, commentary, source, data_vintage).
+- `charts/s-li.csv, s-ig.csv, s-yt.csv, s-ga.csv, s-nl.csv, s-sect.csv`: the last 12 months and the month's sectors. `s-syn.csv` stays September's per-post lifts (the partner profiles read it).
+- `tables/table_1.csv`: top posts. `flags.csv`: the three flags for the team.
+- `chart_style.json`: optional chart option overrides.
+
+`tools/build_unified.py` layers these over the handoff's files on every build. The written read (`data/analysis.csv`) is rewritten each month too. October's figures come from the Oct 28 report (Oct 1–27); the close-out on Nov 1 replaces them with the full month.

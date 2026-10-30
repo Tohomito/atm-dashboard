@@ -610,7 +610,7 @@
    "fmt": "integer_abbrev",
    "hideVals": true,
    "every": 2,
-   "aria": "atm.media users by month"
+   "aria": "atm.media sessions by month"
   }
  },
  "s-nl": {
@@ -640,7 +640,7 @@
    "fmt": "integer",
    "labW": 220,
    "rowH": 26,
-   "aria": "September appearances by sector"
+   "aria": "October appearances by sector"
   }
  }
 }
