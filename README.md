@@ -89,3 +89,7 @@ The monthly sections (A to E: headline numbers, the last 12 months, syndication,
 - `chart_style.json`: optional chart option overrides.
 
 After changing anything in `data/monthly/`, run `python3 tools/apply_monthly.py` from the repo root and commit both `data/monthly/` and `data/scorecard/`: the page reads `data/scorecard/`. A full rebuild is not needed (it also calls the same step, but it needs the handoff folder, which is not in the repo). The written read (`data/analysis.csv`) is rewritten each month too. October's figures come from the Oct 28 report (Oct 1–27); the close-out on Nov 1 replaces them with the full month.
+
+## Mis-tag check (weekly)
+
+A Monday scheduled task on Matt's Mac uses Chrome, signed in to LinkedIn, to search last week's posts that mention "At The Moment" and also name a guest, company or series ATM featured. Where the tag points to the separate "At The Moment" page instead of ATM's page (105562357), it adds a row to `data/mistags.csv` (found, post_date, poster, post_url, about, tag_points_to, fix, status; status `open`, `fixed` or `not a mis-tag`). It also records the other page's follower count in `data/mistags_meta.json` (`checked`, `other_page.url`, `other_page.followers` as {date, count}). The Actions tab lists open rows. The task never comments on, reacts to or messages anyone.

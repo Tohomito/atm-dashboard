@@ -336,7 +336,7 @@ ACTIONS = """
   <div class="sec-head"><span class="eyebrow" id="actions-eyebrow">Actions</span><h2>What to do next</h2><p>Ranked suggestions from the latest analysis, which reads every source on the dashboard together with the optimization log.</p></div>
   <div class="grid two" id="actions-grid">
     <div class="card"><h3>Priorities</h3><div class="plays" id="read-actions"></div></div>
-    <div class="card"><h3>Catch posts tagged to the wrong page</h3><p class="sub">"At The Moment" is a separate LinkedIn page with a similar name. These steps catch follows and tags meant for ATM that land there.</p><p class="sub" id="peer-watch"></p><div class="plays" id="tag-actions"></div></div>
+    <div class="card"><h3>Catch posts tagged to the wrong page</h3><p class="sub">"At The Moment" is a separate LinkedIn page with a similar name. These steps catch follows and tags meant for ATM that land there.</p><p class="sub" id="peer-watch"></p><h4 class="mt">Tagged to the wrong page, weekly check</h4><div id="mistag-log"></div><h4 class="mt">Steps</h4><div class="plays" id="tag-actions"></div></div>
     <div class="card"><h3>Setup tasks</h3><p class="sub">Access and tracking work that unlocks parts of the dashboard. Each names an owner.</p><div class="plays" id="setup-actions"></div></div>
     <div class="card"><h3>Tracking and site fixes</h3><p class="sub">Known measurement and setup problems that skew the numbers or cost readers until they are fixed.</p><div class="plays" id="tracking-actions"></div></div>
   </div>
@@ -630,11 +630,12 @@ body:not([data-view="actions"]) .actions-view{display:none}
 .findings.two-col li{break-inside:avoid;margin-bottom:12px}
 .status-strip span{display:inline-flex;align-items:center;gap:6px}
 .status-strip span::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--good)}
+h4.mt{margin:14px 0 4px;font-size:13px}
 """
 html = str(soup)
 loader = open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "scorecard_loader.js"), encoding="utf-8").read()
 html = html.replace("</body>", "") if "</body>" in html else html
-html += "\n<script>\n(function(){\n" + fn_part.strip() + "\n\n" + loader + "\nwindow.ATMChart = { el, css, hover, showTip, hideTip, bullet, hbar, vbar, vstack, line, stack100, fmtPct, fmtInt, fmtK };\n})();\n</script>\n<script src=\"js/archive.js?v=" + BUILD + "\"></script>\n<script src=\"js/daily_data.js?v=" + BUILD + "\"></script>\n<script src=\"js/daily_view.js?v=" + BUILD + "\"></script>\n<script src=\"js/glance.js?v=" + BUILD + "\"></script>\n<script src=\"js/carousel.js?v=" + BUILD + "\"></script>\n<script src=\"js/briefings.js?v=" + BUILD + "\"></script>\n"
+html += "\n<script>\n(function(){\n" + fn_part.strip() + "\n\n" + loader + "\nwindow.ATMChart = { el, css, hover, showTip, hideTip, bullet, hbar, vbar, vstack, line, stack100, fmtPct, fmtInt, fmtK };\n})();\n</script>\n<script src=\"js/archive.js?v=" + BUILD + "\"></script>\n<script src=\"js/daily_data.js?v=" + BUILD + "\"></script>\n<script src=\"js/daily_view.js?v=" + BUILD + "\"></script>\n<script src=\"js/glance.js?v=" + BUILD + "\"></script>\n<script src=\"js/carousel.js?v=" + BUILD + "\"></script>\n<script src=\"js/briefings.js?v=" + BUILD + "\"></script>\n<script src=\"js/mistags.js?v=" + BUILD + "\"></script>\n"
 html = html.replace("</style>", EXTRA_CSS + "</style>", 1)
 # ATM brand (2026 guidelines): Montserrat everywhere, brand theme layered over the token block
 OLD_FONTS = "https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;family=IBM+Plex+Mono:wght@400;500&amp;display=swap"
