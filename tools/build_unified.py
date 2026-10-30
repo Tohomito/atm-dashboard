@@ -115,6 +115,16 @@ script = soup.find_all("script")[-1]
 code = script.string
 fn_part = code.split("/* ================= DATA & CHARTS ================= */")[0]
 fn_part = fn_part.replace("(function(){", "", 1)
+# stacked-bar category labels wrap onto two or three lines when they would run into the next bar
+_VS_OLD = "svg.appendChild(el('text',{x:cx,y:y0+16,class:'tick','text-anchor':'middle'},c));\n    if(totals[i]>0)"
+_VS_NEW = ("{const max=Math.max(6,Math.floor(slot/6.2)),words=String(c).split(/\\s+/),lines=[];let cur='';"
+           "words.forEach(w=>{if(cur&&(cur+' '+w).length>max){lines.push(cur);cur=w;}else cur=cur?cur+' '+w:w;});if(cur)lines.push(cur);"
+           "const t=el('text',{x:cx,y:y0+16,class:'tick','text-anchor':'middle'});"
+           "lines.slice(0,3).forEach((l,k)=>{const ts=document.createElementNS('http://www.w3.org/2000/svg','tspan');ts.setAttribute('x',cx);ts.setAttribute('dy',k?'1.15em':'0');ts.textContent=l;t.appendChild(ts);});"
+           "svg.appendChild(t);}\n    if(totals[i]>0)")
+assert _VS_OLD in fn_part, "vstack label line moved; update the wrap patch"
+fn_part = fn_part.replace(_VS_OLD, _VS_NEW, 1)
+fn_part = fn_part.replace("function vstack(id,cats,series,opt={}){\n  const W=560,H=230,padL=52,padB=40,", "function vstack(id,cats,series,opt={}){\n  const W=560,H=230,padL=52,padB=Math.max(...cats.map(c=>String(c).length))*6.2>(560-62)/cats.length?52:40,", 1)
 script.decompose()
 
 # ---------- data files ----------

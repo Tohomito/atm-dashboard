@@ -275,7 +275,7 @@ a{color:var(--ink)}
 @media (prefers-reduced-motion:reduce){#tip{transition:none}}
 @media (max-width:520px){.play{grid-template-columns:1fr}.play .num{font-size:18px}}
 </style>
-<link rel="stylesheet" href="assets/brand.css?v=20261030105530"><div aria-live="polite" id="tip" role="status"></div>
+<link rel="stylesheet" href="assets/brand.css?v=20261030112737"><div aria-live="polite" id="tip" role="status"></div>
 <div class="wrap">
 
 <div class="brand-bar" data-added=""><div class="in"><img alt="ATM, at the moment" height="40" src="assets/atm-logo-white.png" width="88"/><div class="t">Audience Dashboard<span>Social, site and newsletter, in one place</span></div></div></div>
@@ -703,7 +703,7 @@ function vbar(id,cats,vals,opt={}){
 
 /* ---------- vstack: stacked or grouped vertical bars ---------- */
 function vstack(id,cats,series,opt={}){
-  const W=560,H=230,padL=52,padB=40,padT=14,padR=10;
+  const W=560,H=230,padL=52,padB=Math.max(...cats.map(c=>String(c).length))*6.2>(560-62)/cats.length?52:40,padT=14,padR=10;
   const svg=el('svg',{viewBox:`0 0 ${W} ${H}`,role:'img','aria-label':opt.aria||'Stacked bar chart'});
   const n=cats.length;
   const totals=cats.map((c,i)=>opt.grouped?Math.max(...series.map(s=>s.values[i])):series.reduce((a,s)=>a+s.values[i],0));
@@ -715,7 +715,7 @@ function vstack(id,cats,series,opt={}){
     const cx=x0+slot*(i+.5);
     if(opt.grouped){const gw=bw/series.length;series.forEach((s,k)=>{const v=s.values[i];const x=cx-bw/2+k*gw,y=sy(v),h=y0-y;const r=el('rect',{x:x+1,y,width:Math.max(gw-2,2),height:h,fill:s.color,rx:2});svg.appendChild(r);hover(r,`<b>${c}</b> ${s.name}: ${opt.fmt(v)}`);});}
     else{let acc=0;series.forEach((s,k)=>{const v=s.values[i];if(!v)return;const yTop=sy(acc+v),yBot=sy(acc);const r=el('rect',{x:cx-bw/2,y:yTop,width:bw,height:Math.max(yBot-yTop-(acc?2:0),1),fill:s.color,rx:2});svg.appendChild(r);hover(r,`<b>${c}</b> ${s.name}: ${opt.fmt(v)}<br>total ${opt.fmt(totals[i])}`);acc+=v;});}
-    svg.appendChild(el('text',{x:cx,y:y0+16,class:'tick','text-anchor':'middle'},c));
+    {const max=Math.max(6,Math.floor(slot/6.2)),words=String(c).split(/\s+/),lines=[];let cur='';words.forEach(w=>{if(cur&&(cur+' '+w).length>max){lines.push(cur);cur=w;}else cur=cur?cur+' '+w:w;});if(cur)lines.push(cur);const t=el('text',{x:cx,y:y0+16,class:'tick','text-anchor':'middle'});lines.slice(0,3).forEach((l,k)=>{const ts=document.createElementNS('http://www.w3.org/2000/svg','tspan');ts.setAttribute('x',cx);ts.setAttribute('dy',k?'1.15em':'0');ts.textContent=l;t.appendChild(ts);});svg.appendChild(t);}
     if(totals[i]>0)svg.appendChild(el('text',{x:cx,y:sy(totals[i])-5,class:'val','text-anchor':'middle',style:'font-size:10.5px'},opt.fmt(totals[i])));
   });
   svg.appendChild(el('line',{x1:x0,y1:y0,x2:x1,y2:y0,class:'baseline'}));
@@ -962,9 +962,9 @@ window.ATMScoreReady = boot().catch(e => {
 window.ATMChart = { el, css, hover, showTip, hideTip, bullet, hbar, vbar, vstack, line, stack100, fmtPct, fmtInt, fmtK };
 })();
 </script>
-<script src="js/archive.js?v=20261030105530"></script>
-<script src="js/daily_data.js?v=20261030105530"></script>
-<script src="js/daily_view.js?v=20261030105530"></script>
-<script src="js/glance.js?v=20261030105530"></script>
-<script src="js/carousel.js?v=20261030105530"></script>
-<script src="js/briefings.js?v=20261030105530"></script>
+<script src="js/archive.js?v=20261030112737"></script>
+<script src="js/daily_data.js?v=20261030112737"></script>
+<script src="js/daily_view.js?v=20261030112737"></script>
+<script src="js/glance.js?v=20261030112737"></script>
+<script src="js/carousel.js?v=20261030112737"></script>
+<script src="js/briefings.js?v=20261030112737"></script>
