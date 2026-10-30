@@ -88,4 +88,4 @@ The monthly sections (A to E: headline numbers, the last 12 months, syndication,
 - `tables/table_1.csv`: top posts. `flags.csv`: the three flags for the team.
 - `chart_style.json`: optional chart option overrides.
 
-`tools/build_unified.py` layers these over the handoff's files on every build. The written read (`data/analysis.csv`) is rewritten each month too. October's figures come from the Oct 28 report (Oct 1–27); the close-out on Nov 1 replaces them with the full month.
+After changing anything in `data/monthly/`, run `python3 tools/apply_monthly.py` from the repo root and commit both `data/monthly/` and `data/scorecard/`: the page reads `data/scorecard/`. A full rebuild is not needed (it also calls the same step, but it needs the handoff folder, which is not in the repo). The written read (`data/analysis.csv`) is rewritten each month too. October's figures come from the Oct 28 report (Oct 1–27); the close-out on Nov 1 replaces them with the full month.
