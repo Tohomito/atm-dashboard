@@ -20,9 +20,38 @@ function setView(v, push) {
 const viewFromHash = () => location.hash === '#actions' ? 'actions' : location.hash.startsWith('#briefings') ? 'briefings' : 'data';
 document.querySelectorAll('.seg[data-for="view"] button').forEach(b => b.addEventListener('click', () => setView(b.dataset.v, true)));
 document.addEventListener('click', e => { const a = e.target.closest('[data-goto="actions"]'); if (a) { e.preventDefault(); setView('actions', true); } });
+// a series callout opens that series' profile in Briefings
+document.addEventListener('click', e => {
+  const a = e.target.closest('a[data-series]'); if (!a) return;
+  e.preventDefault(); location.hash = '#briefings/proof';
+  setTimeout(() => { const sel = $('pf-series'); if (!sel) return; const o = [...sel.options].find(x => x.value === a.dataset.series); if (o) { sel.value = o.value; sel.dispatchEvent(new Event('change')); } }, 60);
+});
 setView(viewFromHash(), false);
 window.addEventListener('hashchange', () => setView(viewFromHash(), false));
 $('refresh-btn').addEventListener('click', () => { const u = new URL(location.href); u.searchParams.set('r', Date.now()); location.replace(u.toString()); });
+
+/* ---------- series callouts: only when a series stands well clear of the rest ---------- */
+// A series is called out when it has 3+ posts in the window and its median post reaches at least 1.5x (or at most 0.6x)
+// the median post on the same channel in the same window, with two-thirds of its posts on that side of the median.
+function seriesCallouts(f, chan, POSTS, sOf) {
+  const chans = chan === 'li' ? ['LinkedIn'] : chan === 'ig' ? ['Instagram'] : chan === 'all' ? ['LinkedIn', 'Instagram'] : [];
+  if (!chans.length) return [];
+  const metric = p => p.ch === 'LinkedIn' ? p.reach : p.views;
+  const P = POSTS.filter(p => chans.includes(p.ch) && p.date >= f.postStart && p.date <= f.postEnd && metric(p) > 0);
+  const med = a => { const s = [...a].sort((x, y) => x - y), m = s.length >> 1; return s.length ? (s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2) : null; };
+  const base = Object.fromEntries(chans.map(c => [c, med(P.filter(p => p.ch === c).map(metric))]));
+  const by = new Map();
+  for (const p of P) { const s = sOf(p); if (s && base[p.ch]) (by.get(s) || by.set(s, []).get(s)).push(metric(p) / base[p.ch]); }
+  const rows = [...by].filter(([, r]) => r.length >= 3).map(([name, r]) => ({ name, n: r.length, m: med(r), above: r.filter(x => x > 1).length / r.length }));
+  const hi = rows.filter(r => r.m >= 1.5 && r.above >= 2 / 3).sort((a, b) => b.m - a.m)[0];
+  const lo = rows.filter(r => r.m <= 0.6 && r.above <= 1 / 3).sort((a, b) => a.m - b.m)[0];
+  const what = chans.length > 1 ? "its channel's typical post" : chans[0] === 'LinkedIn' ? "the typical LinkedIn post's impressions" : "the typical Instagram post's views";
+  const link = r => ` <a href="#briefings/proof" data-series="${esc(r.name)}">Series profile</a>`;
+  const out = [];
+  if (hi) out.push(`<b>Series running ahead:</b> ${esc(hi.name)}. Its ${hi.n} posts drew a median ${hi.m.toFixed(1)}× ${what}.${link(hi)}`);
+  if (lo) out.push(`<b>Series lagging:</b> ${esc(lo.name)}. Its ${lo.n} posts drew a median ${lo.m.toFixed(1)}× ${what}.${link(lo)}`);
+  return out;
+}
 
 /* ---------- monthly chart files (newsletter, site, social by month) ---------- */
 function parseCSV(t) {
@@ -301,6 +330,12 @@ Promise.all([window.ATMDailyReady, window.ATMScoreReady]).then(async ([S, score]
   if (!S) { $('glance-list').innerHTML = '<li>Daily figures could not load. Try Refresh.</li>'; return; }
   await loadGA4();
   overview(S, tiles);
+  // series per post, from the ATM Kitchen board where a post matches its item (js/tags.js), else from tags and text
+  const T = window.ATMTags;
+  const boardRows = await fetch(`data/board_tags.csv?v=${Date.now()}`, { cache: 'no-store' }).then(r => r.ok ? r.text() : '').then(t => t ? parseCSV(t) : []).catch(() => []);
+  const btag = T ? T.boardTagger(boardRows, []) : () => ({});
+  const serMap = new Map((S.POSTS || []).map(p => { const b = btag(p); return [p, 'seriesName' in b ? b.seriesName : (T ? T.seriesOf(p) : '')]; }));
+  const sOf = p => serMap.get(p) || '';
   const WIN = { '7': 7, '14': 14, '30': 30, all: 'all' };
   const facts = Object.fromEntries(Object.keys(WIN).map(k => [k, windowFacts(S, WIN[k], tiles)]));
   const CH = { all: 'All channels', li: 'LinkedIn', ig: 'Instagram', yt: 'YouTube', nl: 'Newsletter', site: 'Site' };
@@ -309,7 +344,7 @@ Promise.all([window.ATMDailyReady, window.ATMScoreReady]).then(async ([S, score]
     const f = facts[win], r = readout(f, chan);
     $('glance-title').textContent = `${CH[chan]} · ${f.all ? `everything since ${longDate(f.from)}` : `the last ${f.n} days, to ${longDate(f.AS_OF)}`}`;
     $('glance-headline').innerHTML = r.headline ? esc(r.headline.charAt(0).toUpperCase() + r.headline.slice(1)) : '';
-    $('glance-list').innerHTML = r.bullets.map(x => `<li>${x}</li>`).join('');
+    $('glance-list').innerHTML = r.bullets.concat(seriesCallouts(f, chan, S.POSTS || [], sOf)).map(x => `<li>${x}</li>`).join('');
     $('measures').innerHTML = measuresHTML(measureCards(f, tiles, chan));
     $('headline-tiles').innerHTML = headlineHTML(headlineTiles(tiles, chan), f);
     drawChart(f, chan, S);
