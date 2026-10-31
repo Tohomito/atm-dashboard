@@ -98,9 +98,38 @@ function editorial(B, S) {
 }
 
 /* ---------- client and partner proof ---------- */
-function proof(S, companies, syn, senior, func, execs) {
-  const tag = tagger(companies);
-  const ALL = S.POSTS.map(p => Object.assign({}, p, tag(p), { seriesName: seriesOf(p) }));
+// ATM Kitchen board tags (data/board_tags.csv, approved Oct 31). A post is matched to its board item by the post link the audit
+// found, or else by live date (within a day) and the guest's surname in the item name. A firm match sets the post's series and partner.
+function boardKey(p) { return p.ch === 'Instagram' ? (p.url ? 'ig:' + p.url.split('?')[0].replace(/\/?$/, '/') : '') : (p.id || ''); }
+function boardTagger(rows, companies) {
+  const byKey = new Map(), byDate = new Map();
+  for (const r of rows) {
+    for (const k of (r.posts || '').split(' ').filter(Boolean)) { const o = byKey.get(k); if (!o || (o.match !== 'exact' && r.match === 'exact')) byKey.set(k, r); }
+    if (r.date) (byDate.get(r.date) || byDate.set(r.date, []).get(r.date)).push(r);
+  }
+  const byName = new Map(); for (const c of companies) { if (!byName.has(norm(c.partner))) byName.set(norm(c.partner), c); byName.set(norm(c.name), c); }
+  return p => {
+    let b = byKey.get(boardKey(p)), firm = b && b.match === 'exact';
+    if (!b && p.person) {
+      const sur = p.person.trim().split(/\s+/).at(-1).toLowerCase();
+      if (sur.length >= 3) {
+        const near = [-1, 0, 1].flatMap(d => byDate.get(addDays(p.date, d)) || []).filter(r => r.item.toLowerCase().includes(sur));
+        if (new Set(near.map(r => r.item_id)).size === 1) { b = near[0]; firm = true; }
+      }
+    }
+    if (!b) return {};
+    const out = { boardItem: b.item, programs: (b.programs || '').split(';').filter(Boolean) };
+    if (firm) out.seriesName = b.series; else if (b.series && !seriesOf(p)) out.seriesName = b.series;
+    if (b.partner && firm) {
+      const c = byName.get(norm(b.partner));
+      if (!(c && c.industry === 'ATM')) { out.partners = [c ? c.partner : b.partner]; out.industry = c ? c.industry : ''; }
+    }
+    return out;
+  };
+}
+function proof(S, companies, syn, senior, func, execs, board = []) {
+  const tag = tagger(companies), btag = boardTagger(board, companies);
+  const ALL = S.POSTS.map(p => { const b = btag(p); const t = tag(p); return Object.assign({}, p, t, { seriesName: seriesOf(p) }, b, b.partners && !b.industry && t.industry ? { industry: t.industry } : {}); });
   const first = ALL.reduce((m, p) => p.date < m ? p.date : m, '9999'), last = ALL.reduce((m, p) => p.date > m ? p.date : m, '');
   const count = key => { const m = new Map(); for (const p of ALL) for (const v of [].concat(p[key] || [])) if (v) m.set(v, (m.get(v) || 0) + 1); return [...m.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0])); };
   const fill = (id, list, label) => { $(id).innerHTML = `<option value="">All ${label}</option>` + list.map(([v, n]) => `<option value="${esc(v)}">${esc(v)} (${n})</option>`).join(''); };
@@ -302,13 +331,13 @@ function tests(T) {
 
 Promise.all([window.ATMDailyReady, window.ATMScoreReady]).then(async ([S]) => {
   if (!S || !S.POSTS) return;
-  const [B, companies, syn, senior, func, execs, T] = await Promise.all([getCSV('data/briefings.csv'), getCSV('data/companies.csv'),
-    getCSV('data/scorecard/charts/s-syn.csv'), getCSV('data/scorecard/charts/c-senior.csv'), getCSV('data/scorecard/charts/c-func.csv'), getCSV('data/execs.csv'), getCSV('data/tests.csv')]);
+  const [B, companies, syn, senior, func, execs, T, BT] = await Promise.all([getCSV('data/briefings.csv'), getCSV('data/companies.csv'),
+    getCSV('data/scorecard/charts/s-syn.csv'), getCSV('data/scorecard/charts/c-senior.csv'), getCSV('data/scorecard/charts/c-func.csv'), getCSV('data/execs.csv'), getCSV('data/tests.csv'), getCSV('data/board_tags.csv')]);
   const meta = B.find(r => r.kind === 'meta');
   if (meta) $('brief-eyebrow').textContent = `Briefings · ${meta.title}`;
   try { editorial(B, S); } catch (e) { console.error('editorial briefing', e); }
   try { tests(T); } catch (e) { console.error('tests', e); }
-  try { proof(S, companies, syn, senior, func, execs); } catch (e) { console.error('proof briefing', e); }
+  try { proof(S, companies, syn, senior, func, execs, BT); } catch (e) { console.error('proof briefing', e); }
   document.documentElement.dataset.briefReady = '1';
 });
 })();
