@@ -2,29 +2,29 @@
  "s-li": {
   "section_headline": "Where October sits in the year",
   "card_subtitle_as_published": "Organic only. Sponsored impressions (Nov 2025–Jun 2026) left out.",
-  "commentary_as_published": "October is above September on more posts (56 originals against about 38); reach per post fell. July and August remain the two biggest months.",
-  "data_vintage": "Oct 28 2026 report (Oct 1-27 window)",
-  "source_platform_and_window": "LinkedIn page admin analytics (organic), read Oct 28 2026; Oct = Oct 1–26"
+  "commentary_as_published": "October closed above September on more posts (63 page updates against 44 in the connector count); impressions rose 8.4%, so reach per post fell. July and August remain the two biggest months.",
+  "data_vintage": "Nov 1 2026 close-out (Oct 1-31 window)",
+  "source_platform_and_window": "Sep and Oct: LinkedIn Pages via Supermetrics (105562357, organic), pulled Nov 1 2026, full months. Earlier months: LinkedIn page admin analytics (organic)."
  },
  "s-ig": {
   "section_headline": "Where October sits in the year",
-  "commentary_as_published": "Below September and well below the spring and summer. Posts with an accepted collaborator averaged 1,634 views against 412 without.",
-  "data_vintage": "Oct 28 2026 report (Oct 1-27 window)",
-  "source_platform_and_window": "Instagram Insights via Supermetrics (IGI 17841471383675991), pulled Oct 30 2026; Oct = Oct 1–27"
+  "commentary_as_published": "October closed 8.8% below September and well below the spring and summer. Posts with an accepted collaborator averaged 1,634 views against 412 without (Oct 1–27 read).",
+  "data_vintage": "Nov 1 2026 close-out (Oct 1-31 window)",
+  "source_platform_and_window": "Sep and Oct: Instagram Insights via Supermetrics (IGI 17841471383675991), account views, pulled Nov 1 2026, full months. Earlier months: Instagram's own reports."
  },
  "s-yt": {
   "section_headline": "Where October sits in the year",
-  "commentary_as_published": "All organic since September. 60% of the last 28 days' views came from YouTube search.",
-  "data_vintage": "Oct 28 2026 report (Oct 1-27 window)",
-  "source_platform_and_window": "YouTube via Supermetrics (YT2), daily pull; Oct = Oct 1–27; no ADVERTISING traffic since August"
+  "commentary_as_published": "All organic since September. October closed at 3,195 views, 27.7% below September; YouTube search is the biggest source.",
+  "data_vintage": "Nov 1 2026 close-out (Oct 1-31 window)",
+  "source_platform_and_window": "Sep and Oct: YouTube via Supermetrics (YT2), pulled Nov 1 2026, full months; no ADVERTISING traffic since August. Earlier months: YouTube Studio reports."
  },
  "s-ga": {
   "section_headline": "Where October sits in the year",
   "card_title": "atm.media sessions per month (GA4)",
   "card_subtitle_as_published": "Sessions.",
-  "commentary_as_published": "Moment Awards voting doubled the site: /vote drew 6,108 views from 4,768 people, and episode pages still grew 13%. Voting ran to Oct 30, after this window.",
-  "data_vintage": "Oct 28 2026 report (Oct 1-27 window)",
-  "source_platform_and_window": "GA4 489265998, native reports, read Oct 28 2026; Oct = Oct 1–27"
+  "commentary_as_published": "Moment Awards voting doubled the site: 13,182 sessions, and /vote drew 7,652 views from 6,119 people before voting closed on Oct 30. Episode pages grew 4.8% on September.",
+  "data_vintage": "Nov 1 2026 close-out (Oct 1-31 window)",
+  "source_platform_and_window": "Sep and Oct: GA4 489265998 via Supermetrics (America/New_York), pulled Nov 1 2026, full months. Earlier months: GA4 native reports."
  },
  "s-nl": {
   "section_headline": "Where October sits in the year",

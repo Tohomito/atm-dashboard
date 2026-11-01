@@ -1,5 +1,5 @@
 kind,title,text
-header_eyebrow,,"ATM Audience Dashboard · written Oct 30, 2026 · daily figures through Oct 28 · monthly figures Oct 1–27"
+header_eyebrow,,"ATM Audience Dashboard · written Oct 30, 2026 · daily figures through Oct 28 · monthly figures Oct 1–31"
 header_title,,"Awards voting doubled the site, LinkedIn reached more on more posts, and collabs decided Instagram."
 header_lede,,"Moment Awards voting drew 4,768 people to the site and doubled sessions on September. LinkedIn impressions rose 10% on 56 originals, against about 38 in September, so reach per post fell and comments dropped a fifth. Partners reposted, but rarely with their own words, so the September lift all but vanished (1.02× against 1.28×). On Instagram, posts with an accepted collaborator drew four times the views of the rest, and only 11 of 36 had one. The newsletter list grew 64% on imports, and clicks per delivered email held."
 header_meta,,"<span>Sources: LinkedIn page admin analytics, the Instagram professional dashboard, YouTube Studio and GA4 (read Oct 28), Supermetrics, beehiiv, monday.com and the TEAM ATM live links. Daily figures refresh each time the page opens; monthly figures are from the October report (Oct 1–27); the baseline audit at the end is from September.</span>"
@@ -39,6 +39,7 @@ tracking,Instagram follower demographics are not read.,"They need a Meta Busines
 tracking,No play counts per episode.,"Vimeo is not connected, so sponsor recaps cannot show plays per episode or per partner series."
 context,overview,"Moment Awards voting ran from the Oct 6 Top 20 reveal to Oct 30 (extended), and the Awards are on Nov 5. Most of October's site traffic is voting."
 context,overview,"ATM posted about half again as many LinkedIn originals as in September, many of them Top 20 sizzles, so totals rose while reach per post fell."
+context,overview,"The Nov 1 close-out moved the headline numbers to the full month, Oct 1–31, against full September. LinkedIn comments caught up in the last days (176, level with September's 174, where Oct 1–26 read −20%); impressions closed +8.4% and reactions +18.5%. Voting filled the site to the end: 13,182 sessions (+112%) and 7,652 /vote views from 6,119 people. Episode views closed +4.8% (not +13%), YouTube −27.7% and Instagram views −8.8%. Newsletter figures stay at Oct 27, and the findings below keep their Oct 1–27 window."
 context,B,October 2026 runs to Oct 27 (LinkedIn to Oct 26). The month closes out in the next run. LinkedIn months before July include no sponsored impressions on this chart.
 context,C,"Repost tracking began in September. October is the second month measured, on 16 posts' Reposts lists."
 context,02,"3,045 imported subscribers arrived on Oct 26–27, after the last October send, so their first opens and clicks fall in November."
