@@ -7,7 +7,7 @@ item_id,item,date,group,series,programs,categories,partner,posts,match
 12822061787,Disney Decoded - Series 1 Midseason Trailer,2026-08-18,Projects,,Disney Decoded,,Disney,li:7495521617826074624,loose
 12821809570,🏆 Awards FAQ One Sheeter,2026-08-19,Projects,,Moment Awards,,,,
 12446761884,"Phil Gaughran, CEO, Dentsu Creative Americas - MM",2026-08-22,Projects,,Moment Maker,,dentsu,,
-12999738119,Awards Newsletter Banner Gif,2026-09-11 00:00,Projects,,Moment Awards,Ads,,,
+12999738119,Awards Newsletter Banner Gif,2026-09-10 23:00,Projects,,Moment Awards,Ads,,,
 12902170036,PR One Sheet,2026-09-12,Projects,,,,,,
 12834512539,Rob Personal Voice Back To School,2026-09-21,Projects,,,Human interest,,ig:https://www.instagram.com/reel/DdjDp6gBsrz/,loose
 12830683902,Website Hero Header,2026-09-26,Projects,,,,,,
@@ -34,7 +34,7 @@ item_id,item,date,group,series,programs,categories,partner,posts,match
 13249198637,"Colleen Dawe, VP Advertiser Partnership at Experian - MM",2026-11-02,Projects,,Moment Maker,,Experian,,
 13386258142,Top 5 Winners Video + Carousel,2026-11-09,Projects,,,,,,
 13338040607,"Greg Fasking, CMO US Space & Rocket Center - MM",2026-11-05,Projects,,Moment Maker,,US Space & Rocket Center,,
-13221427785,"Justin Breton, GAP - AAF HoA",2026-11-03,Projects,,AAF Hall of Achievement,,GAP,,
+13221427785,"Justin Breton, GAP - AAF HoA",2026-11-03,Projects,,AAF Hall of Achievement,,"GAP, American Advertising Federation",,
 13358480846,The Heart Beat: A Letter to Himself (Andrew Almendras),2026-11-12,Projects,The Heart Beat,,,IMAX,,
 13061501316,Brand Digest: 100 Years of Firsts (Matt Strauss),2026-11-06,Projects,Brand Digest,,,NBCUniversal,,
 13267307110,"Joe Lige, Culture Hive - MM",2026-11-04,Projects,,Moment Maker,,Culture Hive,,
@@ -47,7 +47,7 @@ item_id,item,date,group,series,programs,categories,partner,posts,match
 13328384569,Masterclass Off Duty | Confidence Can Be Taught (Bridget Evans),2026-11-09,Projects,Masterclass Off Duty,,,Spotify,,
 13221429042,"Brittany Slattery, OpenAP - AAF HoA",2026-11-10,Projects,,AAF Hall of Achievement,,OpenAP,,
 13328434894,The Heart Beat | Girl Dad (Guy Tytunovich),2026-11-11,Projects,The Heart Beat,,,CHEQ,,
-13348812423,"Eric Schwartz, CMO Clorox - MM",2026-11-03,Projects,,Moment Maker,,Clorox,,
+13348812423,"Eric Schwartz, CMO Clorox - MM",2026-11-11,Projects,,Moment Maker,,Clorox,,
 13298501378,"Jen Hourigan – Initiative, AAF HoA: MM",2026-11-12,Projects,,AAF Hall of Achievement,,American Advertising Federation,,
 13302016978,Industry Movers & Shakers,2026-11-13,Projects,Industry Movers & Shakers,,,,,
 13211878177,Media Diet: Crime Junkie & Michelle Obama (Amanda Forrester),2026-11-12,Projects,Media Diet,,,OpenX,,
@@ -94,7 +94,7 @@ item_id,item,date,group,series,programs,categories,partner,posts,match
 11495711853,ATM Leads Ads - Error Animation,2026-03-25,Ads/Longer Term,,,,,,
 11880894725,Week in Review,2026-05-08,Backlog,,Week In Review,Recap,,,
 11979328892,ATM 1 Year: Birthday Teaser,2026-05-19,Backlog,Brand Digest,,Ads,,li:7462530190783610880 ig:https://www.instagram.com/reel/DYh431Yp3ng/,exact
-11874246876,On The Record: SLOW DOWN (Chrissie Hanson),2026-08-22 00:00,Backlog,On The Record,,,,,
+11874246876,On The Record: SLOW DOWN (Chrissie Hanson),2026-08-21 23:00,Backlog,On The Record,,,,,
 13154172102,Trend Watch: Less Is More (Emily Seal),2026-10-03,Backlog,Trend Watch,,,,,
 13313242442,PROTO BOX Video (Moment Awards),2026-10-19,Backlog,,Moment Awards,,,,
 11552762785,Insider Scoop: The Intelligence Core,,Backlog,Insider Scoop,,,,,
@@ -143,7 +143,7 @@ item_id,item,date,group,series,programs,categories,partner,posts,match
 11445586269,Insider Scoop: Is AI Your Office's New Stylist,2026-03-11,Completed,Insider Scoop,,Human interest,,,
 11435821179,Gordon AAF Newsletter,2026-03-12,Completed,,AAF Hall of Achievement,,American Advertising Federation,li:7437662814728679424 ig:https://www.instagram.com/reel/DVyGQMcCfE_/,loose
 11354401645,Sibling Rivalry (Peter Laz NBCU),2026-03-12,Completed,,One-off social,Human interest,NBCUniversal,li:7437895316600713216 ig:https://www.instagram.com/reel/DVymv9BDbo6/,exact
-11401799019,Gordon AAF Interview,2026-03-12 09:00,Completed,,AAF Hall of Achievement,,American Advertising Federation,li:7437662814728679424 ig:https://www.instagram.com/reel/DVyGQMcCfE_/,loose
+11401799019,Gordon AAF Interview,2026-03-12 08:00,Completed,,AAF Hall of Achievement,,American Advertising Federation,li:7437662814728679424 ig:https://www.instagram.com/reel/DVyGQMcCfE_/,loose
 11400641679,Friday Newsletter,2026-03-13,Completed,,,Recap,,,
 11500695276,Newsroom Chrissie Hanson,2026-03-13,Completed,Newsroom,,,,li:7438297844094078976 ig:https://www.instagram.com/reel/DV1eDhDCaYk/,exact
 11480293633,ATM Week in Review,2026-03-13,Completed,,Week In Review,Recap,,,
@@ -154,7 +154,7 @@ item_id,item,date,group,series,programs,categories,partner,posts,match
 11396195125,SXSW Moments That Matter,2026-03-16,Completed,,Moments That Matter,Recap,,li:7439314210032934912 ig:https://www.instagram.com/reel/DV8sL3WDeiR/,exact
 11529575467,Smartly Newsroom,2026-03-17,Completed,Newsroom,,,,li:7439769025347280896 ig:https://www.instagram.com/reel/DV_7Xrmie_3/,loose
 11401694555,SXSW Brand Activation Carousel,2026-03-17,Completed,,Moments That Matter,,,li:7439678007918854144 ig:https://www.instagram.com/p/DV_QfhCjbgw/,exact
-11424970969,On The Record Quotable: Devika,2026-03-17 14:00,Completed,On The Record,Expert Advice,,,li:7439706747780481024 ig:https://www.instagram.com/p/DV_q3CLjf6K/,loose
+11424970969,On The Record Quotable: Devika,2026-03-17 13:00,Completed,On The Record,Expert Advice,,,li:7439706747780481024 ig:https://www.instagram.com/p/DV_q3CLjf6K/,loose
 11401727208,SXSW Yahoo Activation,2026-03-18,Completed,,Moments That Matter,,,li:7439831381842575360 ig:https://www.instagram.com/reel/DWBtTMViSaO/,exact
 11454229593,Esi Eggleston AAF Newsletter,2026-03-19,Completed,,AAF Hall of Achievement,,American Advertising Federation,li:7440195856231710720 ig:https://www.instagram.com/reel/DWEH1mqpc2B/,loose
 11454211316,Esi Eggleston Bracey AAF Interview,2026-03-19,Completed,,AAF Hall of Achievement,,American Advertising Federation,li:7440195856231710720 ig:https://www.instagram.com/reel/DWEH1mqpc2B/,exact
@@ -203,7 +203,7 @@ item_id,item,date,group,series,programs,categories,partner,posts,match
 11542424144,Expert Advice: Get Offline (Gordon Bowen),2026-04-15,Completed,,Expert Advice,,,li:7450241463738765315 ig:https://www.instagram.com/reel/DXKVtEbiY0f/,exact
 11454226415,Tim Ellis AAF Newsletter,2026-04-16,Completed,,AAF Hall of Achievement,,American Advertising Federation,li:7450292841555087360,loose
 11454219833,Tim Ellis AAF Interview,2026-04-16,Completed,,AAF Hall of Achievement,,American Advertising Federation,li:7450292841555087360,loose
-11756380808,Newsroom: AllBirds,2026-04-16 12:00,Completed,Newsroom,,,,li:7450587654657654784 ig:https://www.instagram.com/reel/DXMzg5TkUyg/,loose
+11756380808,Newsroom: AllBirds,2026-04-16 11:00,Completed,Newsroom,,,,li:7450587654657654784 ig:https://www.instagram.com/reel/DXMzg5TkUyg/,loose
 11614609284,Expert Advice: The Leadership Wisdom Leaders Love,2026-04-17,Completed,,Expert Advice,,,li:7450609825610387456 ig:https://www.instagram.com/reel/DXOxwpDBakO/,exact
 11541834953,Friday Newsletter,2026-04-17,Completed,,,Recap,,,
 11480319526,Week In Review,2026-04-17,Completed,,Week In Review,Recap,,,
@@ -217,7 +217,7 @@ item_id,item,date,group,series,programs,categories,partner,posts,match
 11539410016,AAF Quotable_Jim,2026-04-22,Completed,,AAF Hall of Achievement,,American Advertising Federation,li:7452706299622035456 ig:https://www.instagram.com/p/DXcC3adlEiK/,loose
 11641748179,Alan d’Escragnolle,2026-04-22,Completed,,Moment Maker,,,ig:https://www.instagram.com/reel/DXbqyEDyhW4/,exact
 11542415980,Insider Scoop: The Industry’s Disruption Era (Chloe Pastore),2026-04-22,Completed,Insider Scoop,,,Publicis,li:7452763077214720000 ig:https://www.instagram.com/reel/DXcXaQqhOSG/,exact
-11745393702,Bloomberg Media Video,2026-04-22 09:30,Completed,,,,,li:7452555869399130113 ig:https://www.instagram.com/reel/DXbq2lXB1y8/,loose
+11745393702,Bloomberg Media Video,2026-04-22 08:30,Completed,,,,,li:7452555869399130113 ig:https://www.instagram.com/reel/DXbq2lXB1y8/,loose
 11604290434,AAF Program Ad,2026-04-23,Completed,,AAF Hall of Achievement,,American Advertising Federation,,
 11741530008,Meredith Klein Interview,2026-04-23,Completed,Insider Scoop,,,,li:7452831882553028608 ig:https://www.instagram.com/reel/DXePqC_pEtn/,exact
 11461804909,Expert Advice Column: Amy Leifer,2026-04-23,Completed,,Expert Advice,,DIRECTV,li:7453111322159951872 ig:https://www.instagram.com/p/DXevCJQEZY2/,exact
@@ -237,21 +237,21 @@ item_id,item,date,group,series,programs,categories,partner,posts,match
 11864024116,Vinny Rinaldi - Moment Maker,2026-05-04,Completed,,Moment Maker,,,li:7456865471414398976 ig:https://www.instagram.com/reel/DX6unyXP0JQ/,exact
 11709885962,Insider Scoop: Upfronts (Brian Steinberg),2026-05-04,Completed,Insider Scoop,,,,li:7457127457289093120 ig:https://www.instagram.com/reel/DX7Rc3WJIfI/,exact
 11880611004,Mother's Day Intro Clip,2026-05-04,Completed,,,,,,
-11862440159,Media Diet: Stars Wars And Substack (Lauren Wetzel),2026-05-04 09:30,Completed,Media Diet,,,,,
+11862440159,Media Diet: Stars Wars And Substack (Lauren Wetzel),2026-05-04 08:30,Completed,Media Diet,,,,,
 11794228037,Chrissie Hanson - Moment Maker,2026-05-05,Completed,,Moment Maker,,,li:7457259029141078016 ig:https://www.instagram.com/reel/DX9JLMIJd1D/,exact
 11607399366,Media Diet: Who Influences the Influencers?,2026-05-05,Completed,Media Diet,,,,li:7457544734115258369 ig:https://www.instagram.com/reel/DX9oDMgpBV_/,exact
 11892629567,Newsroom: Met Gala,2026-05-05,Completed,Newsroom,,,,li:7457797471117828096 ig:https://www.instagram.com/reel/DYABx37tPpA/,loose
 11880185123,Mother's Day: Sarah Harms,2026-05-06,Completed,,,Human interest,,li:7457539501016559617 ig:https://www.instagram.com/reel/DX_4OWpSSuI/,exact
 11883392209,Lori Goode - Index Exchange - MM,2026-05-06,Completed,,Moment Maker,,Index Exchange,li:7457538182155284480 ig:https://www.instagram.com/reel/DX_t74NSDUK/,exact
 11859144692,"Women in The Industry (ABBEY THOMAS)(CCO, Anoki AI)",2026-05-06,Completed,,One-off social,Human interest,Anoki AI,li:7457544734115258369 ig:https://www.instagram.com/reel/DYAM1Z9SxE2/,exact
-11943867021,Newsroom: ATM Goes Hollywood,2026-05-07 00:00,Completed,Newsroom,,,,li:7458180373299191809 ig:https://www.instagram.com/reel/DYCxpEQNSTg/,exact
+11943867021,Newsroom: ATM Goes Hollywood,2026-05-06 23:00,Completed,Newsroom,,,,li:7458180373299191809 ig:https://www.instagram.com/reel/DYCxpEQNSTg/,exact
 11883377598,Merging Moment: Ji (WPP)/Diana (Hello Products) Part 1,2026-05-07,Completed,,Merging Moment,,WPP,li:7457907057170509825 ig:https://www.instagram.com/reel/DYCSymyyqPp/,exact
 11880094539,Mother's Day: Jill Kelly,2026-05-07,Completed,,,Human interest,,li:7458141655154667520 ig:https://www.instagram.com/reel/DYCxoNwJeyC/,exact
 11883467478,"Adam Royle, Comcast - Moment Maker",2026-05-08,Completed,,Moment Maker,,Comcast,li:7458263462163636224 ig:https://www.instagram.com/reel/DYFB36eJYGo/,exact
 11940334212,Upfronts Preview,2026-05-08,Completed,,One-off social,,,li:7458484919548297217 ig:https://www.instagram.com/reel/DYE6scaRcZQ/,loose
 11869702575,Friday Newsletter,2026-05-08,Completed,,,Recap,,,
 11915864658,Mother's Day: Kim Francella,2026-05-08,Completed,,,Human interest,,li:7458264634194620416 ig:https://www.instagram.com/reel/DYFWecLSEOW/,exact
-11870661447,Mother's Day: Emily Seal,2026-05-09 11:00,Completed,,,Human interest,,li:7458631020368576512 ig:https://www.instagram.com/reel/DYHmr_JJaJi/,exact
+11870661447,Mother's Day: Emily Seal,2026-05-09 10:00,Completed,,,Human interest,,li:7458631020368576512 ig:https://www.instagram.com/reel/DYHmr_JJaJi/,exact
 11921697454,Mother's Day Graphic,2026-05-10,Completed,,,,,li:7459045586340704256,loose
 11945889262,Mother's Day - Christine Roeder,2026-05-10,Completed,,,,,li:7458782758035812352 ig:https://www.instagram.com/reel/DYKLYw5B3Li/,loose
 11864098878,Kyle Rudolph- Moment Maker,2026-05-11,Completed,,Moment Maker,,Alltroo,li:7459385788678619136,loose
@@ -291,7 +291,7 @@ item_id,item,date,group,series,programs,categories,partner,posts,match
 12037872674,Cynthia Plotch- Moment Maker (CLIO),2026-05-27,Completed,,Moment Maker,,Winx Health,li:7465123556276785153 ig:https://www.instagram.com/reel/DY1ypa0JwSJ/,exact
 11942038087,"Matt Spiegel, Transunion - Moment Maker",2026-05-28,Completed,,Moment Maker,,TransUnion,li:7465509043126587392 ig:https://www.instagram.com/reel/DY4WQ54J1rW/,exact
 12037880747,Jill Angelo - Moment Maker (CLIO),2026-05-28,Completed,,Moment Maker,,Oura,li:7465759214511112193 ig:https://www.instagram.com/reel/DY42UNqB2Kj/,exact
-12043081213,The Heart Beat: Kyle Rudolph,2026-05-29 00:00,Completed,The Heart Beat,,Celebrity guest,Alltroo,li:7466155109773803520 ig:https://www.instagram.com/reel/DY68NU3J0-t/,exact
+12043081213,The Heart Beat: Kyle Rudolph,2026-05-28 23:00,Completed,The Heart Beat,,Celebrity guest,Alltroo,li:7466155109773803520 ig:https://www.instagram.com/reel/DY68NU3J0-t/,exact
 11869708608,Friday Newsletter,2026-05-29,Completed,,,Recap,,,
 11880959722,Week in Review,2026-05-29,Completed,,Week In Review,Recap,,,
 12099450084,"Rhiannon White, Clue - Moment Maker (CLIO HEALTH)",2026-06-01,Completed,,Moment Maker,,Clue,li:7467223143019872256 ig:https://www.instagram.com/reel/DZDCrvnhu-n/,exact
@@ -327,11 +327,11 @@ item_id,item,date,group,series,programs,categories,partner,posts,match
 12204592207,"Mark Stenberg, Adweek - Moment Maker",2026-06-15,Completed,,Moment Maker,,ADWEEK,li:7472121682015719424 ig:https://www.instagram.com/reel/DZm4GWZxqCC/,exact
 12266583098,Website HERO Video,2026-06-15,Completed,,,,,,
 12138988002,Cannes Intro (doesn't get posted),2026-06-15,Completed,,,,,li:7472121682015719424 ig:https://www.instagram.com/reel/DZm4GWZxqCC/,loose
-12279068342,Newsroom: Fox Buys Roku (Sarah Harms + Katrina Cukaj),2026-06-15 18:00,Completed,Newsroom,,,Roku,li:7472362847587667968 ig:https://www.instagram.com/reel/DZnkqnlJ5Os/,exact
-12218970309,"Nayeema Raza, Smart Girl Dumb Questions - Moment Maker",2026-06-16 00:00,Completed,,Moment Maker,,Smart Girl Dumb Questions,li:7472664389951770624 ig:https://www.instagram.com/reel/DZpqnWJNl80/,exact
+12279068342,Newsroom: Fox Buys Roku (Sarah Harms + Katrina Cukaj),2026-06-15 17:00,Completed,Newsroom,,,Roku,li:7472362847587667968 ig:https://www.instagram.com/reel/DZnkqnlJ5Os/,exact
+12218970309,"Nayeema Raza, Smart Girl Dumb Questions - Moment Maker",2026-06-15 23:00,Completed,,Moment Maker,,Smart Girl Dumb Questions,li:7472664389951770624 ig:https://www.instagram.com/reel/DZpqnWJNl80/,exact
 11978886340,Insider Scoop: New Age of Agencies,2026-06-16,Completed,Insider Scoop,,,,ig:https://www.instagram.com/reel/DZpxa2Apq7M/,loose
 12197356766,"Christopher Feo, Unity - Moment Maker",2026-06-17,Completed,,Moment Maker,,Unity,li:7472981171144994816 ig:https://www.instagram.com/reel/DZsPV0Mh9Eo/,exact
-12233463898,Father's Day: Fatherhood Transformed His Perspective(Andrew Gall),2026-06-17 08:00,Completed,,,Human interest,,li:7473036470375763969 ig:https://www.instagram.com/reel/DZsj7gnhm6q/,exact
+12233463898,Father's Day: Fatherhood Transformed His Perspective(Andrew Gall),2026-06-17 07:00,Completed,,,Human interest,,li:7473036470375763969 ig:https://www.instagram.com/reel/DZsj7gnhm6q/,exact
 12233475735,Father's Day (Mac Hagel),2026-06-18,Completed,,,Human interest,,ig:https://www.instagram.com/reel/DZu7DymhGnn/,exact
 12248391664,"Rafael Espinal, Commissioner - Moment Maker",2026-06-18,Completed,,Moment Maker,,,li:7473382156342366208 ig:https://www.instagram.com/reel/DZuw218Rdqe/,exact
 12301091032,Newsletter,2026-06-19,Completed,,,,,,
@@ -339,7 +339,7 @@ item_id,item,date,group,series,programs,categories,partner,posts,match
 12243182834,Week In Review,2026-06-19,Completed,,Week In Review,Recap,,,
 12302743573,Cannes Look/Feel Thumbs,2026-06-19,Completed,,,Ads,,ig:https://www.instagram.com/reel/DZx0edfB-QZ/,loose
 12311388694,Cannes OUTRO (doesn't get posted),2026-06-19,Completed,,,,,ig:https://www.instagram.com/reel/DZx0edfB-QZ/,loose
-12303278397,Juneteenth Static,2026-06-19 18:00,Completed,,Moments That Matter,,,,
+12303278397,Juneteenth Static,2026-06-19 17:00,Completed,,Moments That Matter,,,,
 12233472926,Father's Day Gif,2026-06-21,Completed,,Moment Maker,Holiday or topical moment,,li:7474431030674927616,loose
 12232702147,"Sarah Spain, Host 'Good Game with Sarah Spain' & Content Dir iHeart Women's Sports- MM",2026-06-22,Completed,,Moment Maker,,iHeartMedia,li:7474786426862305280 ig:https://www.instagram.com/reel/DZ4vWLUBHYf/,exact
 12310841301,Cannes - Sunday Recap Social Sizzle,2026-06-22,Completed,,Events,Holiday or topical moment,,li:7474810401906581506 ig:https://www.instagram.com/reel/DZ46bCCxD6G/,loose
@@ -371,7 +371,7 @@ item_id,item,date,group,series,programs,categories,partner,posts,match
 12248391842,"Chief Johnson, PUMA - Moment Maker",2026-07-07,Completed,,Moment Maker,,PUMA,li:7480056583633330176,exact
 12011388863,Expert Advice: Integrity In The Industry (Hall of Famers),2026-07-08,Completed,,Expert Advice,,,li:7480607108271517696,exact
 12248403065,"Fred Asquith, TikTok/ TV Creator - Moment Maker",2026-07-08,Completed,,Moment Maker,,,li:7480327168770637825,loose
-12470810090,Ryan Seacrest MOTS AI,2026-07-09 00:00,Completed,,,Celebrity guest,,li:7481357649628925953 ig:https://www.instagram.com/reel/DalNkEMxzQ7/,exact
+12470810090,Ryan Seacrest MOTS AI,2026-07-08 23:00,Completed,,,Celebrity guest,,li:7481357649628925953 ig:https://www.instagram.com/reel/DalNkEMxzQ7/,exact
 12415848550,"KC Sullivan, CNBC - Moment Maker (Cannes)",2026-07-09,Completed,,Moment Maker,,Versant,li:7480927716452532224 ig:https://www.instagram.com/reel/Dakg4CqhBjW/,exact
 12446711891,"Josh Stinchcomb, EVP/CRO, Dow Jones/WSJ - MM",2026-07-09,Completed,,Moment Maker,,Dow Jones/WSJ,li:7480986739185098752 ig:https://www.instagram.com/reel/Dak44nihh2w/,exact
 12236178346,"Jonny Bauer, FundamentalCo",2026-07-10,Completed,,Moment Maker,,FundamentalCo,li:7481090799636697088 ig:https://www.instagram.com/reel/DanFlwAh-DA/,exact
@@ -381,14 +381,14 @@ item_id,item,date,group,series,programs,categories,partner,posts,match
 12415873848,"Liz Jenkins, NBCU - Moment Maker (from Cannes)",2026-07-13,Completed,,Moment Maker,,NBCUniversal,li:7482463153742647296 ig:https://www.instagram.com/reel/DavSt-ax9Or/,exact
 11891098666,On The Record: Culture Defines Everything (Tamon George),2026-07-13,Completed,On The Record,,,Creative Theory Agency,li:7482415904631341057,exact
 12446820250,"Roberto Stanichi, CMO, Mattel- MM",2026-07-14,Completed,,Moment Maker,,Mattel,li:7482599151923466240 ig:https://www.instagram.com/reel/DaxY2YPJlrt/,exact
-12517155213,World Cup Social,2026-07-15 00:00,Completed,,One-off moment,Holiday or topical moment,,li:7483221355878924288 ig:https://www.instagram.com/reel/Da0riZOJ7YV/,exact
+12517155213,World Cup Social,2026-07-14 23:00,Completed,,One-off moment,Holiday or topical moment,,li:7483221355878924288 ig:https://www.instagram.com/reel/Da0riZOJ7YV/,exact
 12415955155,"Allie Galloway, Yahoo! - Moment Maker (Cannes)",2026-07-15,Completed,,Moment Maker,,Yahoo,li:7482983080186605568 ig:https://www.instagram.com/reel/Daz9kIhhuWW/,exact
 12460418564,On The Record: Brands Biggest Threat (Maggie Schmerin),2026-07-15,Completed,On The Record,,,United Airlines,li:7482987333089165312 ig:https://www.instagram.com/reel/Da0O0unhwWn/,exact
 12099450683,"Jodi Neuhauser, 51& - Moment Maker (CLIO HEALTH)",2026-07-16,Completed,,Moment Maker,,51&,li:7483246519454965760 ig:https://www.instagram.com/reel/Da2ib1XpyaN/,exact
 12248391504,"Daniel Kopec, Microsoft - Moment Maker",2026-07-17,Completed,,Moment Maker,,Microsoft,li:7483597898681769984 ig:https://www.instagram.com/reel/Da5HONupArB/,exact
 12551168662,Week In Review,2026-07-17,Completed,,Week In Review,,,,
 12099459131,"Kara Egan, Teal Health - Moment Maker (CLIO HEALTH)",2026-07-17,Completed,,Moment Maker,,Teal Health,li:7483941382764654592 ig:https://www.instagram.com/reel/Da53PDEJtde/,exact
-12421545757,"Andrew Captan, TelevisaUnivision - Moment Maker (Cannes)",2026-07-20 00:00,Completed,,Moment Maker,,TelevisaUnivision,li:7484960169278386176 ig:https://www.instagram.com/reel/DbBiKk7BPMo/,exact
+12421545757,"Andrew Captan, TelevisaUnivision - Moment Maker (Cannes)",2026-07-19 23:00,Completed,,Moment Maker,,TelevisaUnivision,li:7484960169278386176 ig:https://www.instagram.com/reel/DbBiKk7BPMo/,exact
 12543002386,ESPY Awards Red Carpet - Moments that Matter,2026-07-20,Completed,,Moments That Matter,,,li:7484914994980106240 ig:https://www.instagram.com/reel/DbA8ZTmh--j/,exact
 12446757854,Christine Cotter 360i - MM,2026-07-20,Completed,,Moment Maker,,dentsu,li:7484909266026414080 ig:https://www.instagram.com/reel/DbA1mVVhFd1/,exact
 12415900496,Dentsu Roundtable - Andrew Ross Sorkin - Roundtable Moments,2026-07-21,Completed,Insider Scoop,,Celebrity guest,,li:7485305364180107264 ig:https://www.instagram.com/reel/DbDfkYNRP27/,exact
@@ -399,7 +399,7 @@ item_id,item,date,group,series,programs,categories,partner,posts,match
 12446761114,"Ali Miller, General Manager of Advertising, Instacart - MM",2026-07-23,Completed,,Moment Maker,,Instacart,li:7485910169256669184 ig:https://www.instagram.com/reel/DbIj6SEBOB2/,exact
 11963075914,The Heart Beat: The Industry Needs Each Other (Amy Leifer),2026-07-23,Completed,The Heart Beat,,,DIRECTV,li:7485914383454404608 ig:https://www.instagram.com/reel/DbI1Kb9hC6_/,exact
 12501091806,Tim Ellis MOTS,2026-07-23,Completed,,One-off social,,NFL,li:7485915296676093952 ig:https://www.instagram.com/reel/DbJJwp8h-1X/,exact
-12604463713,Jimothy Graphic (insta only),2026-07-24 00:00,Completed,,One-off social,,,,
+12604463713,Jimothy Graphic (insta only),2026-07-23 23:00,Completed,,One-off social,,,,
 12099456696,"Elina Scherwitzl, Natural Cycles - Moment Maker (CLIO HEALTH)",2026-07-24,Completed,,Moment Maker,,Natural Cycles,li:7486219064420319232 ig:https://www.instagram.com/reel/DbLIuN3pS_9/,exact
 12572989957,Week In Review 7.24,2026-07-24,Completed,,Week In Review,,,,
 12099488955,"Michelle Monaco, Wheel - Moment Maker (CLIO HEALTH)",2026-07-27,Completed,,Moment Maker,,Wheel,li:7487304743732625408 ig:https://www.instagram.com/reel/DbS3MQEpAT7/,exact
@@ -424,7 +424,7 @@ item_id,item,date,group,series,programs,categories,partner,posts,match
 12664373617,Media Diet: KC Sullivan,2026-08-07,Completed,Media Diet,,,Versant,li:7491321009581785089 ig:https://www.instagram.com/reel/DbvIdwxhIXo/,loose
 12737059603,Newsletter 8.7,2026-08-07,Completed,,,,,,
 12446741823,"Alice Ma Co-Founder, CEO, Mad Realities - MM",2026-08-10,Completed,,Moment Maker,,Mad Realities,li:7492568945355370496 ig:https://www.instagram.com/reel/Db26SfuBX36/,exact
-12562217324,ESPY's Spotlight: Anna Leigh Waters,2026-08-11 00:00,Completed,,ESPY's Spotlight,Celebrity guest;Human interest,PPA Tour,ig:https://www.instagram.com/reel/Db59_5chYyJ/,exact
+12562217324,ESPY's Spotlight: Anna Leigh Waters,2026-08-10 23:00,Completed,,ESPY's Spotlight,Celebrity guest;Human interest,PPA Tour,ig:https://www.instagram.com/reel/Db59_5chYyJ/,exact
 12446712010,"Jay Askinasi, CRO, Paramount - MM",2026-08-11,Completed,,Moment Maker,,Paramount,ig:https://www.instagram.com/reel/Db5fB3IhIwB/,exact
 12562222322,ESPY's Spotlight: Jayson Tatum,2026-08-12,Completed,,ESPY's Spotlight,Celebrity guest,Boston Celtics,ig:https://www.instagram.com/reel/Db8iyTjBjPZ/,exact
 12243921387,Insider Scoop: Content Is The Key To Access (Alan d'Escragnolle),2026-08-13,Completed,Insider Scoop,,,Filmhub,li:7493329745049407488 ig:https://www.instagram.com/reel/Db-opyfhdIN/,exact
@@ -436,12 +436,12 @@ item_id,item,date,group,series,programs,categories,partner,posts,match
 12562238249,ESPY's Spotlight: The Miz (WWE),2026-08-17,Completed,,ESPY's Spotlight,Celebrity guest;Human interest,WWE,li:7494924704953069568 ig:https://www.instagram.com/reel/DcJast1JSiL/,exact
 12421543184,"Andres Gutierrez, TelevisaUnivision - Moment Maker (cannes)",2026-08-18,Completed,,Moment Maker,,TelevisaUnivision,li:7495337657615446016 ig:https://www.instagram.com/reel/DcLgyuux4qz/,exact
 12562254003,ESPY's Spotlight: Jackson Olson,2026-08-18,Completed,,ESPY's Spotlight,Celebrity guest,Disney,li:7495521617826074624 ig:https://www.instagram.com/reel/DcMGVW5xRzq/,exact
-12718159363,Masterclass Off Duty. Lego's + Brand Building (Allie Galloway),2026-08-19 00:00,Completed,Masterclass Off Duty,Expert Advice,,Yahoo,li:7495702208521490433 ig:https://www.instagram.com/reel/DcOdd_sxaIC/,exact
+12718159363,Masterclass Off Duty. Lego's + Brand Building (Allie Galloway),2026-08-18 23:00,Completed,Masterclass Off Duty,Expert Advice,,Yahoo,li:7495702208521490433 ig:https://www.instagram.com/reel/DcOdd_sxaIC/,exact
 12562254732,ESPY's Spotlight: Juan Toscano-Anderson,2026-08-19,Completed,,ESPY's Spotlight,Celebrity guest;Human interest,,li:7495701789346910208 ig:https://www.instagram.com/reel/DcOFWwZxh7z/,exact
-12735837893,Insider Scoop: Jodi Neuhauser,2026-08-20 00:00,Completed,Insider Scoop,,,51&,li:7496012407165714432 ig:https://www.instagram.com/reel/DcRJJs-JOZT/,exact
+12735837893,Insider Scoop: Jodi Neuhauser,2026-08-19 23:00,Completed,Insider Scoop,,,51&,li:7496012407165714432 ig:https://www.instagram.com/reel/DcRJJs-JOZT/,exact
 12562238473,ESPY's Spotlight: Chiney Ogwumike,2026-08-20,Completed,,ESPY's Spotlight,Celebrity guest,WNBA,li:7496010882494218240 ig:https://www.instagram.com/reel/DcQqQZJJBRa/,exact
 12842541890,Newsroom: Travis Kelce College Athletes,2026-08-20,Completed,Newsroom,,,,li:7496228027031445504 ig:https://www.instagram.com/reel/DcRF-jYxfcp/,exact
-12718060945,Industry Movers & Shakers Carousel,2026-08-21 00:00,Completed,Industry Movers & Shakers,,,,li:7496533649908011008,loose
+12718060945,Industry Movers & Shakers Carousel,2026-08-20 23:00,Completed,Industry Movers & Shakers,,,,li:7496533649908011008,loose
 12409598490,On The Record: Creators Don't Have It Easy (Fred Asquith),2026-08-24,Completed,On The Record,,Human interest,,li:7497484781681721344 ig:https://www.instagram.com/reel/Dca9ZHxBRoS/,exact
 12735373928,On The Record: Closing The Women's Health Information Gap With Storytelling (Cynthia Plotch - Winx),2026-08-24,Completed,On The Record,Expert Advice,,Winx Health,li:7497485769595408384 ig:https://www.instagram.com/reel/DcbjHe4hz-7/,exact
 12623413478,"Insider Scoop: Robots Are Shopping Now? (Guy T, Cheq)",2026-08-25,Completed,Insider Scoop,,,CHEQ,li:7497973720540643328 ig:https://www.instagram.com/reel/DcdjS6jhilR/,exact
@@ -455,10 +455,10 @@ item_id,item,date,group,series,programs,categories,partner,posts,match
 12904047892,Fanta Newsroom Static,2026-08-28,Completed,Newsroom,,,,li:7499224748036382720 ig:https://www.instagram.com/p/DcmZOQsiVJT/,loose
 12902244915,Newsletter 8.28,2026-08-28,Completed,,,,,,
 12736013239,Trend Watch: Micro Dramas (Heather Conneely),2026-08-31,Completed,Trend Watch,,,TelevisaUnivision,li:7500019532510511105 ig:https://www.instagram.com/reel/Dcs--khhuNL/,exact
-12834295834,Masterclass Off Duty: Songwriting (Brian Carley),2026-09-01 00:00,Completed,Masterclass Off Duty,Expert Advice,,Publicis,li:7500018376765943808 ig:https://www.instagram.com/reel/Dcv061thwxY/,exact
+12834295834,Masterclass Off Duty: Songwriting (Brian Carley),2026-08-31 23:00,Completed,Masterclass Off Duty,Expert Advice,,Publicis,li:7500018376765943808 ig:https://www.instagram.com/reel/Dcv061thwxY/,exact
 12900782539,Magnite Full Frame - WPP Dev _ Episode 1,2026-09-01,Completed,,Full Frame (Magnite),,WPP,li:7500395508323065856 ig:https://www.instagram.com/reel/DcvgTITR6Iq/,exact
 12882694185,Magnite Full Frame - Episode 1 - Newsletter,2026-09-01,Completed,,Full Frame (Magnite),,Magnite,li:7500395508323065856,loose
-12885802109,Insider Scoop: Women's Sports Is The Way In (Sarah Spain),2026-09-02 00:00,Completed,Insider Scoop,,,iHeartMedia,li:7500722254352179201 ig:https://www.instagram.com/reel/DcyS1HYJeaM/,exact
+12885802109,Insider Scoop: Women's Sports Is The Way In (Sarah Spain),2026-09-01 23:00,Completed,Insider Scoop,,,iHeartMedia,li:7500722254352179201 ig:https://www.instagram.com/reel/DcyS1HYJeaM/,exact
 12897381791,"Insider Scoop: OOH & Bars In Billboards (Brian Rappaport, Quan)",2026-09-03,Completed,Insider Scoop,,,Quan Media Group,li:7501249979064266752 ig:https://www.instagram.com/reel/Dc0tWNjJXbc/,exact
 12834968814,Trend Watch: The Gen A-Z Oracle (Chief Johnson),2026-09-03,Completed,Trend Watch,Expert Advice,,PUMA,li:7501370609050968064 ig:https://www.instagram.com/reel/Dc1ouGlJ5i-/,exact
 12834457381,Industry Movers & Shakers Carousel,2026-09-04,Completed,Industry Movers & Shakers,,,,li:7501593922402504704 ig:https://www.instagram.com/p/Dc3NzOlkaQ1/,exact
@@ -474,7 +474,7 @@ item_id,item,date,group,series,programs,categories,partner,posts,match
 13011568867,9/11 Remembrance Static,2026-09-11,Completed,,One-off moment,Holiday or topical moment,,,
 12933701180,"Will McIntosh, Pres Digital Platforms and Ventures, Versant - MM",2026-09-14,Completed,,Moment Maker,,Versant,li:7504975147611881473 ig:https://www.instagram.com/reel/DdRFjYwJ20I/,exact
 13027150842,Moment Award Submission Reminder GIF,2026-09-14,Completed,,Moment Awards,,,,
-12772286112,🏆 Awards Announcement Trailer - Honorees,2026-09-15 00:00,Completed,,Moment Awards,,,ig:https://www.instagram.com/reel/DdT4Ai-JKdO/,loose
+12772286112,🏆 Awards Announcement Trailer - Honorees,2026-09-14 23:00,Completed,,Moment Awards,,,ig:https://www.instagram.com/reel/DdT4Ai-JKdO/,loose
 13038421118,WPP Future of Growth Newsletter,2026-09-15,Completed,,The Future of Growth (WPP),,WPP,li:7505259426027618305 ig:https://www.instagram.com/reel/DdTm5VDBxhi/,exact
 12718805762,WPP: Future of Growth Series: EA Nancy Hall (1),2026-09-15,Completed,,Expert Advice,Celebrity guest,,li:7505259426027618305 ig:https://www.instagram.com/reel/DdTm5VDBxhi/,exact
 12804818095,"Masterclass Off Duty: Cooking Philosophy (Nicolas Bidon,Ogury)",2026-09-15,Completed,Masterclass Off Duty,Expert Advice,Celebrity guest,Ogury,li:7505250405950545920 ig:https://www.instagram.com/reel/DdUF0IThcwZ/,exact
@@ -482,11 +482,11 @@ item_id,item,date,group,series,programs,categories,partner,posts,match
 13001797378,Brand Digest: Rebuilding the Creative Arsenal (Jeff Miller),2026-09-16,Completed,Brand Digest,,,Anduril Industries,li:7505776611301023744 ig:https://www.instagram.com/reel/DdWcyxGJ8Cy/,exact
 12834501444,Trend Watch: Rise of Retail Media (Ali Miller),2026-09-17,Completed,Trend Watch,,,Instacart,li:7506061540588978176 ig:https://www.instagram.com/reel/DdYwgf8pGMn/,exact
 13028435146,Awards IG Story Gif,2026-09-17,Completed,,Moment Awards,Holiday or topical moment,,,
-13026001124,Industry Movers & Shakers Carousel,2026-09-18 00:00,Completed,Industry Movers & Shakers,,,,li:7506673523055067136 ig:https://www.instagram.com/p/DdbmcfFkchE/,exact
-12834511982,Christine LinkedIn: Favorite Moment/What I learned/Summer Recap,2026-09-18 00:00,Completed,,Moment Maker,Human interest,,li:7506745212006858754,loose
+13026001124,Industry Movers & Shakers Carousel,2026-09-17 23:00,Completed,Industry Movers & Shakers,,,,li:7506673523055067136 ig:https://www.instagram.com/p/DdbmcfFkchE/,exact
+12834511982,Christine LinkedIn: Favorite Moment/What I learned/Summer Recap,2026-09-17 23:00,Completed,,Moment Maker,Human interest,,li:7506745212006858754,loose
 12843033546,🏆Honoree Trailer: Michelle Crossan-Matos,2026-09-18,Completed,,Moment Awards,Ads,SharkNinja,li:7506513343633924096 ig:https://www.instagram.com/reel/DdbR4cfJ5-3/,exact
 13068431090,Newsletter,2026-09-18,Completed,,,,,,
-12968614423,Masterclass Off Duty: Interpretive Dance (Lori Goode),2026-09-21 00:00,Completed,Masterclass Off Duty,,Human interest,Index Exchange,li:7507801444398350336 ig:https://www.instagram.com/reel/DdjU9FyxwGM/,exact
+12968614423,Masterclass Off Duty: Interpretive Dance (Lori Goode),2026-09-20 23:00,Completed,Masterclass Off Duty,,Human interest,Index Exchange,li:7507801444398350336 ig:https://www.instagram.com/reel/DdjU9FyxwGM/,exact
 12842911417,🏆Honoree Trailer: Sara Fischer,2026-09-21,Completed,,Moment Awards,Celebrity guest,Axios,ig:https://www.instagram.com/reel/DdjDp6gBsrz/,exact
 13078959188,Countdown Newsletter,2026-09-21,Completed,,Moment Awards,,,,
 12996791299,Baker Machado Fall Social Cut,2026-09-22,Completed,,One-off social,,Front Office Sports,li:7508128219888328704 ig:https://www.instagram.com/reel/Ddl9CbvBymB/,exact
@@ -505,10 +505,10 @@ item_id,item,date,group,series,programs,categories,partner,posts,match
 12834331127,Masterclass Off Duty: Mastering Mindfulness (Michelle Crossan-Matos),2026-09-28,Completed,Masterclass Off Duty,Expert Advice,,SharkNinja,li:7510308275872043008 ig:https://www.instagram.com/reel/Dd1IpjcppJ5/,exact
 12834325415,"Masterclass Off Duty: Family, Friends, & The Perfect Martini﻿ (KC Sullivan)",2026-09-29,Completed,Masterclass Off Duty,Expert Advice,,Versant,li:7510551919103352832 ig:https://www.instagram.com/reel/Dd3p973JmXa/,exact
 13148483176,Awards Countdown Gif (3 days),2026-09-29,Completed,,Moment Awards,Holiday or topical moment,,,
-12962119634,Full Frame Episode 2: Rich D; Charter,2026-09-30 00:00,Completed,,Full Frame (Magnite),,Magnite,li:7511079121993535488,exact
+12962119634,Full Frame Episode 2: Rich D; Charter,2026-09-29 23:00,Completed,,Full Frame (Magnite),,Magnite,li:7511079121993535488,exact
 13151479012,2 Day Countdown Gif,2026-09-30,Completed,,Moment Awards,Holiday or topical moment,,,
 13050034526,Barbara Peng - Biz Insider (Former) - MM,2026-09-30,Completed,,Moment Maker,,,li:7511048337345728512 ig:https://www.instagram.com/reel/Dd6ZGHSJTpu/,exact
-13098936810,"On The Record: The AI Cast: Claude, Chalice, and ChatGPT (Ali Manning)",2026-10-01 00:00,Completed,On The Record,,,Chalice AI,li:7511126609496821761 ig:https://www.instagram.com/reel/Dd82_KjpZKZ/,exact
+13098936810,"On The Record: The AI Cast: Claude, Chalice, and ChatGPT (Ali Manning)",2026-09-30 23:00,Completed,On The Record,,,Chalice AI,li:7511126609496821761 ig:https://www.instagram.com/reel/Dd82_KjpZKZ/,exact
 13106706176,Last day to Submit Static,2026-10-01,Completed,,Moment Awards,,,li:7511404440306802688 ig:https://www.instagram.com/p/Dd87GjhRYOB/,loose
 13106758840,Last Day to Submit Newsletter,2026-10-01,Completed,,Moment Awards,,,li:7511404440306802688 ig:https://www.instagram.com/p/Dd87GjhRYOB/,loose
 13170039131,Newsletter 10.2,2026-10-02,Completed,,,,,,
