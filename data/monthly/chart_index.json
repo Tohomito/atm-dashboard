@@ -8,13 +8,13 @@
  },
  "s-ig": {
   "section_headline": "Where October sits in the year",
-  "commentary_as_published": "October closed 8.8% below September and well below the spring and summer. Posts with an accepted collaborator averaged 1,634 views against 412 without (Oct 1–27 read).",
+  "commentary_as_published": "October closed 8.8% below September and well below the spring and summer. The 18 of 45 posts with an accepted collaborator drew a median 959 views, against 293 for the 27 without.",
   "data_vintage": "Nov 2 2026 full-month pull (Oct 1-31 window)",
   "source_platform_and_window": "Sep and Oct: Instagram Insights via Supermetrics (IGI 17841471383675991), account views, pulled Nov 2 2026, full months. Earlier months: Instagram's own reports."
  },
  "s-yt": {
   "section_headline": "Where October sits in the year",
-  "commentary_as_published": "All organic since September. October closed at 3,195 views, 27.7% below September; YouTube search is the biggest source.",
+  "commentary_as_published": "All organic since September. October closed at 3,461 views, 21.7% below September; YouTube search brought 57% of views.",
   "data_vintage": "Nov 2 2026 full-month pull (Oct 1-31 window)",
   "source_platform_and_window": "Sep and Oct: YouTube via Supermetrics (YT2), pulled Nov 2 2026, full months; no ADVERTISING traffic since August. Earlier months: YouTube Studio reports."
  },
@@ -22,7 +22,7 @@
   "section_headline": "Where October sits in the year",
   "card_title": "atm.media sessions per month (GA4)",
   "card_subtitle_as_published": "Sessions.",
-  "commentary_as_published": "Moment Awards voting doubled the site: 13,182 sessions, and /vote drew 7,652 views from 6,119 people before voting closed on Oct 30. Episode pages grew 4.8% on September.",
+  "commentary_as_published": "Moment Awards voting more than doubled site sessions: 13,141 in October against 6,218 in September. 96% of the 7,529 sessions that included a /vote page went to no other page; without voting, sessions were between 9.6% down and 1.0% up on September. Episode pages grew 4.8%.",
   "data_vintage": "Nov 2 2026 full-month pull (Oct 1-31 window)",
   "source_platform_and_window": "Sep and Oct: GA4 489265998 via Supermetrics (America/New_York), pulled Nov 2 2026, full months. Earlier months: GA4 native reports."
  },
@@ -34,16 +34,19 @@
   "source_platform_and_window": "beehiiv subscriber history, read Oct 28 2026"
  },
  "s-syn": {
-  "section_headline": "Partners reposted, but rarely with their own words",
-  "card_title": "September: organic vs syndicated engagement, posts with commentary reposts",
-  "commentary_as_published": "September's lift came from WPP Media, Nancy Hall and Versant reposting with their own copy. In October partners mostly reposted without it: 35 syndicated engagements on 1,608 organic. Hand partners and guests repost copy on publish day."
+  "section_headline": "Reposts with the reposter's own words lifted October engagement by a third",
+  "card_title": "October: organic vs syndicated engagement, the six posts with the most syndicated engagement",
+  "card_subtitle_as_published": "Reactions + comments + reposts. Organic is on ATM's post; syndicated is on reposts that carried the reposter's own words.",
+  "commentary_as_published": "Reposts with the reposter's own words added 718 engagements to 2,130 organic across the 65 October posts: 1.34×, against 1.28× in September. These six posts drew 457 of the 718, mostly from guests and honorees reposting their own cut. A recommendation for the social team: send guests suggested repost copy on publish day.",
+  "data_vintage": "Nov 2 2026 full-month read (Oct 1-31 posts)",
+  "source_platform_and_window": "Organic: LinkedIn Pages via Supermetrics, per post. Syndicated: the Reposts list on every October post, read in the LinkedIn page admin view on Nov 2 2026; ATM team members left out."
  },
  "s-sect": {
-  "section_headline": "243 executives featured since launch",
+  "section_headline": "244 executives featured since launch",
   "card_title": "October appearances by sector",
-  "card_subtitle_as_published": "49 appearances.",
-  "commentary_as_published": "Ad tech and brands lead. Publicis and IPG voices are missing, and CPG beyond PepsiCo and pharma beyond Organon are thin.",
-  "data_vintage": "Oct 28 2026 report (Oct 1-27 window)",
-  "source_platform_and_window": "October report: post log, monday.com and Teams live links; sector assigned by hand"
+  "card_subtitle_as_published": "54 appearances, Oct 1–31.",
+  "commentary_as_published": "Ad tech and brands lead. Publicis and IPG voices are missing, and CPG beyond PepsiCo and Hello Products, and pharma beyond Organon, are thin.",
+  "data_vintage": "Nov 2 2026 full-month read (Oct 1-31 posts)",
+  "source_platform_and_window": "October post log, monday.com and Teams live links; sector assigned by hand (Oct 28–31 added Nov 2)"
  }
 }
