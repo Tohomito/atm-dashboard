@@ -647,5 +647,8 @@ TIP = '<div aria-live="polite" id="tip" role="status"></div>'
 assert TIP in html, "tip div moved; update the brand step"
 html = html.replace(TIP, '<link rel="stylesheet" href="assets/brand.css?v=' + BUILD + '">' + TIP, 1)
 html = html.replace("<title>ATM Audience Scorecard</title>", '<title>ATM Audience Dashboard</title><meta name="robots" content="noindex,nofollow">')
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from fold_baseline import fold
+html = fold(html)
 open(os.path.join(OUT, "index.html"), "w", encoding="utf-8").write(html)
 print("page_text keys:", len(page_text), "tile groups:", tile_groups, "tables:", table_n, "charts styled:", len(style))

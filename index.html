@@ -170,7 +170,7 @@ body:not([data-view="actions"]) .actions-view{display:none}
 .status-strip span{display:inline-flex;align-items:center;gap:6px}
 .status-strip span::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--good)}
 h4.mt{margin:14px 0 4px;font-size:13px}
-</style></head><body>
+</style><style id="baseline-fold-css">.baseline-fold>summary{cursor:pointer;list-style:none;padding:14px 0;display:grid;gap:4px}.baseline-fold>summary::-webkit-details-marker{display:none}.baseline-fold>summary .bf-title{font-weight:700;font-size:17px}.baseline-fold>summary .bf-title::before{content:"\25B8  "}.baseline-fold[open]>summary .bf-title::before{content:"\25BE  "}.baseline-fold>summary .bf-note{font-size:13.5px;opacity:.75}</style></head><body>
 <title>ATM Audience Dashboard</title><meta name="robots" content="noindex,nofollow">
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&amp;display=swap" rel="stylesheet"/>
 <style>
@@ -294,7 +294,7 @@ a{color:var(--ink)}
 <h3>Reading the page, top to bottom</h3>
 <ul>
 <li><b>Overview:</b> total audience, site traffic, new against returning visitors, and the scorecards. Each scorecard compares the last full month with the three months before it: <span class="chg up">▲ green</span> is better, <span class="chg down">▼ red</span> is worse.</li>
-<li><b>September baseline:</b> the audit's verdicts. The detail behind them is at the bottom of the page (sections 01 to 06).</li>
+<li><b>September baseline:</b> the audit's verdicts. Collapsed by default: a fixed reference from September, not refreshed each month. The detail behind them is at the bottom of the page (sections 01 to 06), also collapsed.</li>
 <li><b>At a glance:</b> pick a channel and a time frame. The headline, bullets, chart and measures all follow your choice, and the month's headline numbers sit underneath.</li>
 <li><b>Social over the last 7, 14 and 30 days:</b> daily charts. Each chart has its own time buttons.</li>
 <li><b>B to F:</b> the year by month, partner reposts, executives featured, what worked, and the top posts of the last 30 days.</li>
@@ -339,13 +339,13 @@ a{color:var(--ink)}
 <details class="fnote"><summary>How these figures are worked out</summary><p id="a-bench-note"></p></details>
 </section>
 
-<section data-sec="audit" id="audit">
+<section data-sec="audit" id="audit"><details class="baseline-fold" id="baseline-top"><summary><span class="eyebrow">Baseline study · September 2026</span><span class="bf-title">How ATM compared with benchmarks and peers in September</span><span class="bf-note">A fixed reference point, not refreshed each month. Open to read the verdicts.</span></summary>
 <span class="eyebrow" data-k="audit.eyebrow"></span>
 <h2 data-k="audit.headline"></h2>
 <p class="lede" data-k="audit.lede"></p>
 <div class="meta" data-k="audit.meta"></div>
-<div class="verdicts" data-verdicts="Sep 19 baseline verdict"></div><p class="sub" data-added="" style="margin-top:12px">The detail behind each verdict is in sections 01 to 06 further down the page.</p>
-</section><section data-added="" id="glance">
+<div class="verdicts" data-verdicts="Sep 19 baseline verdict"></div><p class="sub" data-added="" style="margin-top:12px">The detail behind each verdict is in sections 01 to 06 further down the page, under "Baseline detail".</p>
+</details></section><section data-added="" id="glance">
 <div class="glance-head"><div><span class="eyebrow">At a glance</span><h2 id="glance-title">The latest</h2></div>
 <div class="glance-tabs">
 <div aria-label="Channel" class="seg" data-for="channel" role="group"><button aria-pressed="true" data-v="all" type="button">All</button><button aria-pressed="false" data-v="li" type="button">LinkedIn</button><button aria-pressed="false" data-v="ig" type="button">Instagram</button><button aria-pressed="false" data-v="yt" type="button">YouTube</button><button aria-pressed="false" data-v="nl" type="button">Newsletter</button><button aria-pressed="false" data-v="site" type="button">Site</button></div>
@@ -463,7 +463,7 @@ a{color:var(--ink)}
 </section>
 
 
-<!-- 1. Scorecard -->
+<details class="baseline-fold" id="baseline-detail"><summary><span class="eyebrow">Baseline detail · September 2026</span><span class="bf-title">Sections 01 to 06: the evidence behind the September verdicts</span><span class="bf-note">A fixed reference point, not refreshed each month. Open to read.</span></summary><!-- 1. Scorecard -->
 <section data-sec="01">
 <div class="sec-head"><span class="eyebrow" data-k="01.eyebrow"></span><h2 data-k="01.headline"></h2><p data-k="01.lede"></p></div>
 <div class="grid two">
@@ -605,6 +605,7 @@ a{color:var(--ink)}
 <p class="sowhat" data-chart-text="commentary_as_published"></p></div>
 </div>
 </section>
+</details>
 <!-- 8. Data connections -->
 
 <footer><span data-added="" id="foot-daily"></span>
@@ -971,3 +972,4 @@ window.ATMChart = { el, css, hover, showTip, hideTip, bullet, hbar, vbar, vstack
 <script src="js/carousel.js?v=20261030113517"></script>
 <script src="js/briefings.js?v=20261031153500"></script>
 <script src="js/mistags.js?v=20261030113517"></script>
+<script id="baseline-fold-js">(function(){function openFor(h){if(!h||h.length<2)return;var t=document.getElementById(h.slice(1));if(!t)return;var d=t.closest(".baseline-fold")||t.querySelector(":scope>.baseline-fold");if(d&&!d.open){d.open=true;setTimeout(function(){t.scrollIntoView();},0);}}document.addEventListener("click",function(e){var a=e.target.closest&&e.target.closest("a[href^='#']");if(a)openFor(a.getAttribute("href"));});window.addEventListener("hashchange",function(){openFor(location.hash);});if(location.hash)window.addEventListener("load",function(){openFor(location.hash);});})();</script>
