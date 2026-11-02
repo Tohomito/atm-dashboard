@@ -337,8 +337,8 @@ ACTIONS = """
   <div class="grid two" id="actions-grid">
     <div class="card"><h3>Priorities</h3><div class="plays" id="read-actions"></div></div>
     <div class="card"><h3>Catch posts tagged to the wrong page</h3><p class="sub">"At The Moment" is a separate LinkedIn page with a similar name. These steps catch follows and tags meant for ATM that land there.</p><p class="sub" id="peer-watch"></p><h4 class="mt">Tagged to the wrong page, weekly check</h4><div id="mistag-log"></div><h4 class="mt">Steps</h4><div class="plays" id="tag-actions"></div></div>
-    <div class="card"><h3>Setup tasks</h3><p class="sub">Access and tracking work that unlocks parts of the dashboard. Each names an owner.</p><div class="plays" id="setup-actions"></div></div>
     <div class="card"><h3>Tracking and site fixes</h3><p class="sub">Known measurement and setup problems that skew the numbers or cost readers until they are fixed.</p><div class="plays" id="tracking-actions"></div></div>
+    <div class="card"><h3>Setup tasks</h3><p class="sub">Access and data-connection work for the dashboard itself, mostly followed up by Matt. Each names an owner.</p><div class="plays" id="setup-actions"></div></div>
   </div>
 </section>
 """
@@ -395,8 +395,7 @@ F = f"""
 soup.find("section", attrs={"data-sec": "E"}).insert_after(frag(F))
 soup.find("footer").insert(0, frag('<span id="foot-daily" data-added></span>'))
 _flags = soup.find("section", attrs={"data-sec": "D"}).find(attrs={"data-plays": True}).find_parent(class_="card")
-_flags.extract()
-soup.find(id="actions-grid").append(_flags)
+_flags.extract()  # team flags are merged into the Priorities list (data/analysis.csv actions)
 # section D: the tally tiles give way to CEOs featured, the month's executives and the month's top executives
 _secD = soup.find("section", attrs={"data-sec": "D"})
 _secD.find(attrs={"data-tiles": True}).decompose()
