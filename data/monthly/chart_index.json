@@ -28,10 +28,10 @@
  },
  "s-nl": {
   "section_headline": "Where October sits in the year",
-  "card_subtitle_as_published": "beehiiv subscriber history; Oct = Oct 27.",
-  "commentary_as_published": "The step-ups are imports (5,588 of 5,753 October adds; 3,045 on Oct 26–27, after the last send). Open rate fell to 34.4% as the list grew; verified clicks per delivered email held at 0.53%.",
-  "data_vintage": "Oct 28 2026 report (Oct 1-27 window)",
-  "source_platform_and_window": "beehiiv subscriber history, read Oct 28 2026"
+  "card_subtitle_as_published": "beehiiv active subscribers at month end.",
+  "commentary_as_published": "The step-ups are imports (5,588 of 5,753 October adds). Open rate fell to 35.1% as the list grew; verified clicks per delivered email held at 0.52%, against 0.53% in September.",
+  "data_vintage": "Nov 2 2026 full-month pull (Oct 1-31 window)",
+  "source_platform_and_window": "beehiiv subscriber history and post stats, pulled Nov 2 2026, full months"
  },
  "s-syn": {
   "section_headline": "Reposts with the reposter's own words lifted October engagement by a third",
