@@ -86,6 +86,27 @@ async function loadGA4() {
   }
   return GA4;
 }
+/* newsletter files (written by the weekly beehiiv pull): one row per send, and active subscribers by day */
+const NL = { ready: false };
+async function loadNL() {
+  const get = f => fetch(`data/newsletter/${f}?v=${Date.now()}`, { cache: 'no-store' }).then(r => r.ok ? r.text() : '').then(t => t ? parseCSV(t) : []).catch(() => []);
+  const [sends, subs] = await Promise.all(['sends.csv', 'subscribers.csv'].map(get));
+  const meta = await fetch(`data/newsletter/meta.json?v=${Date.now()}`, { cache: 'no-store' }).then(r => r.ok ? r.json() : {}).catch(() => ({}));
+  const n = x => +x || 0;
+  Object.assign(NL, { meta, ready: sends.length > 0 && subs.length > 0,
+    sends: sends.map(r => ({ date: r.date, title: r.title, delivered: n(r.delivered), opens: n(r.unique_opens), clicks: n(r.unique_verified_clicks), unsubs: n(r.unsubscribes) })).sort((a, b) => a.date < b.date ? -1 : 1),
+    subs: subs.map(r => ({ date: r.date, active: n(r.active_subscribers) })).sort((a, b) => a.date < b.date ? -1 : 1) });
+  return NL;
+}
+/* sends and subscriber change between two dates (inclusive); subscriber counts are as of the end of each day */
+function nlWindow(from, to) {
+  if (!NL.ready) return null;
+  const s = NL.sends.filter(x => x.date >= from && x.date <= to);
+  const at = d => { const r = NL.subs.filter(x => x.date <= d).at(-1); return r ? r.active : null; };
+  const dayBefore = d => { const t = new Date(d + 'T12:00:00Z'); t.setUTCDate(t.getUTCDate() - 1); return t.toISOString().slice(0, 10); };
+  const del = s.reduce((a, x) => a + x.delivered, 0), ck = s.reduce((a, x) => a + x.clicks, 0), op = s.reduce((a, x) => a + x.opens, 0);
+  return { n: s.length, del, ck, rate: del ? ck / del * 100 : null, open: del ? op / del * 100 : null, subsEnd: at(to), subsStart: at(dayBefore(from)), last: s.at(-1) };
+}
 const retShare = m => m && (m.nu + m.ru) ? m.ru / (m.nu + m.ru) * 100 : null;
 /* give each monthly label a year: "Oct '25", "Nov", ..., "Jan '26", ..., "Sep*" */
 function datedMonths(rows) {
@@ -192,8 +213,19 @@ function readout(f, ch) {
       lastM ? `${monthName(lastM.k)} closed at <b>${full(lastM.views)}</b> views and ${full(lastM.watch)} watch hours, all organic since the ad flight ended in August.` : '');
   } else if (ch === 'nl') {
     const cm = f.clicks && f.clicks.detail.match(/rate\s*([\d.]+)%.*?was\s*([\d.]+)%/i);
-    headline = cm ? `The verified-click rate fell from ${cm[2]}% to ${cm[1]}% of delivered email while the list grew on imports.` : 'Newsletter figures are monthly.';
-    if (!f.all && f.n < 30) B.push(monthlyOnly); else B.push(nl(), ck(), 'List size includes imported addresses, so verified clicks are the better measure of readers.');
+    const w = nlWindow(f.from, f.AS_OF);
+    if (w && w.n) {
+      const span = f.all ? `since ${mdy(f.from)}` : `in the last ${f.n} days`;
+      const pw = f.all ? null : (() => { const t = new Date(f.from + 'T12:00:00Z'); const e = new Date(t); e.setUTCDate(e.getUTCDate() - 1); const b = new Date(t); b.setUTCDate(b.getUTCDate() - f.n); return nlWindow(b.toISOString().slice(0, 10), e.toISOString().slice(0, 10)); })();
+      headline = `Verified human clicks were ${w.rate.toFixed(2)}% of delivered email across ${w.n} send${w.n > 1 ? 's' : ''} ${span}${pw && pw.n ? `, against ${pw.rate.toFixed(2)}% across ${pw.n} before` : ''}.`;
+      B.push(`<b>${full(w.ck)}</b> verified human clicks on <b>${full(w.del)}</b> delivered emails ${span}; open rate ${w.open.toFixed(1)}%.`,
+        w.subsEnd != null && w.subsStart != null ? `Active subscribers: <b>${full(w.subsEnd)}</b>, ${w.subsEnd >= w.subsStart ? 'up' : 'down'} ${full(Math.abs(w.subsEnd - w.subsStart))} ${span}.` : '',
+        w.last ? `Latest send: "${esc(w.last.title)}" (${mdy(w.last.date)}), ${full(w.last.clicks)} verified clicks on ${full(w.last.delivered)} delivered.` : '',
+        (f.all || f.n >= 30) ? ck() : '', 'List size includes imported addresses, so verified clicks are the better measure of readers.');
+    } else {
+      headline = cm ? `The verified-click rate fell from ${cm[2]}% to ${cm[1]}% of delivered email while the list grew on imports.` : 'Newsletter figures are monthly.';
+      if (!f.all && f.n < 30) B.push(monthlyOnly); else B.push(nl(), ck(), 'List size includes imported addresses, so verified clicks are the better measure of readers.');
+    }
   } else if (ch === 'site') {
     if (GA4.ready) {
       const g = GA4, top = g.lp[0], w = `the 30 days to ${mdy(g.w[1])}`, chs = g.chn.slice(0, 3);
@@ -257,6 +289,7 @@ function measureCards(f, tiles, chan) {
     { ch: 'ig', all: false, k: 'Instagram likes on new posts', v: full(f.igreactions), p: `${f.igPosts} posts, ${period}`, now: f.igreactions, prev: f.all ? null : f.igreactionsPrev, prevLabel, fmtB: full, n: f.young ? 'Recent posts are still collecting likes, so a short window reads low.' : 'Lifetime likes on posts published in the window.' },
     { ch: 'ig', all: false, k: 'Instagram followers', v: full(f.igFoll), p: f.igFollChange != null ? `${sign(f.igFollChange)}${full(f.igFollChange)} ${period}` : 'latest daily read', now: null, prev: null, n: 'Lifetime total from the daily reads.' },
     { ch: 'yt', all: true, k: 'YouTube subscribers gained', v: f.ytGain != null ? `${sign(f.ytGain)}${full(f.ytGain)}` : '—', p: f.ytGain != null ? `since ${mdy(f.ytFrom)} · ${full(f.ytTotal)} total` : `${full(f.ytTotal)} total; no reading at the start of this window`, now: f.ytGain, prev: f.all ? null : f.ytGainPrev, prevLabel, fmtB: full, n: 'All organic since the ad flight ended in August.' },
+    ...(NL.ready ? [(() => { const w = nlWindow(f.from, f.AS_OF); return { ch: 'nl', all: false, k: 'Newsletter verified clicks', v: w && w.n ? full(w.ck) : '—', p: w && w.n ? `${period}, ${w.n} send${w.n > 1 ? 's' : ''}, beehiiv` : `${period}: no sends`, now: null, prev: null, n: w && w.rate != null ? `${w.rate.toFixed(2)}% of delivered email. Bot-filtered unique clickers.` : 'Bot-filtered unique clickers per send.' }; })()] : []),
     { ch: 'nl', all: true, k: 'Newsletter verified-click rate', v: ctrNow != null ? ctrNow.toFixed(2) + '%' : '—', p: `${f.monthly}, monthly, share of delivered email`, now: ctrNow, prev: ctrWas, prevLabel: 'month before', fmtB: x => x.toFixed(2) + '%', n: 'Bot-filtered clicks; list size alone is inflated by imports.' },
     ...(GA4.ready ? [
       { ch: 'site', all: false, k: 'Site sessions, last 30 days', v: full(GA4.sess30), p: `to ${mdy(GA4.w[1])}, GA4${GA4.int30 ? ', internal left out' : ''}`, now: null, prev: null, n: (GA4.lp[0] ? `${GA4.lp[0].landing_page} alone drew ${full(+GA4.lp[0].sessions)}.` : '') + (GA4.int30 ? ` Plus ${full(GA4.int30)} internal sessions, counted separately.` : '') },
@@ -328,7 +361,7 @@ Promise.all([window.ATMDailyReady, window.ATMScoreReady]).then(async ([S, score]
   const tiles = score ? score.tiles : [];
   $('loaded-at').textContent = 'Loaded ' + new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
   if (!S) { $('glance-list').innerHTML = '<li>Daily figures could not load. Try Refresh.</li>'; return; }
-  await loadGA4();
+  await Promise.all([loadGA4(), loadNL()]);
   overview(S, tiles);
   // series per post, from the ATM Kitchen board where a post matches its item (js/tags.js), else from tags and text
   const T = window.ATMTags;
