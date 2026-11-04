@@ -259,6 +259,11 @@ function personFromLinkedIn(text) {
   const t = clean(text).replace(/\s*\((?:he|she|they)[^)]*\)/ig, "");
   let m = t.match(new RegExp(`^(${NAME}), ([^,]{3,120}?), (?:says|said|is|was|tells|wants|grew|built|on|shares|believes|launched|joins|explains|talks|thinks|knows|has|reflects)\\b`, "u"));
   if (!m) m = t.match(new RegExp(`honou?ring (${NAME}), ([^,]{3,120}?), as\\b`, "u"));
+  // "Name, SVP, Marketing and Communications at OpenX, let curiosity..." (a title with commas, then the company)
+  if (!m) { const b = t.match(new RegExp(`^(${NAME}), (.{3,160}?) (?:at|of) (?:the )?([\\p{Lu}\\d][^,]{1,60}?), (?=\\p{Ll})`, "u"));
+    if (b) return { person: b[1].trim(), role: b[2].trim(), company: b[3].trim().replace(/\s+(LLC|Inc\.?|Ltd\.?)$/i, "") }; }
+  // "Name, Title at Company, <any lower-case verb>..."
+  if (!m) m = t.match(new RegExp(`^(${NAME}), ([^,]{3,120}?), (?=\\p{Ll})`, "u"));
   if (!m) return null;
   const tc = splitTitle(m[2]);
   return { person: m[1].trim(), role: tc.title, company: tc.company.replace(/\s+(LLC|Inc\.?|Ltd\.?)$/i, "").replace(/^the /i, "") };
@@ -283,7 +288,11 @@ function smPosts(li, ig) {
     const reach = num(r.reach), inter = num(r.interactions);
     let who = personFromInstagram(r.caption);
     // the same guest usually has a LinkedIn post within a few days; it carries a cleaner name and company
-    const near = L.filter(p => p.person && Math.abs(new Date(p.date) - new Date(r.date)) <= 3 * 864e5 && clean(r.caption).toLowerCase().includes(lastName(p.person)));
+    // match on the full name, or on a surname of 4+ letters as a whole word (a short surname such as "Ma" would match almost any caption)
+    const cap = clean(r.caption).toLowerCase(), word = w => new RegExp(`(?<![\\p{L}])${w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}(?![\\p{L}])`, 'u');
+    const named = p => { const full = p.person.toLowerCase(), ln = lastName(p.person); return cap.includes(full) || cap.includes(full.replace(/[^\p{L}]/gu, '')) || (ln.length >= 4 && word(ln).test(cap)); };
+    const near = L.filter(p => p.person && Math.abs(new Date(p.date) - new Date(r.date)) <= 3 * 864e5 && named(p))
+      .sort((a, b) => Math.abs(new Date(a.date) - new Date(r.date)) - Math.abs(new Date(b.date) - new Date(r.date)));
     if (near.length) who = { person: near[0].person, company: near[0].company };
     return { id: "ig:" + r.media_id, url: r.url || "", ch: "Instagram", fmt: r.type === "REELS" ? "Reel" : r.type === "FEED" ? "Post" : (r.type || ""), date: r.date, person: who?.person || "", company: who?.company || "", series: "", client: "",
       title: firstSentence(r.caption), text: clean(r.caption), reach, views: num(r.views), clicks: null, reactions: num(r.likes), comments: num(r.comments), amp: num(r.shares),

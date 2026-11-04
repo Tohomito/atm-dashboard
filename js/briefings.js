@@ -42,6 +42,10 @@ const { seriesOf, boardTagger } = window.ATMTags;
 function tagger(companies) {
   const byName = new Map(), byNorm = new Map();
   for (const c of companies) { byName.set(c.name, c); byNorm.set(norm(c.name), c); if (!byNorm.has(norm(c.partner))) byNorm.set(norm(c.partner), c); }
+  const COMMON = new Set(['Wheel', 'Unity', 'Puck', 'Clue', 'Smartly', 'Alltroo']);
+  const escRe = x => x.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const mentionable = companies.filter(c => c.industry !== 'ATM' && c.name && c.name.length >= 3 && !COMMON.has(c.name))
+    .map(c => ({ partner: c.partner, industry: c.industry, re: new RegExp(`(?<![\\p{L}\\d])${escRe(c.name)}(?![\\p{L}\\d])`, 'u') }));
   return p => {
     const out = { partners: [], industry: '' };
     for (const raw of [p.company, p.client]) {
@@ -51,6 +55,12 @@ function tagger(companies) {
       if (c && c.industry === 'ATM') continue;
       if (!out.partners.includes(partner)) out.partners.push(partner);
       if (!out.industry && c) out.industry = c.industry;
+    }
+    // no company parsed from the post: look for partner and company names in the post text itself
+    // (campaign and launch posts name the brand, not a guest). Case-sensitive whole words; common words left out.
+    if (!out.partners.length && (p.text || p.title)) {
+      const txt = String(p.text || p.title);
+      for (const c of mentionable) if (c.re.test(txt) && !out.partners.includes(c.partner)) { out.partners.push(c.partner); if (!out.industry) out.industry = c.industry; }
     }
     return out;
   };
@@ -102,17 +112,20 @@ function proof(S, companies, syn, senior, func, execs, board = []) {
   const adv = func.find(r => /advertising services/i.test(r.label));
   const topFn = func.filter(r => !/industry/i.test(r.label)).sort((a, b) => b.value - a.value).slice(0, 2).map(r => r.label.toLowerCase());
 
-  // repost lift, September syndication read (organic engagement vs engagement on partners' reposts)
-  const synRows = {};
-  for (const r of syn) { const c = r.category; (synRows[c] ??= { name: c })[/organic/i.test(r.series) ? 'org' : 'syn'] = parseFloat(r.value) || 0; }
-  const SYN = Object.values(synRows).filter(r => r.org).map(r => {
-    const [s, partner] = r.name.split(' · ');
-    const series = /^FoG/.test(s) ? 'The Future of Growth' : /moment maker/i.test(s) ? 'Moment Maker' : '';
-    const pn = partner || (series ? '' : s);
-    const c = companies.find(x => norm(x.name) === norm(pn) || norm(x.partner) === norm(pn)) || null;
-    const nice = /^FoG Ep(\d)/.test(s) ? `The Future of Growth, episode ${s.match(/Ep(\d)/)[1]}` : /^FoG trailer/.test(s) ? 'The Future of Growth trailer' : /moment maker/i.test(s) ? 'Moment Maker' : `the ${c ? c.partner : s} post`;
-    return { label: nice, series, partner: c ? c.partner : pn === 'EA' ? 'Electronic Arts' : pn, industry: c ? c.industry : '', lift: (r.org + r.syn) / r.org, org: r.org, syn: r.syn };
-  }).sort((a, b) => b.lift - a.lift);
+  // repost lift per post (data/syndication.csv): engagement on reposts that carried the reposter's own words,
+  // read on each post's Reposts list (September: 17 posts with the most reposts; October onward: every post).
+  // Each row is matched to its post by LinkedIn post id, or by date (within a day) and featured person or company.
+  const dayGap = (a, b) => Math.abs((new Date(a + 'T12:00:00Z') - new Date(b + 'T12:00:00Z')) / 864e5);
+  const liPosts = ALL.filter(p => p.ch === 'LinkedIn');
+  const SYN = syn.filter(r => +r.syndicated > 0).map(r => {
+    const org = +r.organic || 0, sy = +r.syndicated || 0, who = norm(String(r.person || '').split(',')[0]);
+    const post = (r.post_id && liPosts.find(p => p.id === 'li:' + r.post_id))
+      || liPosts.find(p => dayGap(p.date, r.date) <= 1 && (who ? norm(p.person || '').includes(who) || norm(p.title || '').startsWith(who) : r.company && norm(p.company || '') === norm(r.company)));
+    return { label: r.label, month: r.month, date: r.date, reposters: r.reposters || '', post, org, syn: sy, lift: org ? (org + sy) / org : null,
+      partners: post ? post.partners || [] : [], series: post ? post.seriesName || '' : '', industry: post ? post.industry || '' : '' };
+  }).filter(r => r.lift != null).sort((a, b) => b.lift - a.lift);
+  const synMonths = [...new Set(syn.map(r => r.month))].sort().map(k => new Date(k + '-15T12:00:00').toLocaleDateString('en-US', { month: 'long' }));
+  const synSpan = synMonths.length ? `${synMonths[0]}${synMonths.length > 1 ? ` to ${synMonths.at(-1)}` : ''}` : '';
 
   const card = (id, kicker, big, body, src, copy) => {
     $(id).innerHTML = `<div class="mk">${kicker}</div><div class="mv mono">${big}</div><p>${body}</p><p class="src">Source: ${src}</p><button type="button" class="copy-btn">Copy proof point</button>`;
@@ -140,7 +153,11 @@ function proof(S, companies, syn, senior, func, execs, board = []) {
   const bestTxt = p => p ? `${whoTxt(p)} on ${p.ch}, ${dateTxt(p.date)}: ${full(p.reach)} ${p.ch === 'LinkedIn' ? 'impressions' : 'accounts reached'}, ${(p.reach / MED[p.ch]).toFixed(1)} times the median ATM ${p.ch} post` : '';
   const beatCount = P => { const xs = P.filter(p => p.reach != null && MED[p.ch]); return { n: xs.filter(p => p.reach > MED[p.ch]).length, of: xs.length }; };
   const chLine = (P, base) => ['LinkedIn', 'Instagram'].map(ch => { const m = medBy(P, ch), b = base ? medBy(base, ch) : MED[ch]; return m != null && b ? `${ch}: median ${full(m)} against ${full(b)} (${ratioTxt(m / b)})` : null; }).filter(Boolean);
-  const synFor = f => SYN.filter(r => (!f.partners || r.partner === f.partners) && (!f.seriesName || r.series === f.seriesName) && (!f.industry || r.industry === f.industry));
+  const hasPartner = (r, name) => (r.partners || []).includes(name);
+  const synFor = f => SYN.filter(r => (!f.partners || hasPartner(r, f.partners)) && (!f.seriesName || r.series === f.seriesName) && (!f.industry || r.industry === f.industry));
+  const synWho = r => r.reposters ? `, reposted by ${r.reposters}` : '';
+  const synSent = r => `Reposts that carried the reposter's own words took ${r.label} (${dateTxt(r.date)}) to ${r.lift.toFixed(1)} times its organic engagement: ${full(r.org + r.syn)} reactions, comments and reposts against ${full(r.org)} on ATM's post alone${synWho(r)}.`;
+  const synSrc = `LinkedIn Reposts lists, ${synSpan}, reposts with the reposter's own words; engagement = reactions + comments + reposts`;
 
   function partnerProfile(f, P, name) {
     // 1. who appeared, with titles where on record
@@ -164,9 +181,9 @@ function proof(S, companies, syn, senior, func, execs, board = []) {
     const fm = {}; for (const p of P) { const k = `${p.ch === 'LinkedIn' ? 'LinkedIn' : 'Instagram'} ${String(p.fmt || 'post').toLowerCase()}s`; (fm[k] ??= []).push(p.reach / MED[p.ch]); }
     const bestFmt = Object.entries(fm).filter(([, v]) => v.length >= 2).map(([k, v]) => [k, median(v)]).sort((a, b) => b[1] - a[1])[0];
     const syn = synFor(f)[0];
-    const s3 = `${P.length} post${P.length === 1 ? '' : 's'} across ${months} month${months === 1 ? '' : 's'}, most recently ${dateTxt(P.reduce((m, p) => p.date > m ? p.date : m, ''))}.${bestFmt ? ` ${bestFmt[0][0].toUpperCase() + bestFmt[0].slice(1)} did best, at ${bestFmt[1].toFixed(1)} times the channel median.` : ''}${syn ? ` When ${name} reposted ${syn.label} with its own words, the post drew ${syn.lift.toFixed(1)} times its organic engagement.` : ''}`;
+    const s3 = `${P.length} post${P.length === 1 ? '' : 's'} across ${months} month${months === 1 ? '' : 's'}, most recently ${dateTxt(P.reduce((m, p) => p.date > m ? p.date : m, ''))}.${bestFmt ? ` ${bestFmt[0][0].toUpperCase() + bestFmt[0].slice(1)} did best, at ${bestFmt[1].toFixed(1)} times the channel median.` : ''}${syn ? ` ${synSent(syn)}` : ''}`;
     card('pp-amp', 'Relationship over time', String(P.length), `${bars(P, () => 1)}<p>${esc(s3)}</p>`,
-      `posts by month, LinkedIn and Instagram${syn ? '; repost lift from September repost tracking' : ''}`, s3);
+      `posts by month, LinkedIn and Instagram${syn ? `; ${synSrc}` : ''}`, s3);
   }
 
   function seriesProfile(f, P, name) {
@@ -187,8 +204,8 @@ function proof(S, companies, syn, senior, func, execs, board = []) {
     const pe = {}; for (const p of P) for (const x of p.partners) pe[x] = (pe[x] || 0) + eng(p);
     const topP = Object.entries(pe).sort((a, b) => b[1] - a[1]).slice(0, 5);
     const best = bestOf(P), syn = synFor(f);
-    const s3 = `${topP.length ? `Partners featured, by engagement: ${topP.map(([k, v]) => `${k} (${full(v)})`).join(', ')}. ` : ''}${best ? `Best post: ${bestTxt(best)}.` : ''}${syn.length ? ` Reposts with the partner's own words took ${syn.map(r => `${r.label} to ${r.lift.toFixed(1)}×`).join(' and ')} its organic engagement.` : ''}`;
-    card('pp-amp', 'Who it featured', syn.length ? `${syn[0].lift.toFixed(1)}×` : String(topP.length), esc(s3), `post tags and analytics${syn.length ? '; repost lift from September repost tracking' : ''}`, s3);
+    const s3 = `${topP.length ? `Partners featured, by engagement: ${topP.map(([k, v]) => `${k} (${full(v)})`).join(', ')}. ` : ''}${best ? `Best post: ${bestTxt(best)}.` : ''}${syn.length ? ` Reposts with the reposter's own words took ${syn.slice(0, 2).map(r => `${r.label} to ${r.lift.toFixed(1)}×`).join(' and ')} its organic engagement.` : ''}`;
+    card('pp-amp', 'Who it featured', syn.length ? `${syn[0].lift.toFixed(1)}×` : String(topP.length), esc(s3), `post tags and analytics${syn.length ? `; ${synSrc}` : ''}`, s3);
   }
 
   function industryProfile(f, P, name) {
@@ -245,16 +262,16 @@ function proof(S, companies, syn, senior, func, execs, board = []) {
     }
 
     // 3. partner amplification
-    const synHit = SYN.filter(r => (!f.partners || r.partner === f.partners) && (!f.seriesName || r.series === f.seriesName) && (!f.industry || r.industry === f.industry));
+    const synHit = synFor(f);
     const amp = P.reduce((s, p) => s + (p.amp || 0), 0), topAmp = P.filter(p => p.amp).sort((a, b) => b.amp - a.amp)[0];
     if (synHit.length) {
       const r = synHit[0];
-      const sent = `When ${r.partner || 'the partner'} reposted ${r.label} with its own words, the post drew ${r.lift.toFixed(1)} times its organic engagement (${full(r.org + r.syn)} reactions, comments and reposts against ${full(r.org)} on ATM's post alone).`;
+      const sent = synSent(r);
       card('pp-amp', 'Partner amplification', `${r.lift.toFixed(1)}×`, esc(sent) + (synHit.length > 1 ? ` <span class="dim">${synHit.slice(1, 3).map(s => `${esc(s.label)}: ${s.lift.toFixed(1)}×`).join('; ')}.</span>` : ''),
-        'LinkedIn reposts with commentary, September (repost tracking began that month); engagement = reactions + comments + reposts', sent);
+        synSrc, sent);
     } else {
       const sent = `${label ? `Posts featuring ${label}` : 'These posts'} were reposted or shared ${full(amp)} times${topAmp ? `; the most shared was ${topAmp.person || `"${cut((topAmp.title || '').split(/(?<=[.!?])\s/)[0], 60)}"`} (${topAmp.ch}, ${dateTxt(topAmp.date)}, ${full(topAmp.amp)})` : ''}.`;
-      card('pp-amp', 'Partner amplification', full(amp), `${esc(sent)} <span class="dim">No repost with the partner's own words is on record for this selection yet. Repost tracking began in September.</span>`,
+      card('pp-amp', 'Partner amplification', full(amp), `${esc(sent)} <span class="dim">No repost with the reposter's own words is on record for this selection in ${esc(synSpan)}.</span>`,
         'LinkedIn reposts and Instagram shares, per post', sent);
     }
   };
@@ -291,7 +308,7 @@ function tests(T) {
 Promise.all([window.ATMDailyReady, window.ATMScoreReady]).then(async ([S]) => {
   if (!S || !S.POSTS) return;
   const [B, companies, syn, senior, func, execs, T, BT] = await Promise.all([getCSV('data/briefings.csv'), getCSV('data/companies.csv'),
-    getCSV('data/scorecard/charts/s-syn.csv'), getCSV('data/scorecard/charts/c-senior.csv'), getCSV('data/scorecard/charts/c-func.csv'), getCSV('data/execs.csv'), getCSV('data/tests.csv'), getCSV('data/board_tags.csv')]);
+    getCSV('data/syndication.csv'), getCSV('data/scorecard/charts/c-senior.csv'), getCSV('data/scorecard/charts/c-func.csv'), getCSV('data/execs.csv'), getCSV('data/tests.csv'), getCSV('data/board_tags.csv')]);
   const meta = B.find(r => r.kind === 'meta');
   if (meta) $('brief-eyebrow').textContent = `Briefings · ${meta.title}`;
   try { editorial(B, S); } catch (e) { console.error('editorial briefing', e); }
