@@ -1,74 +1,73 @@
 source_medium,new_vs_returning,sessions,users
-(direct) / (none),new,4644,4654
-beehiiv / owned_audience,new,1696,1694
-atm-media.beehiiv.com / newsletter,new,1239,1239
-teams.public.onecdn.static.microsoft / referral,new,598,598
-(direct) / (none),returning,579,430
-linkedin.com / referral,new,296,296
-atm-media / newsletter,new,279,279
-google / organic,returning,212,107
-google / organic,new,208,208
-(direct) / (none),(not set),206,166
-l.instagram.com / referral,new,188,188
-ig / social,new,177,177
-teams.public.onecdn.static.microsoft / referral,returning,176,122
-bing / organic,new,162,162
+(direct) / (none),new,3152,3105
+atm-media.beehiiv.com / newsletter,new,2285,2285
+beehiiv / owned_audience,new,1269,1270
+teams.public.onecdn.static.microsoft / referral,new,511,511
+(direct) / (none),returning,403,303
+google / organic,returning,240,134
+listmonk / owned_audience,new,237,237
+google / organic,new,214,214
+linkedin.com / referral,new,207,207
+atm-media / newsletter,new,189,189
+(direct) / (none),(not set),167,130
+teams.public.onecdn.static.microsoft / referral,returning,147,105
+listmonk / newsletter,new,136,137
+linkedin / organic_social,new,131,131
+ig / social,new,124,124
 disneyadvertising.com / referral,new,121,121
-linkedin / partner_social,returning,118,40
-linkedin.com / referral,returning,105,53
-linkedin / organic_social,new,95,95
-linkedin / partner_social,new,82,82
-atm-media.beehiiv.com / newsletter,returning,81,47
-teams.public.onecdn.static.microsoft / referral,(not set),65,43
-linkedin / organic_social,returning,59,26
-themachinenyc.com / referral,new,59,59
-danielreji21-atmmedia.editor.wix.com / referral,returning,49,3
-google / organic,(not set),47,37
-linkedin.com / referral,(not set),42,27
-meta / organic,new,42,42
-beehiiv / owned_audience,returning,39,18
+linkedin / partner_social,returning,114,33
+atm-media.beehiiv.com / newsletter,returning,104,76
+linkedin / organic_social,returning,96,31
+l.instagram.com / referral,new,70,70
+linkedin.com / referral,returning,69,40
+teams.public.onecdn.static.microsoft / referral,(not set),63,40
+bing / organic,new,53,53
+linkedin / partner_social,new,52,52
+google / organic,(not set),40,32
+meta / organic_social,new,39,39
+beehiiv / owned_audience,returning,37,18
 disneyadvertising.com / referral,returning,34,20
-linkedin / partner_social,(not set),34,17
-meta / organic_social,new,30,30
-facebook.com / referral,new,21,21
-themachinenyc.com / referral,returning,18,11
-atm-media.beehiiv.com / newsletter,(not set),17,13
-beehiiv / owned_audience,(not set),17,8
-meta / organic_social,returning,17,7
-(not set),new,16,16
-bing / organic,returning,16,8
-linkedin / organic_social,(not set),16,11
-so / mail,new,16,16
-disneyadvertising.com / referral,(not set),15,9
-m.facebook.com / referral,new,14,14
-optin / email,new,13,13
+danielreji21-atmmedia.editor.wix.com / referral,returning,32,3
+linkedin.com / referral,(not set),32,19
+linkedin / partner_social,(not set),29,13
+meta / organic_social,returning,29,9
+meta / organic,new,24,24
+linkedin / organic_social,(not set),20,14
+atm-media.beehiiv.com / newsletter,(not set),19,14
+facebook.com / referral,new,19,19
+beehiiv / owned_audience,(not set),18,7
+disneyadvertising.com / referral,(not set),17,9
+m.facebook.com / referral,new,16,16
+meta / organic_social,(not set),15,5
+(not set),new,13,13
 mail.google.com / referral,new,12,12
+bing / organic,returning,11,7
 dsp.yahooinc.com / referral,new,11,11
-euc-word-edit.officeapps.live.com / referral,returning,10,4
-ig / social,returning,10,8
-l.facebook.com / referral,new,10,10
 login.b2b.yahooinc.com / referral,new,10,10
-t.co / referral,new,10,10
-l.instagram.com / referral,returning,9,6
-so / mail,returning,8,3
-urlisolation.com / referral,new,8,8
-usc-word-edit.officeapps.live.com / referral,returning,8,4
+optin / email,new,10,10
+yahoo / organic,returning,8,2
+l.facebook.com / referral,new,7,7
 linkedin / referral,new,7,7
 meta / organic,(not set),7,3
+usc-word-edit.officeapps.live.com / referral,returning,7,3
 bing / organic,(not set),6,1
-meta / organic_social,(not set),6,3
-yahoo / organic,returning,6,2
-meta / organic,returning,5,4
-themachinenyc.com / referral,(not set),5,5
-Optin / owned_audience,new,4,4
+euc-word-edit.officeapps.live.com / referral,returning,6,2
+so / mail,returning,6,4
+urlisolation.com / referral,new,6,6
+atm-media.beehiiv.com / referral,returning,5,4
+ig / social,returning,4,3
+l.instagram.com / referral,returning,4,2
 legal.yahoo.com / referral,new,4,4
 linkedin / (not set),(not set),4,1
+meta / organic,returning,4,4
+themachinenyc.com / referral,returning,4,1
 atm-media.beehiiv.com / referral,new,3,3
 ig / social,(not set),3,2
 later-linkinbio / referral,returning,3,2
 linkedin / (not set),new,3,3
-listmonk / owned_audience,new,3,3
 login.yahoo.com / referral,new,3,3
-loopme.ai / referral,new,3,3
-urlisolation.com / referral,returning,3,3
+so / mail,new,3,3
+themachinenyc.com / referral,new,3,3
+urlisolation.com / referral,returning,3,2
+usc-word-edit.officeapps.live.com / referral,new,3,3
 yahooinc.com / referral,new,3,3
