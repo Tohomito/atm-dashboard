@@ -222,8 +222,12 @@ function proof(S, companies, syn, senior, func, execs, board = []) {
     // 3. guest seniority
     const people = new Map(); for (const p of P) if (p.person && !people.has(norm(p.person))) people.set(norm(p.person), titleOf(p));
     const ts = [...people.values()], top = ts.filter(t => SENIOR(t) === 'top').length, sen = ts.filter(t => SENIOR(t) === 'senior').length, known = ts.filter(Boolean).length;
-    const s3 = `${people.size} guests from ${name} companies have appeared. Of the ${known} with a title on record, ${top} are C-suite, president or founder and ${sen} are VP, head or director level.`;
-    card('pp-amp', 'Guest seniority', `${top + sen} of ${known}`, esc(s3), 'titles from the ATM Kitchen board and post copy', s3);
+    const s3a = `${people.size} guests from ${name} companies have appeared. Of the ${known} with a title on record, ${top} are C-suite, president or founder and ${sen} are VP, head or director level.`;
+    // repost lift across the industry's posts that drew reposts with the reposter's own words
+    const syn = synFor(f), so = syn.reduce((a, r) => a + r.org, 0), ss = syn.reduce((a, r) => a + r.syn, 0);
+    const s3b = syn.length ? ` On ${syn.length} ${name} post${syn.length === 1 ? '' : 's'}, reposts that carried the reposter's own words added ${full(ss)} engagements to ${full(so)} on ATM's posts (${((so + ss) / so).toFixed(1)} times in total). The biggest was ${syn[0].label} at ${syn[0].lift.toFixed(1)} times${synWho(syn[0])}.` : ` No repost with the reposter's own words is on record for ${name} posts in ${synSpan}.`;
+    const s3 = s3a + s3b;
+    card('pp-amp', 'Guest seniority and reposts', `${top + sen} of ${known}`, esc(s3), `titles from the ATM Kitchen board and post copy; ${synSrc}`, s3);
   }
 
   const draw = () => {
