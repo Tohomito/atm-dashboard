@@ -122,6 +122,7 @@ function proof(S, companies, syn, senior, func, execs, board = []) {
     const post = (r.post_id && liPosts.find(p => p.id === 'li:' + r.post_id))
       || liPosts.find(p => dayGap(p.date, r.date) <= 1 && (who ? norm(p.person || '').includes(who) || norm(p.title || '').startsWith(who) : r.company && norm(p.company || '') === norm(r.company)));
     return { label: r.label, month: r.month, date: r.date, reposters: r.reposters || '', post, org, syn: sy, lift: org ? (org + sy) / org : null,
+      net: +r.reposter_followers || 0, atmF: +r.atm_followers || 0,
       partners: post ? post.partners || [] : [], series: post ? post.seriesName || '' : '', industry: post ? post.industry || '' : '' };
   }).filter(r => r.lift != null).sort((a, b) => b.lift - a.lift);
   const synMonths = [...new Set(syn.map(r => r.month))].sort().map(k => new Date(k + '-15T12:00:00').toLocaleDateString('en-US', { month: 'long' }));
@@ -156,7 +157,9 @@ function proof(S, companies, syn, senior, func, execs, board = []) {
   const hasPartner = (r, name) => (r.partners || []).includes(name);
   const synFor = f => SYN.filter(r => (!f.partners || hasPartner(r, f.partners)) && (!f.seriesName || r.series === f.seriesName) && (!f.industry || r.industry === f.industry));
   const synWho = r => r.reposters ? `, reposted by ${r.reposters}` : '';
-  const synSent = r => `Reposts that carried the reposter's own words took ${r.label} (${dateTxt(r.date)}) to ${r.lift.toFixed(1)} times its organic engagement: ${full(r.org + r.syn)} reactions, comments and reposts against ${full(r.org)} on ATM's post alone${synWho(r)}.`;
+  // reach of the reposters' own networks, when the weekly read recorded follower counts
+  const synNet = r => r.net ? ` Everyone who reposted it has ${full(r.net)} followers between them${r.atmF ? `, ${(r.net / r.atmF).toFixed(1)} times ATM's ${full(r.atmF)}` : ''}.` : '';
+  const synSent = r => `Reposts that carried the reposter's own words took ${r.label} (${dateTxt(r.date)}) to ${r.lift.toFixed(1)} times its organic engagement: ${full(r.org + r.syn)} reactions, comments and reposts against ${full(r.org)} on ATM's post alone${synWho(r)}.${synNet(r)}`;
   const synSrc = `LinkedIn Reposts lists, ${synSpan}, reposts with the reposter's own words; engagement = reactions + comments + reposts`;
 
   function partnerProfile(f, P, name) {
