@@ -14,8 +14,10 @@ After any change to data/ or js/archive.js:
   2. Upload build/ask_main.md and build/ask_posts.md to the Drive folder as new
      Google Docs (markdown converted), titled "ATM Dashboard data (for Claude)"
      and "ATM Dashboard post history (for Claude)".
-  3. Put the new Doc IDs in DATA_DOCS in js/glance.js, rebuild, publish.
-  4. Move the previous Docs to the trash.
+  3. Put the new Doc IDs in DATA_DOCS in js/glance.js, bump glance.js ?v= in
+     index.html, commit and push. New Docs inherit the folder's sharing.
+  4. Leave the previous Docs for Matt to remove.
+The monthly close-out task does all four on the 1st of each month.
 """
 import csv, io, json, re, sys
 from datetime import datetime, timezone
