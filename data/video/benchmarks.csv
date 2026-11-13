@@ -1,0 +1,5 @@
+key,label,value,unit,source,year,url,note
+watch_2_10,Share of each video watched (business videos 2 to 10 minutes long),50,%,Vidyard business video data,2022,https://marketingprofs.com/charts/2023/49949/business-video-benchmarks-retention-rates-by-length,"1.8 million business videos. Most ATM episode videos run 2 to 10 minutes."
+pages_social,Pages per visit from social,1.4,pages,Chartbeat publisher data,2025,https://chartbeat.com/resources/general/successful-2026-publishing-strategy/,ATM: visits that began on an episode page.
+pages_direct,Pages per visit from direct,2.2,pages,Chartbeat publisher data,2025,https://chartbeat.com/resources/general/successful-2026-publishing-strategy/,ATM: visits that began on an episode page.
+internal_share,Page views that come from another page on the same site,40,%,Chartbeat publisher data,2025,https://chartbeat.com/resources/general/successful-2026-publishing-strategy/,"A site-wide measure; ATM's figure is the narrower moves on from episode pages, per 100 episode page views."

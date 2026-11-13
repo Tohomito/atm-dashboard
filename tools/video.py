@@ -21,11 +21,14 @@ Writes (each file keeps other months' rows and replaces this month's):
   data/video/videos.csv    one row per Vimeo video with views, and the episode page it plays on
   data/video/pages.csv     one row per episode page: visits by how people arrived, onward clicks, its video
   data/video/journeys.csv  page-to-page moves that start or end on an episode page (not reloads)
+  data/video/arrivals.csv  visits that began on an episode page, by ATM channel group: sessions, page views, average length
   data/video/meta.json     the months held and their sources
 
 Hand-kept files it reads:
   data/video/links.csv     page,video_id: episode pages whose video title does not match the page address
   data/video/exclude.csv   video_id,reason: site videos that are not content (the home page background loop)
+  data/video/benchmarks.csv  published benchmarks the section compares against (source, year, link)
+  data/video/actions.csv   kind,title,text: video actions for the Actions view, rewritten each month from the figures
   data/video/tags.csv      page,guest,company,program,series,basis: what each episode is. "basis" says how the
                            tag was set (board item and date, link tags, title). Add a row for each new episode;
                            untagged episodes are listed in the run's output and show as "Untagged" on the page.
@@ -105,7 +108,7 @@ def main():
             pv[p] = pv.get(p, 0) + num(r["screenPageViews"])
 
     # GA4: sessions that started on an episode page, by how people arrived
-    land = {}
+    land, arrive = {}, {}
     for r in read(a.landing):
         p = clean_path(r["landingPage"])
         ch = r.get("c_sessioncustomchannelgroup_15809010745") or r.get("sessionDefaultChannelGrouping") or ""
@@ -114,6 +117,10 @@ def main():
         s = num(r["sessions"])
         d[k][0] += s
         d[k][1] += s * num(r["averageSessionDuration"])
+        g = arrive.setdefault(ch or "(none)", [0, 0.0, 0.0])
+        g[0] += s
+        g[1] += num(r["screenPageViews"])
+        g[2] += s * num(r["averageSessionDuration"])
 
     # GA4: moves between pages (referrer -> page), leaving out reloads of the same page
     moves = {}
@@ -179,6 +186,9 @@ def main():
              "onward_episode", "video_id", "guest", "company", "program", "series"]
     write(V / "videos.csv", vcols, keep_other_months(V / "videos.csv", m) + sorted(vids, key=lambda v: -v["views"]))
     write(V / "pages.csv", pcols, keep_other_months(V / "pages.csv", m) + pages)
+    arr = [{"month": m, "channel": k, "sessions": int(g[0]), "views": int(g[1]), "avg_secs": round(g[2] / g[0], 1) if g[0] else ""}
+           for k, g in sorted(arrive.items(), key=lambda x: -x[1][0])]
+    write(V / "arrivals.csv", ["month", "channel", "sessions", "views", "avg_secs"], keep_other_months(V / "arrivals.csv", m) + arr)
     write(V / "journeys.csv", ["month", "from", "to", "views"], keep_other_months(V / "journeys.csv", m) + journeys)
 
     meta_p = V / "meta.json"

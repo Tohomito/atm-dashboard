@@ -32,7 +32,8 @@ const where = p => p === '/' ? 'Home page' : p.startsWith('/episodes/') ? 'Anoth
 async function load() {
   const sec = $('video');
   if (!sec) return;
-  const [videos, pages, journeys, companies] = await Promise.all(['video/videos.csv', 'video/pages.csv', 'video/journeys.csv', 'companies.csv'].map(get));
+  const [videos, pages, journeys, companies, arrivals, benchRows] = await Promise.all(['video/videos.csv', 'video/pages.csv', 'video/journeys.csv', 'companies.csv', 'video/arrivals.csv', 'video/benchmarks.csv'].map(get));
+  const B = Object.fromEntries(benchRows.map(r => [r.key, r]));
   if (!videos.length || !pages.length) { sec.hidden = true; return; }
   const months = [...new Set(pages.map(r => r.month))].sort();
   const industryOf = {};
@@ -101,9 +102,28 @@ async function load() {
     ep.forEach(e => { const k = state.by === 'industry' ? e.industry : e.program; const g = groups[k] ??= { plays: 0, w: 0, fin: 0, n: 0 }; g.plays += e.plays; g.w += e.pct * e.plays; g.fin += e.fin; g.n++; });
     const gl = Object.entries(groups).filter(([, g]) => g.plays >= 5).map(([k, g]) => ({ k, ...g, avg: g.w / g.plays })).sort((a, b) => b.avg - a.avg);
     $('v-groups').innerHTML = '';
-    if (gl.length) C.hbar('v-groups', gl.map(g => ({ label: `${g.k} (${g.plays} plays)`, value: Math.round(g.avg), src: `${g.n} episode video${g.n > 1 ? 's' : ''}, ${int(g.plays)} plays, ${pct(g.fin, g.plays)}% finished` })),
-      { fmt: v => v + '%', labW: 280, rowH: 28, max: 100, aria: `Average share of each video watched, by ${state.by}, ${M}` });
-    $('v-groups-sub').textContent = `Average share of each video watched, weighted by plays, ${M}. Groups with fewer than 5 plays are left out.`;
+    const benchBar = B.watch_2_10 ? [{ label: `Benchmark, ${B.watch_2_10.source.replace(' business video data', '')} ${B.watch_2_10.year}`, value: +B.watch_2_10.value, color: 'var(--muted)', src: `${B.watch_2_10.label}, ${B.watch_2_10.source} (${B.watch_2_10.year})` }] : [];
+    if (gl.length) C.hbar('v-groups', gl.map(g => ({ label: `${g.k} (${g.plays} plays)`, value: Math.round(g.avg), src: `${g.n} episode video${g.n > 1 ? 's' : ''}, ${int(g.plays)} plays, ${pct(g.fin, g.plays)}% finished` })).concat(benchBar),
+      { fmt: v => v + '%', labW: 280, rowH: 28, max: 100, aria: `Average share of each video watched, by ${state.by}, ${M}`,
+      });
+    $('v-groups-sub').textContent = `Average share of each video watched, weighted by plays, ${M}. Groups with fewer than 5 plays are left out.` +
+      (B.watch_2_10 ? ` The grey bar is the ${B.watch_2_10.value}% benchmark for business videos of 2 to 10 minutes (${B.watch_2_10.source}, ${B.watch_2_10.year}).` : '');
+
+    // benchmarks
+    const arr = Object.fromEntries(arrivals.filter(a => a.month === m).map(a => [a.channel, a]));
+    const ppv = ch => arr[ch] && +arr[ch].sessions ? (+arr[ch].views / +arr[ch].sessions) : null;
+    const brow = (key, atm, fmt, atmNote) => { const b = B[key]; if (!b || atm == null) return '';
+      const bv = +b.value, gap = atm / bv, word = gap >= 0.9 ? 'About level' : gap >= 0.75 ? 'Below' : 'Well below';
+      return `<tr><td>${esc(b.label)}${atmNote ? `<br><span class="dim">${esc(atmNote)}</span>` : ''}</td><td class="num">${fmt(atm)}</td><td class="num">${fmt(bv)}</td><td>${word}</td></tr>`; };
+    const pagesFmt = v => (+v).toFixed(2).replace(/0$/, '');
+    $('v-bench').innerHTML = `<thead><tr><th>Measure</th><th class="num">ATM</th><th class="num">Benchmark</th><th></th></tr></thead><tbody>` +
+      brow('watch_2_10', wpct, v => Math.round(v) + '%', 'Episode videos, weighted by plays') +
+      brow('pages_social', ppv('Organic Social'), pagesFmt, 'Visits that began on an episode page') +
+      brow('pages_direct', ppv('Direct'), pagesFmt, 'Visits that began on an episode page') +
+      brow('internal_share', 100 * onward / (views || 1), v => (+v).toFixed(1) + '%', 'ATM: moves on from episode pages per 100 episode page views, a narrower measure') + '</tbody>';
+    $('v-bench-sub').textContent = `${M}. None of these benchmarks is specific to B2B media publishers, so read them as a rough guide.`;
+    const srcs = [...new Map(benchRows.map(r => [r.source, r])).values()];
+    $('v-bench-src').innerHTML = 'Sources: ' + srcs.map(r => `<a href="${esc(r.url)}" target="_blank" rel="noopener">${esc(r.source)} (${esc(r.year)})</a>`).join('; ') + '. ATM: Vimeo video report and GA4.';
 
     // arrivals
     $('v-arrive').innerHTML = '';
@@ -123,7 +143,7 @@ async function load() {
         top.map(j => `<tr><td>${esc(nameOf(j.from))} → ${esc(nameOf(j.to))}</td><td class="num">${int(j.views)}</td></tr>`).join('') + `</tbody></table>` : '');
     $('v-next-sub').textContent = `Page views whose previous page was an episode page, ${M}. Reloads of the same page are left out.`;
 
-    $('v-other').textContent = `Episode videos are those linked to an episode page. The other ${int(otherPlays)} of ${int(allPlays)} Vimeo plays in ${M} (${pct(otherPlays, allPlays)}%) were review copies, social cuts, teasers and raw footage, which include the team's own review plays, so they are left out of these figures.`;
+    $('v-other').textContent = `Episode videos are those linked to an episode page. The other ${int(otherPlays)} of ${int(allPlays)} Vimeo plays in ${M} (${pct(otherPlays, allPlays)}%) were review copies, social cuts, teasers and raw footage, which include the team's own review plays, so they are left out of these figures. The section updates once a month, after the month closes, from Vimeo's video report joined to GA4 figures for the episode pages.`;
   }
   draw();
 }

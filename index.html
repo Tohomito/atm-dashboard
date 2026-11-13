@@ -473,8 +473,9 @@ a{color:var(--ink)}
 </div>
 <div class="grid two" style="margin-top:18px">
 <div class="card"><h3>Where episode visitors went next</h3><p class="sub" id="v-next-sub"></p><div id="v-next"></div><p class="src">Source: GA4, page views by previous page (page referrer)</p></div>
-<div class="card"><h3>What counts as an episode play</h3><p class="sub" id="v-other"></p><p class="sub">The figures update once a month, after the full month closes: Vimeo's video report for the month, joined to GA4 episode page figures for the same month.</p><p class="src">Sources: Vimeo video report; GA4</p></div>
+<div class="card"><h3>How ATM compares with published benchmarks</h3><p class="sub" id="v-bench-sub"></p><div class="tblwrap"><table class="mini" id="v-bench"></table></div><p class="src" id="v-bench-src"></p></div>
 </div>
+<p class="sub dim" id="v-other" style="margin-top:14px"></p>
 </section>
 
 <details class="baseline-fold" id="baseline-detail"><summary><span class="eyebrow">Baseline detail · September 2026</span><span class="bf-title">Sections 01 to 06: the evidence behind the September verdicts</span><span class="bf-note">A fixed reference point, not refreshed each month. Open to read.</span></summary><!-- 1. Scorecard -->
@@ -882,6 +883,9 @@ async function boot() {
   const T = Object.fromEntries(text.map(r => [r.key, r.text]));
   // the combined analysis (written across every source) replaces the header and fills "The read"
   const A = await fetch(`data/analysis.csv?v=${V}`, { cache: 'no-store' }).then(r => r.ok ? r.text() : '').then(t => t ? objects(parseCSV(t)) : []).catch(() => []);
+  /* video actions are written by the monthly video load (data/video/actions.csv) and follow the monthly priorities */
+  const VA = await fetch(`data/video/actions.csv?v=${V}`, { cache: 'no-store' }).then(r => r.ok ? r.text() : '').then(t => t ? objects(parseCSV(t)) : []).catch(() => []);
+  VA.forEach(r => { if (r.kind && r.title) A.push(r); });
   const one = k => (A.find(r => r.kind === k) || {}).text;
   for (const [k, key] of [['header_eyebrow', 'header.eyebrow'], ['header_title', 'header.title'], ['header_lede', 'header.lede'], ['header_meta', 'header.meta']]) if (one(k)) T[key] = one(k);
   const put = (id, h) => { const e = document.getElementById(id); if (e) e.innerHTML = h; };
@@ -986,5 +990,5 @@ window.ATMChart = { el, css, hover, showTip, hideTip, bullet, hbar, vbar, vstack
 <script src="js/carousel.js?v=20261030113517"></script>
 <script src="js/briefings.js?v=20261031153500"></script>
 <script src="js/mistags.js?v=20261030113517"></script>
-<script src="js/video.js?v=20261113130000"></script>
+<script src="js/video.js?v=20261113140000"></script>
 <script id="baseline-fold-js">(function(){function openFor(h){if(!h||h.length<2)return;var t=document.getElementById(h.slice(1));if(!t)return;var d=t.closest(".baseline-fold")||t.querySelector(":scope>.baseline-fold");if(d&&!d.open){d.open=true;setTimeout(function(){t.scrollIntoView();},0);}}document.addEventListener("click",function(e){var a=e.target.closest&&e.target.closest("a[href^='#']");if(a)openFor(a.getAttribute("href"));});window.addEventListener("hashchange",function(){openFor(location.hash);});if(location.hash)window.addEventListener("load",function(){openFor(location.hash);});})();</script>

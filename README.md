@@ -103,6 +103,10 @@ Section G shows how far people watch each episode on atm.media and how visitors 
 - `journeys.csv`: moves from one page to another that start or end on an episode page (GA4 page referrer), with reloads left out.
 - `tags.csv` (kept by hand): guest, company, program and series for each episode, with the basis for each tag (board item and date, link tags, title). The script lists episodes with 5 or more plays that have no tags yet; add them here. Industries come from `data/companies.csv` by company.
 
+- `arrivals.csv`: visits that began on an episode page, by ATM channel group (sessions, page views, average length).
+- `benchmarks.csv` (kept by hand): the published benchmarks the section compares against, with source, year and link. Change a row when a newer edition is published.
+- `actions.csv`: video actions for the Actions view (kind, title, text), shown after the monthly priorities. The monthly video load rewrites them from the month's figures and the benchmarks; finished or disproved actions are dropped.
+
 Visits from email links average a few seconds and rarely lead to a play, which fits email security software opening newsletter links; the section shows them separately and leaves them out of the episode table's visit counts.
 
 ## Mis-tag check (weekly)
