@@ -172,6 +172,22 @@ def main():
         t.append([k, m["days"], m["org"], m["eng"], m["follStart"], m["follEnd"]])
     add(csv_block([[str(x) for x in r] for r in t]))
 
+    vp, vv = D / "video" / "pages.csv", D / "video" / "videos.csv"
+    if vp.exists() and vv.exists():
+        add("## Video on atm.media (monthly)")
+        add("")
+        add("Vimeo plays and watch-through for episode videos, joined to GA4 figures for each episode page. "
+            "sessions_email are visits that began on the page from email links; they last seconds and are likely email security checks, "
+            "so use sessions_other as the visit count. onward = page views whose previous page was this one. "
+            "Only videos with kind \"episode\" are watched on atm.media; \"other\" videos include the team's review plays.")
+        add("")
+        add("### Episode pages")
+        add("")
+        add(csv_block([r for r in rows(vp) if len(r) > 2 and (r[0] == "month" or int(r[2] or 0) >= 10)]))
+        add("### Episode videos")
+        add("")
+        add(csv_block([r for r in rows(vv) if r[-1] in ("kind", "episode")]))
+
     add(f"## Post history, May 2026 to {end}")
     add("")
     add("One row per post, newest first. Columns: date, channel, format, person featured, their company, series, client, title, "

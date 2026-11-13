@@ -462,6 +462,21 @@ a{color:var(--ink)}
 </section>
 
 
+<section data-added="" id="video">
+<div class="sec-head"><span class="eyebrow">G · Video</span><h2 id="v-title">Video on atm.media</h2><p id="v-lede"></p></div>
+<div class="head" style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:12px"><div aria-label="Month" class="seg" data-for="vmonth" hidden id="v-month" role="group"></div></div>
+<div class="tiles" id="v-tiles"></div>
+<div class="card" style="margin-top:18px"><div class="head"><h3>How far viewers watched each episode</h3><select aria-label="Program" id="v-prog"></select></div><p class="sub">Episode videos with 3 or more plays, ranked by plays. Watched is the average share of the video each viewer watched.</p><div class="tblwrap tall"><table id="v-table"></table></div><p class="src">*Visits that began on the episode page from social, search, direct and referral links; visits from email links are left out (see below). Sources: Vimeo video report (plays, watch time, finishes); GA4 (visits)</p></div>
+<div class="grid two" style="margin-top:18px">
+<div class="card"><div class="head"><h3>Watch-through by tag</h3><div aria-label="Group by" class="seg" data-for="vby" id="v-by" role="group"><button aria-pressed="true" data-v="program" type="button">Program</button><button aria-pressed="false" data-v="industry" type="button">Industry</button></div></div><p class="sub" id="v-groups-sub"></p><figure id="v-groups"></figure><p class="src">Sources: Vimeo video report; tags from the ATM Kitchen board and link tags (data/video/tags.csv); industries from data/companies.csv</p></div>
+<div class="card"><h3>How long visitors stay, by how they arrived</h3><p class="sub">Average length of visits that began on an episode page.</p><figure id="v-arrive"></figure><p class="sowhat">Visits from email links last seconds and rarely lead to a play. This fits email security software opening newsletter links to check them, rather than readers. beehiiv, which filters out these checks, counts far fewer human clicks on newsletter links than GA4 counts email visits to episode pages: 481 clicks on every newsletter link in October, against 2,136 email visits to episode pages alone.</p><p class="src">Source: GA4, sessions by landing page and ATM channel group</p></div>
+</div>
+<div class="grid two" style="margin-top:18px">
+<div class="card"><h3>Where episode visitors went next</h3><p class="sub" id="v-next-sub"></p><div id="v-next"></div><p class="src">Source: GA4, page views by previous page (page referrer)</p></div>
+<div class="card"><h3>What counts as an episode play</h3><p class="sub" id="v-other"></p><p class="sub">The figures update once a month, after the full month closes: Vimeo's video report for the month, joined to GA4 episode page figures for the same month.</p><p class="src">Sources: Vimeo video report; GA4</p></div>
+</div>
+</section>
+
 <details class="baseline-fold" id="baseline-detail"><summary><span class="eyebrow">Baseline detail · September 2026</span><span class="bf-title">Sections 01 to 06: the evidence behind the September verdicts</span><span class="bf-note">A fixed reference point, not refreshed each month. Open to read.</span></summary><!-- 1. Scorecard -->
 <section data-sec="01">
 <div class="sec-head"><span class="eyebrow" data-k="01.eyebrow"></span><h2 data-k="01.headline"></h2><p data-k="01.lede"></p></div>
@@ -971,4 +986,5 @@ window.ATMChart = { el, css, hover, showTip, hideTip, bullet, hbar, vbar, vstack
 <script src="js/carousel.js?v=20261030113517"></script>
 <script src="js/briefings.js?v=20261031153500"></script>
 <script src="js/mistags.js?v=20261030113517"></script>
+<script src="js/video.js?v=20261113130000"></script>
 <script id="baseline-fold-js">(function(){function openFor(h){if(!h||h.length<2)return;var t=document.getElementById(h.slice(1));if(!t)return;var d=t.closest(".baseline-fold")||t.querySelector(":scope>.baseline-fold");if(d&&!d.open){d.open=true;setTimeout(function(){t.scrollIntoView();},0);}}document.addEventListener("click",function(e){var a=e.target.closest&&e.target.closest("a[href^='#']");if(a)openFor(a.getAttribute("href"));});window.addEventListener("hashchange",function(){openFor(location.hash);});if(location.hash)window.addEventListener("load",function(){openFor(location.hash);});})();</script>

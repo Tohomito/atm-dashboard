@@ -4,7 +4,7 @@ Live at https://atm.mattbecher.com (also https://tohomito.github.io/atm-dashboar
 
 One page, in the Audience Scorecard's design, built from two data sources:
 
-Page order (Data & insights view): Overview, September baseline summary, At a glance, the 7/14/30-day section, B–E, F (posts), baseline detail 01–06. The Actions view holds "What the numbers say", the actions, and 08 (data sources and fixes).
+Page order (Data & insights view): Overview, September baseline summary, At a glance, the 7/14/30-day section, B–E, F (posts), G (video), baseline detail 01–06. The Actions view holds "What the numbers say", the actions, and 08 (data sources and fixes).
 
 | Sections | Data | Refresh |
 |---|---|---|
@@ -93,6 +93,17 @@ The monthly sections (A to E: headline numbers, the last 12 months, syndication,
 - `chart_style.json`: optional chart option overrides.
 
 After changing anything in `data/monthly/`, run `python3 tools/apply_monthly.py` from the repo root and commit both `data/monthly/` and `data/scorecard/`: the page reads `data/scorecard/`. A full rebuild is not needed (it also calls the same step, but it needs the handoff folder, which is not in the repo). The written read (`data/analysis.csv`) is rewritten each month too. October's figures come from the Oct 28 report (Oct 1–27); the close-out on Nov 1 replaces them with the full month.
+
+## Video (monthly)
+
+Section G shows how far people watch each episode on atm.media and how visitors move through the episode pages, one calendar month at a time. `tools/video.py` loads a month into `data/video/` from four inputs: Vimeo's video report export for the month (Vimeo, Analytics, Videos, Export; the free plan includes it) and three GA4 pulls listed in the script's header. Run `python3 -I tools/video.py --month YYYY-MM --vimeo <export.csv> --pageviews <csv> --landing <csv> --referrers <csv>`.
+
+- `videos.csv`: every Vimeo video with plays that month. `kind` is "episode" when the video is linked to an episode page (its title matches the page address, or `links.csv` links them), "site" for the site's background loops (`exclude.csv`), and "other" for review copies, social cuts, teasers and footage. Only episode videos count in the section's figures, because the others include the team's own review plays.
+- `pages.csv`: every episode page: views, visits that began there from email links and from everything else (with their average length), moves to another page, its video and its tags.
+- `journeys.csv`: moves from one page to another that start or end on an episode page (GA4 page referrer), with reloads left out.
+- `tags.csv` (kept by hand): guest, company, program and series for each episode, with the basis for each tag (board item and date, link tags, title). The script lists episodes with 5 or more plays that have no tags yet; add them here. Industries come from `data/companies.csv` by company.
+
+Visits from email links average a few seconds and rarely lead to a play, which fits email security software opening newsletter links; the section shows them separately and leaves them out of the episode table's visit counts.
 
 ## Mis-tag check (weekly)
 
