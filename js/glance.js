@@ -394,21 +394,23 @@ Promise.all([window.ATMDailyReady, window.ATMScoreReady]).then(async ([S, score]
   /* ---------- ask box: opens Claude with the question and the dashboard's current figures ---------- */
   const A = window.ATMAnalysis || [];
   const context = () => {
-    const lines = ['Figures from the ATM audience dashboard (https://atm.mattbecher.com).', `Daily figures run through ${facts['7'].AS_OF}; monthly figures cover ${facts['7'].monthly}.`, ''];
-    for (const k of ['7', '30', 'all']) {
-      const f = facts[k];
-      lines.push(f.all ? `ALL TIME (since ${f.from}):` : `LAST ${f.n} DAYS:`);
-      for (const c of ['li', 'ig', 'yt'].concat(k === '7' ? [] : ['nl', 'site'])) readout(f, c).bullets.forEach(x => lines.push('- ' + plain(x)));
+    const v = x => x == null ? '' : x;
+    const lines = ['Figures from the ATM audience dashboard (https://atm.mattbecher.com).', `Daily figures run through ${facts['7'].AS_OF}; monthly figures cover ${facts['7'].monthly}.`];
+    // the last 14 days of posts, read live from the sheet; they go first so they are never trimmed
+    const all = (S.POSTS || []).slice().sort((a, b) => b.date.localeCompare(a.date));
+    if (all.length) {
+      const d = new Date(all[0].date + 'T12:00:00Z'); d.setUTCDate(d.getUTCDate() - 13);
+      const from = d.toISOString().slice(0, 10);
+      const recent = all.filter(p => p.date >= from);
+      lines.push('', `POSTS, ${from} TO ${all[0].date} (date | channel | format | person | title | reach | reactions | comments | reposts):`);
+      recent.slice(0, 40).forEach(p => lines.push(`- ${p.date} | ${p.ch} | ${v(p.fmt)} | ${v(p.person)} | ${(p.title || '').slice(0, 60)} | ${v(p.reach)} | ${v(p.reactions)} | ${v(p.comments)} | ${v(p.amp)}`));
     }
     lines.push('', 'KEY MEASURES (last 30 days where daily):');
     measureCards(facts['30'], tiles, 'all').forEach(c => lines.push(`- ${c.k}: ${c.v} (${c.p})${c.now != null && c.prev != null ? `, before ${c.fmtB(c.prev)}` : ''}`));
-    // posts newer than the full data file, read live from the sheet
-    const end = typeof ARCHIVE_END !== 'undefined' ? ARCHIVE_END : '';
-    const recent = (S.POSTS || []).filter(p => p.date > end).sort((a, b) => b.date.localeCompare(a.date));
-    if (recent.length) {
-      const v = x => x == null ? '' : x;
-      lines.push('', `POSTS SINCE ${end} (date | channel | format | person | title | reach | reactions | comments | reposts):`);
-      recent.slice(0, 40).forEach(p => lines.push(`- ${p.date} | ${p.ch} | ${v(p.fmt)} | ${v(p.person)} | ${(p.title || '').slice(0, 70)} | ${v(p.reach)} | ${v(p.reactions)} | ${v(p.comments)} | ${v(p.amp)}`));
+    for (const k of ['7', '30', 'all']) {
+      const f = facts[k];
+      lines.push('', f.all ? `ALL TIME (since ${f.from}):` : `LAST ${f.n} DAYS:`);
+      for (const c of ['li', 'ig', 'yt'].concat(k === '7' ? [] : ['nl', 'site'])) readout(f, c).bullets.forEach(x => lines.push('- ' + plain(x)));
     }
     const comp = (S.COMP && S.COMP.rows) || [];
     if (comp.length) {
@@ -423,8 +425,8 @@ Promise.all([window.ATMDailyReady, window.ATMScoreReady]).then(async ([S, score]
   const v0 = x => x == null ? '' : x;
   // private Google Docs in the team's Drive folder; Claude opens them with the asker's own Google Drive connector
   const DATA_DOCS = [
-    'https://docs.google.com/document/d/1Qwn770yCzLZI-2uOwyLXqn8dOEgVU-hLjtD8xVLVs2E/edit',
-    'https://docs.google.com/document/d/1Y17XTL4KqGCJzl8JQ-RZSl6RbRDKKqiJzbqHHi0Bxsc/edit',
+    'https://docs.google.com/document/d/190TgXK39gWFhLdLRE-MNEjVQPpBcINPANTZ3y3cAdmo/edit',
+    'https://docs.google.com/document/d/1qSCPMyR8XlSVebVu_DrbHiKdm-i3bku1aXIZ5jIjePQ/edit',
   ];
   $('ask-form').addEventListener('submit', e => {
     e.preventDefault();
@@ -434,7 +436,7 @@ Promise.all([window.ATMDailyReady, window.ATMScoreReady]).then(async ([S, score]
     if (ctx.length > 7000) ctx = ctx.split('\nHOW TO READ THE NUMBERS:')[0];
     if (ctx.length > 7000) ctx = ctx.split('\nCURRENT ANALYSIS:')[0];
     if (ctx.length > 7000) ctx = ctx.slice(0, 7000) + '\n[trimmed]';
-    const prompt = `I'm on the ATM team. Answer my question about ATM's audience.\n\nQuestion: ${q}\n\nFirst read the dashboard's two data Docs with Google Drive:\n- ${DATA_DOCS[0]} (monthly scorecard, every chart's data, the peer set, the current analysis and actions)\n- ${DATA_DOCS[1]} (post history from May, with speakers, companies and series)\nThe live daily figures and newest posts are below; use them for anything recent. If you can't open the Docs (Google Drive not connected, or no access to the folder), say so in one line, then answer from the figures below. Say plainly when the data can't answer the question, and what data would.\n\n${ctx}`;
+    const prompt = `I'm on the ATM team. Answer my question about ATM's audience.\n\nQuestion: ${q}\n\nFirst read the dashboard's two data Docs with Google Drive:\n- ${DATA_DOCS[0]} (monthly scorecard, every chart's data, the peer set, the current analysis and actions)\n- ${DATA_DOCS[1]} (every post from May to the last data refresh, tagged with speakers, companies and series through early October)\nThe last 14 days of posts and the live daily figures are below; use them for anything recent. If you can't open the Docs (Google Drive not connected, or no access to the folder), say so in one line, then answer from the figures below. Say plainly when the data can't answer the question, and what data would.\n\n${ctx}`;
     const url = 'https://claude.ai/new?q=' + encodeURIComponent(prompt);
     const w = window.open(url, '_blank', 'noopener');
     const note = $('ask-note'); note.hidden = false;

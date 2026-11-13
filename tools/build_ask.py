@@ -83,7 +83,7 @@ def main():
     add("## How to read this data")
     add("")
     add("- **Daily figures** (LinkedIn, Instagram, YouTube, site) come from a Google Sheet that the dashboard reads live each time it opens. The question that brought you here includes the latest of those figures, and any posts newer than this data. Prefer those for anything recent.")
-    add(f"- **Post history** runs from May 2026 to {end}. Newer posts are in the question.")
+    add(f"- **Post history** runs from May 2026 to {end}, tagged with person, company and series. Posts after that are listed untagged, from the daily LinkedIn and Instagram pulls, up to the date this was built. The question has the newest posts too.")
     add("- **Monthly figures** come from the monthly audience scorecard. Each chart below states its own date range and source.")
     add("- Name sources by platform (LinkedIn, Instagram, beehiiv, GA4), not by person. Call a baseline by its month (\"September baseline\").")
     add("- \"At The Moment\" is a separate LinkedIn page with a similar name, watched as a peer. It is not an ATM page; never add its figures to ATM's.")
@@ -182,16 +182,38 @@ def main():
                   for p in sorted(posts, key=lambda p: p["date"], reverse=True)]
     add(csv_block(t))
 
+    # posts after the archive, from the daily pulls (untagged)
+    li = [r for r in dicts(D / "sm" / "li_posts.csv") if r["date"] > end]
+    ig = [r for r in dicts(D / "sm" / "ig_posts.csv") if r["date"] > end]
+    last = max([r["date"] for r in li + ig] or [end])
+    if li or ig:
+        add("")
+        add(f"## Posts after {end}, to {last}")
+        add("")
+        add("From the daily LinkedIn and Instagram pulls. Not yet tagged with person, company or series: read those from the post text. "
+            "Columns: date, channel, format, reach (LinkedIn impressions / Instagram reach), views (Instagram), reactions or likes, "
+            "comments, reposts or shares, clicks (LinkedIn), saves (Instagram), opening text of the post.")
+        add("")
+        fmt = {"VIDEO": "Video", "IMAGE": "Image", "TEXT": "Text", "ARTICLE": "Article", "DOCUMENT": "Document", "CAROUSEL": "Carousel",
+               "REELS": "Reel", "FEED": "Post", "STORY": "Story"}
+        t = [["date", "channel", "format", "reach", "views", "reactions", "comments", "reposts", "clicks", "saves", "text"]]
+        for r in li:
+            t.append([r["date"], "LinkedIn", fmt.get(r["media"], r["media"].title()), r["impressions"], "", r["likes"], r["comments"], r["shares"], r["clicks"], "", r["text"]])
+        for r in ig:
+            t.append([r["date"], "Instagram", fmt.get(r["type"], r["type"].title()), r["reach"], r["views"], r["likes"], r["comments"], r["shares"], "", r["saves"], r["caption"]])
+        t[1:] = sorted(t[1:], key=lambda x: x[0], reverse=True)
+        add(csv_block(t))
+
     B = ROOT / "build"
     B.mkdir(exist_ok=True)
     out = B / "ask.md"
     out.write_text("\n".join(L).rstrip() + "\n", encoding="utf-8")
     # two Google Docs: the main data, and the post history (each small enough to upload in one step)
     cut = next(i for i, x in enumerate(L) if x.startswith("## Post history"))
-    main_ = L[:cut] + [f"## Post history", "", f"The post history ({len(posts)} posts, May 2026 to {end}) is in the companion Doc \"ATM Dashboard post history (for Claude)\"."]
+    main_ = L[:cut] + [f"## Post history", "", f"The post history ({len(posts) + len(li) + len(ig)} posts, May 2026 to {last}) is in the companion Doc \"ATM Dashboard post history (for Claude)\"."]
     (B / "ask_main.md").write_text("\n".join(main_).rstrip() + "\n", encoding="utf-8")
     (B / "ask_posts.md").write_text("# ATM Audience Dashboard: post history\n\n" + f"Built {built}. Companion to \"ATM Dashboard data (for Claude)\", which explains how to read the figures.\n\n" + "\n".join(L[cut:]).rstrip() + "\n", encoding="utf-8")
-    print(f"wrote {out} ({out.stat().st_size:,} bytes, {len(posts)} posts)")
+    print(f"wrote {out} ({out.stat().st_size:,} bytes, {len(posts) + len(li) + len(ig)} posts to {last})")
 
 
 if __name__ == "__main__":
