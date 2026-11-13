@@ -1,7 +1,7 @@
 {
- "pulled": "2026-11-06",
- "subscribers_through": "2026-11-05",
- "sends": 17,
+ "pulled": "2026-11-13",
+ "subscribers_through": "2026-11-12",
+ "sends": 19,
  "source": "beehiiv connector: get_subscriber_history, list_posts, get_post_stats_batch",
  "publication": "Your ATM Withdrawal (pub_27219466-edae-4736-babe-f5e0bca5b78d)"
 }
