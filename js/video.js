@@ -113,15 +113,17 @@ async function load() {
     const arr = Object.fromEntries(arrivals.filter(a => a.month === m).map(a => [a.channel, a]));
     const ppv = ch => arr[ch] && +arr[ch].sessions ? (+arr[ch].views / +arr[ch].sessions) : null;
     const brow = (key, atm, fmt, atmNote) => { const b = B[key]; if (!b || atm == null) return '';
-      const bv = +b.value, gap = atm / bv, word = gap >= 0.9 ? 'About level' : gap >= 0.75 ? 'Below' : 'Well below';
-      return `<tr><td>${esc(b.label)}${atmNote ? `<br><span class="dim">${esc(atmNote)}</span>` : ''}</td><td class="num">${fmt(atm)}</td><td class="num">${fmt(bv)}</td><td>${word}</td></tr>`; };
+      const bv = +b.value, gap = atm / bv;
+      const [word, col] = gap >= 1.1 ? ['Above', 'var(--goodtext)'] : gap >= 0.9 ? ['About level', 'var(--ink2)'] : gap >= 0.75 ? ['Below', 'var(--vb-amber)'] : ['Well below', 'var(--crit)'];
+      const dot = `<span aria-hidden="true" style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${col};margin-right:6px"></span>`;
+      return `<tr><td>${esc(b.label)}${atmNote ? `<br><span class="dim">${esc(atmNote)}</span>` : ''}</td><td class="num" style="color:${col};font-weight:700">${fmt(atm)}</td><td class="num">${fmt(bv)}</td><td style="color:${col};font-weight:600;white-space:nowrap">${dot}${word}</td></tr>`; };
     const pagesFmt = v => (+v).toFixed(2).replace(/0$/, '');
     $('v-bench').innerHTML = `<thead><tr><th>Measure</th><th class="num">ATM</th><th class="num">Benchmark</th><th></th></tr></thead><tbody>` +
       brow('watch_2_10', wpct, v => Math.round(v) + '%', 'Episode videos, weighted by plays') +
       brow('pages_social', ppv('Organic Social'), pagesFmt, 'Visits that began on an episode page') +
       brow('pages_direct', ppv('Direct'), pagesFmt, 'Visits that began on an episode page') +
       brow('internal_share', 100 * onward / (views || 1), v => (+v).toFixed(1) + '%', 'ATM: moves on from episode pages per 100 episode page views, a narrower measure') + '</tbody>';
-    $('v-bench-sub').textContent = `${M}. None of these benchmarks is specific to B2B media publishers, so read them as a rough guide.`;
+    $('v-bench-sub').textContent = `${M}. Green: 10% or more above the benchmark. Grey: within 10%. Amber: 10% to 25% below. Red: more than 25% below. None of these benchmarks is specific to B2B media publishers, so read them as a rough guide.`;
     const srcs = [...new Map(benchRows.map(r => [r.source, r])).values()];
     $('v-bench-src').innerHTML = 'Sources: ' + srcs.map(r => `<a href="${esc(r.url)}" target="_blank" rel="noopener">${esc(r.source)} (${esc(r.year)})</a>`).join('; ') + '. ATM: Vimeo video report and GA4.';
 

@@ -248,6 +248,9 @@ section:last-of-type{border-bottom:0}
 .pill.good i{background:var(--good)} .pill.warn i{background:var(--warn)} .pill.crit i{background:var(--crit)}
 /* stat tiles */
 .tiles{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(min(100%,150px),1fr))}
+.vb-amber{--vb-amber:#9a6700}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .vb-amber{--vb-amber:#ffda5e}}
+:root[data-theme="dark"] .vb-amber{--vb-amber:#ffda5e}
 .tile{background:var(--surface);border:1px solid var(--ring);border-radius:6px;padding:12px 14px;display:grid;gap:2px}
 .tile .v{font-family:"Montserrat",sans-serif;font-size:26px;font-weight:800;line-height:1.1}
 .tile .k{font-size:12px;color:var(--ink2)}
@@ -473,7 +476,7 @@ a{color:var(--ink)}
 </div>
 <div class="grid two" style="margin-top:18px">
 <div class="card"><h3>Where episode visitors went next</h3><p class="sub" id="v-next-sub"></p><div id="v-next"></div><p class="src">Source: GA4, page views by previous page (page referrer)</p></div>
-<div class="card"><h3>How ATM compares with published benchmarks</h3><p class="sub" id="v-bench-sub"></p><div class="tblwrap"><table class="mini" id="v-bench"></table></div><p class="src" id="v-bench-src"></p></div>
+<div class="card"><h3>How ATM compares with published benchmarks</h3><p class="sub" id="v-bench-sub"></p><div class="tblwrap"><table class="mini vb-amber" id="v-bench"></table></div><p class="src" id="v-bench-src"></p></div>
 </div>
 <p class="sub dim" id="v-other" style="margin-top:14px"></p>
 </section>
@@ -990,5 +993,5 @@ window.ATMChart = { el, css, hover, showTip, hideTip, bullet, hbar, vbar, vstack
 <script src="js/carousel.js?v=20261030113517"></script>
 <script src="js/briefings.js?v=20261031153500"></script>
 <script src="js/mistags.js?v=20261030113517"></script>
-<script src="js/video.js?v=20261113140000"></script>
+<script src="js/video.js?v=20261113151000"></script>
 <script id="baseline-fold-js">(function(){function openFor(h){if(!h||h.length<2)return;var t=document.getElementById(h.slice(1));if(!t)return;var d=t.closest(".baseline-fold")||t.querySelector(":scope>.baseline-fold");if(d&&!d.open){d.open=true;setTimeout(function(){t.scrollIntoView();},0);}}document.addEventListener("click",function(e){var a=e.target.closest&&e.target.closest("a[href^='#']");if(a)openFor(a.getAttribute("href"));});window.addEventListener("hashchange",function(){openFor(location.hash);});if(location.hash)window.addEventListener("load",function(){openFor(location.hash);});})();</script>
