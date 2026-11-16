@@ -313,7 +313,8 @@ function seriesCompare(ALL, MED, SYN, last) {
   const group = key => { const m = new Map(); for (const p of ALL) for (const v of [].concat(p[key] || [])) if (v) (m.get(v) || m.set(v, []).get(v)).push(p); return m; };
   const order = rows => [...rows].sort((a, b) => ((b.n >= MIN) - (a.n >= MIN)) || ((b.reach ?? -1) - (a.reach ?? -1)));
   const ser = order([...group('seriesName')].map(([k, P]) => stats(k, P)));
-  const prg = order([...group('programs')].map(([k, P]) => stats(k, P)));
+  const SKIP_PROGRAMS = new Set(['One-off social', 'One-off moment']); // catch-alls, not programs to compare
+  const prg = order([...group('programs')].filter(([k]) => !SKIP_PROGRAMS.has(k)).map(([k, P]) => stats(k, P)));
   const allCom = mean(ALL.map(p => p.comments)), allEr = median(ALL.map(p => p.er));
   const x = v => v == null ? '—' : `<span class="chg ${v >= 1.1 ? 'up' : v <= 0.9 ? 'down' : ''}">${v.toFixed(1)}×</span>`;
   const row = r => `<tr${r.n < MIN ? ' class="dim"' : ''}><td>${esc(r.name)}${r.n < MIN ? ' <span class="chip" style="white-space:nowrap">too few to judge</span>' : ''}</td>` +
