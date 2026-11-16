@@ -233,6 +233,9 @@ function proof(S, companies, syn, senior, func, execs, board = []) {
     card('pp-amp', 'Guest seniority and reposts', `${top + sen} of ${known}`, esc(s3), `titles from the ATM Kitchen board and post copy; ${synSrc}`, s3);
   }
 
+  /* ---------- how the series and programs compare (Editorial tab, #brief-series) ---------- */
+  try { seriesCompare(ALL, MED, SYN, last); } catch (e) { console.error('series compare', e); }
+
   const draw = () => {
     const f = { partners: $('pf-partner').value, seriesName: $('pf-series').value, industry: $('pf-industry').value };
     const P = ALL.filter(p => (!f.partners || p.partners.includes(f.partners)) && (!f.seriesName || p.seriesName === f.seriesName) && (!f.industry || p.industry === f.industry));
@@ -287,6 +290,54 @@ function proof(S, companies, syn, senior, func, execs, board = []) {
   draw();
 }
 
+
+/* ---------- series and programs side by side ----------
+   Every post tagged with a series (ATM Kitchen board, or the series named in the post) or a program (board),
+   all channels and dates in the post data. Reach is each post's impressions (LinkedIn) or reach (Instagram)
+   against its channel's median, so LinkedIn and Instagram posts can be pooled. Groups with fewer than
+   MIN posts are listed last and marked: too few to judge. */
+function seriesCompare(ALL, MED, SYN, last) {
+  const MIN = 10, box = $('brief-series');
+  if (!box) return;
+  const rel = p => p.reach != null && MED[p.ch] ? p.reach / MED[p.ch] : null;
+  const mean = a => { a = a.filter(x => x != null); return a.length ? a.reduce((x, y) => x + y, 0) / a.length : null; };
+  const stats = (name, P) => {
+    const sorted = [...P].sort((a, b) => a.date < b.date ? -1 : 1), h = Math.floor(sorted.length / 2);
+    const early = median(sorted.slice(0, h).map(rel)), late = median(sorted.slice(h).map(rel));
+    const trend = sorted.length >= 6 && early && late ? (late > early * 1.15 ? 'Rising' : late < early * 0.85 ? 'Falling' : 'Steady') : '';
+    const syn = SYN.filter(r => r.post && P.includes(r.post)), so = syn.reduce((a, r) => a + r.org, 0), ss = syn.reduce((a, r) => a + r.syn, 0);
+    return { name, n: P.length, li: P.filter(p => p.ch === 'LinkedIn').length, ig: P.filter(p => p.ch === 'Instagram').length,
+      reach: median(P.map(rel)), er: median(P.map(p => p.er)), com: mean(P.map(p => p.comments)), trend, early, late,
+      lift: so ? (so + ss) / so : null, synN: syn.length, lastDate: sorted.at(-1)?.date || '' };
+  };
+  const group = key => { const m = new Map(); for (const p of ALL) for (const v of [].concat(p[key] || [])) if (v) (m.get(v) || m.set(v, []).get(v)).push(p); return m; };
+  const order = rows => [...rows].sort((a, b) => ((b.n >= MIN) - (a.n >= MIN)) || ((b.reach ?? -1) - (a.reach ?? -1)));
+  const ser = order([...group('seriesName')].map(([k, P]) => stats(k, P)));
+  const prg = order([...group('programs')].map(([k, P]) => stats(k, P)));
+  const allCom = mean(ALL.map(p => p.comments)), allEr = median(ALL.map(p => p.er));
+  const x = v => v == null ? '—' : `<span class="chg ${v >= 1.1 ? 'up' : v <= 0.9 ? 'down' : ''}">${v.toFixed(1)}×</span>`;
+  const row = r => `<tr${r.n < MIN ? ' class="dim"' : ''}><td>${esc(r.name)}${r.n < MIN ? ' <span class="chip" style="white-space:nowrap">too few to judge</span>' : ''}</td>` +
+    `<td class="num">${r.n}<span class="dim"> (${r.li} LI, ${r.ig} IG)</span></td><td class="num">${x(r.reach)}</td>` +
+    `<td class="num">${r.er != null ? r.er.toFixed(1) + '%' : '—'}</td><td class="num">${r.com != null ? r.com.toFixed(1) : '—'}</td>` +
+    `<td>${r.trend ? `<span class="chg ${r.trend === 'Rising' ? 'up' : r.trend === 'Falling' ? 'down' : ''}">${r.trend}</span>` : '<span class="dim">—</span>'}</td>` +
+    `<td class="num">${r.lift ? `${r.lift.toFixed(2)}×<span class="dim"> (${r.synN})</span>` : '—'}</td><td class="nw">${dateTxt(r.lastDate)}</td></tr>`;
+  const head = `<thead><tr><th>Name</th><th class="num">Posts</th><th class="num">Reach vs median</th><th class="num">Engagement rate</th><th class="num">Comments per post</th><th>Reach trend</th><th class="num">Repost lift (posts)</th><th>Latest</th></tr></thead>`;
+  const lead = rows => {
+    const ok = rows.filter(r => r.n >= MIN && r.reach != null);
+    if (ok.length < 2) return '';
+    const top = ok[0], low = ok.at(-1), com = [...ok].sort((a, b) => (b.com ?? 0) - (a.com ?? 0))[0], fall = ok.filter(r => r.trend === 'Falling');
+    const andList = a => a.length < 2 ? a.join('') : `${a.slice(0, -1).join(', ')} and ${a.at(-1)}`;
+    return `Of those with ${MIN} or more posts, ${top.name} reached the most, at ${top.reach.toFixed(1)} times the channel median per post, and ${low.name} the least, at ${low.reach.toFixed(1)} times. ` +
+      (com.com > allCom ? `${com.name} drew the most comments, ${com.com.toFixed(1)} per post against ${allCom.toFixed(1)} across all ATM posts.`
+        : `None drew more comments per post than the ATM average of ${allCom.toFixed(1)}; ${com.name} came closest, at ${com.com.toFixed(1)}.`) +
+      (fall.length ? ` Reach is falling for ${andList(fall.map(r => r.name))}: their later posts reached less than their earlier ones.` : '');
+  };
+  box.innerHTML = `<div class="card"><p class="sub" style="margin-top:0">${esc(lead(ser))}</p>
+    <div class="tbl-wrap"><table class="mini">${head}<tbody>${ser.map(row).join('')}</tbody></table></div>
+    <h4 style="margin:18px 0 6px">Programs</h4><p class="sub" style="margin-top:0">${esc(lead(prg))}</p>
+    <div class="tbl-wrap"><table class="mini">${head}<tbody>${prg.map(row).join('')}</tbody></table></div>
+    <p class="src">Posts on LinkedIn and Instagram from ${dateTxt(ALL.reduce((m, p) => p.date < m ? p.date : m, '9999'))} to ${dateTxt(last)}, tagged from the ATM Kitchen board (data/board_tags.csv) or the series named in the post. Reach vs median: each post's impressions (LinkedIn) or reach (Instagram) against its channel's median, so green is above the typical ATM post and red below. Engagement rate is the median per post; all ATM posts: ${allEr != null ? allEr.toFixed(1) + '%' : '—'}. Reach trend compares the later half of a group's posts with the earlier half. Repost lift: engagement on reposts that carried the reposter's own words, added to ATM's own, on the group's posts with such reposts (data/syndication.csv, September onward). Groups with fewer than ${MIN} posts are marked too few to judge.</p></div>`;
+}
 
 /* ---------- record of past tests and standing practices (data/tests.csv) ---------- */
 function tests(T) {

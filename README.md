@@ -94,6 +94,10 @@ The monthly sections (A to E: headline numbers, the last 12 months, syndication,
 
 After changing anything in `data/monthly/`, run `python3 tools/apply_monthly.py` from the repo root and commit both `data/monthly/` and `data/scorecard/`: the page reads `data/scorecard/`. A full rebuild is not needed (it also calls the same step, but it needs the handoff folder, which is not in the repo). The written read (`data/analysis.csv`) is rewritten each month too. October's figures come from the Oct 28 report (Oct 1–27); the close-out on Nov 1 replaces them with the full month.
 
+## Series compared (Briefings, Editorial tab)
+
+"How the series and programs compare" sets every series and program side by side, worked out live in `js/briefings.js` (`seriesCompare`) from the same tagged posts the partner, series and industry filters use: posts, reach against each channel's median, median engagement rate, comments per post, reach trend (later half of the group's posts against the earlier half) and repost lift from `data/syndication.csv`. Series tags come from the ATM Kitchen board or the series named in the post; programs from the board. Groups with fewer than 10 posts are marked too few to judge. The weekly briefing reads it and turns clear gaps into patterns or experiments.
+
 ## Video (monthly)
 
 Section G shows how far people watch each episode on atm.media and how visitors move through the episode pages, one calendar month at a time. `tools/video.py` loads a month into `data/video/` from four inputs: Vimeo's video report export for the month (Vimeo, Analytics, Videos, Export; the free plan includes it) and three GA4 pulls listed in the script's header. Run `python3 -I tools/video.py --month YYYY-MM --vimeo <export.csv> --pageviews <csv> --landing <csv> --referrers <csv>`.
