@@ -54,8 +54,8 @@ A scheduled task rewrites these files every Monday morning; the page reads them 
 | File | Key | Columns |
 |---|---|---|
 | `li_daily.csv` | date | impressions, clicks, likes, comments, shares, page_views, new_followers (organic) |
-| `li_posts.csv` | post_id | post date, media, lifetime impressions, clicks, likes, comments, shares, first 160 characters of the text |
-| `ig_posts.csv` | media_id | post date, type, url, views, reach, likes, comments, shares, saves, interactions, first 160 characters of the caption |
+| `li_posts.csv` | post_id | post date, media, lifetime impressions, clicks, likes, comments, shares, the post text (up to 1,000 characters) |
+| `ig_posts.csv` | media_id | post date, type, url, views, reach, likes, comments, shares, saves, interactions, the caption (up to 1,000 characters) |
 | `ig_28d.csv` | end_date | reach and views for the 28 days ending that date |
 | `yt_daily.csv` | date | views, minutes watched, subscribers gained and lost |
 | `yt_monthly.csv` | month | the same by month, with the last day covered for the current month |

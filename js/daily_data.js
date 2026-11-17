@@ -255,8 +255,17 @@ const splitTitle = seg => {
   return { title: seg, company: "" };
 };
 const NAME = "\\p{Lu}[\\p{L}.'’-]+(?: (?:\\p{Lu}[\\p{L}.'’-]+|de|la|van|von)){1,4}";
-function personFromLinkedIn(text) {
+function personFromLinkedIn(text, inner) {
   const t = clean(text).replace(/\s*\((?:he|she|they)[^)]*\)/ig, "");
+  // Posts that open with a hook ("She started in finance... Then she built...") name the guest in a later
+  // sentence: try each sentence start in turn, with the same patterns, once the opening fails.
+  if (!inner) {
+    const r = personFromLinkedIn(t, true);
+    if (r) return r;
+    const re = /[.!?]\s+(?=\p{Lu})/gu; let s;
+    while ((s = re.exec(t))) { const r2 = personFromLinkedIn(t.slice(s.index + s[0].length), true); if (r2) return r2; }
+    return null;
+  }
   let m = t.match(new RegExp(`^(${NAME}), ([^,]{3,120}?), (?:says|said|is|was|tells|wants|grew|built|on|shares|believes|launched|joins|explains|talks|thinks|knows|has|reflects)\\b`, "u"));
   if (!m) m = t.match(new RegExp(`honou?ring (${NAME}), ([^,]{3,120}?), as\\b`, "u"));
   // "Name, SVP, Marketing and Communications at OpenX, let curiosity..." (a title with commas, then the company)
