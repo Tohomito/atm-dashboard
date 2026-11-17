@@ -19,7 +19,8 @@ Writes:
   other row (other posts, earlier months) is kept as it is. One row per ATM post whose reposts carried the
   reposter's own words. organic = likes + comments + shares on ATM's post (data/sm/li_posts.csv);
   syndicated = reactions + comments + reposts on those reposts; reposter_followers = the followers of
-  everyone who reposted it (words and plain); atm_followers = ATM's page followers at the read.
+  everyone who reposted it (words and plain) whose count is known, a potential audience (not deduplicated,
+  not impressions); followers_unknown = how many of them have no count yet; atm_followers = ATM's page followers at the read.
 - data/repost_runs.csv: one line per run (the run log): date, kind, the post dates covered, posts read,
   reposts found (with the reposter's own words / plain), follower counts read this run and still blank,
   the biggest lift, and whether the run worked. A rerun on the same day replaces that day's line. A run
@@ -35,7 +36,7 @@ DATA = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "data")
 R_F = ["post_id", "post_date", "name", "headline", "profile_url", "kind", "when", "followers", "followers_read",
        "reactions", "comments", "reposts", "read"]
 S_F = ["month", "date", "post_id", "person", "company", "label", "organic", "syndicated", "reposters",
-       "reposter_followers", "atm_followers"]
+       "reposter_followers", "atm_followers", "followers_unknown"]
 RUN_F = ["run_date", "kind", "posts_from", "posts_to", "posts_read", "posts_with_reposts", "reposts", "with_words",
          "plain", "followers_read", "followers_blank", "biggest_lift", "status", "note"]
 E_F = ["post_id", "post_date", "plain_reposts", "plain_reposter_followers", "repost_dates", "impressions_gain",
@@ -113,7 +114,8 @@ def main(src):
                     "organic": n(p.get("likes")) + n(p.get("comments")) + n(p.get("shares")) if p else "",
                     "syndicated": sum(eng(r) for r in words),
                     "reposters": "; ".join(f"{r['name']} ({eng(r)})" for r in words if eng(r) > 0),
-                    "reposter_followers": sum(fol) if fol else "", "atm_followers": read.get("atm_followers", "")})
+                    "reposter_followers": sum(fol) if fol else "", "atm_followers": read.get("atm_followers", ""),
+                    "followers_unknown": len(rs) - len(fol)})
     syn.sort(key=lambda r: (r["date"], r.get("post_id", "")))
     wr(os.path.join(DATA, "syndication.csv"), S_F, syn)
 
