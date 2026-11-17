@@ -1,6 +1,7 @@
 """Merge a weekly Reposts-list read into the dashboard's repost files.
 
 usage: python3 -I tools/reposts.py <read.json>
+       python3 -I tools/reposts.py --failed YYYY-MM-DD "<why the read could not run>"
 
 read.json (written by the weekly repost read in Matt's signed-in Chrome):
   {"read": "YYYY-MM-DD", "atm_followers": N,
@@ -19,6 +20,11 @@ Writes:
   reposter's own words. organic = likes + comments + shares on ATM's post (data/sm/li_posts.csv);
   syndicated = reactions + comments + reposts on those reposts; reposter_followers = the followers of
   everyone who reposted it (words and plain); atm_followers = ATM's page followers at the read.
+- data/repost_runs.csv: one line per run (the run log): date, kind, the post dates covered, posts read,
+  reposts found (with the reposter's own words / plain), follower counts read this run and still blank,
+  the biggest lift, and whether the run worked. A rerun on the same day replaces that day's line. A run
+  that cannot read LinkedIn (Chrome unreachable, signed out) records itself with --failed. read.json may
+  carry "kind" ("weekly" by default, or "full month", "manual") and "note".
 - data/repost_estimates.csv: an estimate of what plain reposts added to ATM's post, from the daily
   snapshots in data/sm/li_post_history.csv (see estimate() below). Written only where the snapshots
   cover the days around a repost.
@@ -30,6 +36,8 @@ R_F = ["post_id", "post_date", "name", "headline", "profile_url", "kind", "when"
        "reactions", "comments", "reposts", "read"]
 S_F = ["month", "date", "post_id", "person", "company", "label", "organic", "syndicated", "reposters",
        "reposter_followers", "atm_followers"]
+RUN_F = ["run_date", "kind", "posts_from", "posts_to", "posts_read", "posts_with_reposts", "reposts", "with_words",
+         "plain", "followers_read", "followers_blank", "biggest_lift", "status", "note"]
 E_F = ["post_id", "post_date", "plain_reposts", "plain_reposter_followers", "repost_dates", "impressions_gain",
        "expected_gain", "estimated_lift_impressions", "snapshots_used", "read"]
 
@@ -123,7 +131,31 @@ def main(src):
             est[pid] = {"post_id": pid, "post_date": rs[0]["post_date"], "plain_reposts": len(rs),
                         "plain_reposter_followers": sum(fol) if fol else "", "read": day, **e}
     wr(os.path.join(DATA, "repost_estimates.csv"), E_F, sorted(est.values(), key=lambda r: r["post_date"]))
+    # run log
+    seen = {key({"post_id": p["post_id"], **r}) for p in read["posts"] for r in p.get("reposts", [])}
+    mine = [r for r in reposts if key(r) in seen]  # this read's reposts, with follower counts carried over
+    big = max((r for r in syn if r.get("post_id") in read_ids and n(r.get("organic"))), default=None,
+              key=lambda r: (n(r["organic"]) + n(r["syndicated"])) / n(r["organic"]))
+    dates = sorted(p["post_date"] for p in read["posts"])
+    log_run({"run_date": day, "kind": read.get("kind", "weekly"), "posts_from": dates[0] if dates else "",
+             "posts_to": dates[-1] if dates else "", "posts_read": len(read["posts"]),
+             "posts_with_reposts": sum(1 for p in read["posts"] if p.get("reposts")), "reposts": len(mine),
+             "with_words": sum(r["kind"] == "words" for r in mine), "plain": sum(r["kind"] == "plain" for r in mine),
+             "followers_read": sum(r.get("followers_read") == day for r in mine),
+             "followers_blank": sum(not str(r.get("followers") or "").strip() for r in mine),
+             "biggest_lift": f"{big['label']}: {(n(big['organic']) + n(big['syndicated'])) / n(big['organic']):.2f}x ({big['reposters'].split(';')[0]})" if big else "",
+             "status": "ok", "note": read.get("note", "")})
     print(f"{len(reposts)} reposts on file; {len(read_ids)} posts updated in data/syndication.csv; {len(est)} plain-repost estimates")
 
+def log_run(row):
+    path = os.path.join(DATA, "repost_runs.csv")
+    runs = [r for r in rd(path) if not (r["run_date"] == row["run_date"] and r["kind"] == row["kind"])]
+    runs.append(row)
+    wr(path, RUN_F, sorted(runs, key=lambda r: (r["run_date"], r["kind"])))
+
 if __name__ == "__main__":
-    main(sys.argv[1])
+    if sys.argv[1] == "--failed":
+        log_run({"run_date": sys.argv[2], "kind": "weekly", "status": "failed", "note": " ".join(sys.argv[3:])})
+        print("logged a failed run in data/repost_runs.csv")
+    else:
+        main(sys.argv[1])

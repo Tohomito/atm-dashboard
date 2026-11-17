@@ -340,6 +340,18 @@ function seriesCompare(ALL, MED, SYN, last) {
     <p class="src">Posts on LinkedIn and Instagram from ${dateTxt(ALL.reduce((m, p) => p.date < m ? p.date : m, '9999'))} to ${dateTxt(last)}, tagged from the ATM Kitchen board (data/board_tags.csv) or the series named in the post. Reach vs median: each post's impressions (LinkedIn) or reach (Instagram) against its channel's median, so green is above the typical ATM post and red below. Engagement rate is the median per post; all ATM posts: ${allEr != null ? allEr.toFixed(1) + '%' : '—'}. Reach trend compares the later half of a group's posts with the earlier half. Repost lift: engagement on reposts that carried the reposter's own words, added to ATM's own, on the group's posts with such reposts (data/syndication.csv, September onward). Groups with fewer than ${MIN} posts are marked too few to judge.</p></div>`;
 }
 
+/* ---------- repost run log (data/repost_runs.csv): when LinkedIn's Reposts lists were last read ---------- */
+function repostRuns(R) {
+  const el = $('repost-runs');
+  if (!el || !R.length) return;
+  const runs = [...R].sort((a, b) => a.run_date < b.run_date ? -1 : 1), last = runs.at(-1), ok = runs.filter(r => r.status === 'ok').at(-1);
+  const age = ok ? Math.round((Date.now() - new Date(ok.run_date + 'T12:00:00')) / 864e5) : null;
+  const okTxt = ok ? `Reposts last read ${dateTxt(ok.run_date)} (${esc(ok.kind)} run): ${ok.posts_read || '?'} posts from ${dateTxt(ok.posts_from)} to ${dateTxt(ok.posts_to)}, ${ok.reposts} reposts, ${ok.with_words} with the reposter's own words.` : 'No repost read on record.';
+  const warn = last.status !== 'ok' ? ` <span class="chg down">The ${dateTxt(last.run_date)} run did not complete: ${esc(last.note || 'no reason recorded')}.</span>`
+    : age != null && age > 8 ? ` <span class="chg down">That is ${age} days ago; the weekly read may have been missed.</span>` : '';
+  el.innerHTML = okTxt + warn + ' <span class="dim">Run log: data/repost_runs.csv.</span>';
+}
+
 /* ---------- record of past tests and standing practices (data/tests.csv) ---------- */
 function tests(T) {
   const ORDER = ['Running', 'Keep doing', 'No clear effect', 'Not decided', 'Not measured', 'Stopped'];
@@ -366,12 +378,13 @@ function tests(T) {
 
 Promise.all([window.ATMDailyReady, window.ATMScoreReady]).then(async ([S]) => {
   if (!S || !S.POSTS) return;
-  const [B, companies, syn, senior, func, execs, T, BT] = await Promise.all([getCSV('data/briefings.csv'), getCSV('data/companies.csv'),
-    getCSV('data/syndication.csv'), getCSV('data/scorecard/charts/c-senior.csv'), getCSV('data/scorecard/charts/c-func.csv'), getCSV('data/execs.csv'), getCSV('data/tests.csv'), getCSV('data/board_tags.csv')]);
+  const [B, companies, syn, senior, func, execs, T, BT, RR] = await Promise.all([getCSV('data/briefings.csv'), getCSV('data/companies.csv'),
+    getCSV('data/syndication.csv'), getCSV('data/scorecard/charts/c-senior.csv'), getCSV('data/scorecard/charts/c-func.csv'), getCSV('data/execs.csv'), getCSV('data/tests.csv'), getCSV('data/board_tags.csv'), getCSV('data/repost_runs.csv')]);
   const meta = B.find(r => r.kind === 'meta');
   if (meta) $('brief-eyebrow').textContent = `Briefings · ${meta.title}`;
   try { editorial(B, S); } catch (e) { console.error('editorial briefing', e); }
   try { tests(T); } catch (e) { console.error('tests', e); }
+  try { repostRuns(RR); } catch (e) { console.error('repost runs', e); }
   try { proof(S, companies, syn, senior, func, execs, BT); } catch (e) { console.error('proof briefing', e); }
   document.documentElement.dataset.briefReady = '1';
 });
