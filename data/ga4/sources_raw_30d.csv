@@ -1,61 +1,52 @@
 source_medium,new_vs_returning,sessions,users
-(direct) / (none),new,2443,2439
-atm-media.beehiiv.com / newsletter,new,2290,2290
-beehiiv / owned_audience,new,1167,1170
-listmonk / owned_audience,new,639,640
-listmonk / newsletter,new,593,593
-teams.public.onecdn.static.microsoft / referral,new,431,431
-(direct) / (none),returning,284,215
-google / organic,returning,204,116
-google / organic,new,191,191
-linkedin.com / referral,new,141,141
-linkedin / organic_social,new,139,139
-teams.public.onecdn.static.microsoft / referral,returning,112,86
-(direct) / (none),(not set),110,83
-disneyadvertising.com / referral,new,105,105
-linkedin / organic_social,returning,101,29
-atm-media.beehiiv.com / newsletter,returning,96,70
-linkedin / partner_social,returning,94,26
-atm-media / newsletter,new,76,76
-ig / social,new,60,61
-teams.public.onecdn.static.microsoft / referral,(not set),54,33
-meta / organic_social,new,47,47
-bing / organic,new,45,45
-linkedin / partner_social,new,42,42
-linkedin.com / referral,returning,41,27
-meta / organic_social,returning,35,9
-google / organic,(not set),32,26
-beehiiv / owned_audience,returning,31,17
-disneyadvertising.com / referral,returning,28,16
-linkedin / partner_social,(not set),25,12
-danielreji21-atmmedia.editor.wix.com / referral,returning,24,2
-linkedin / organic_social,(not set),24,12
-linkedin.com / referral,(not set),20,13
-meta / organic_social,(not set),18,5
-disneyadvertising.com / referral,(not set),17,9
-l.instagram.com / referral,new,17,17
-(not set),new,16,16
-atm-media.beehiiv.com / newsletter,(not set),16,12
-meta / organic,new,15,15
+atm-media.beehiiv.com / newsletter,new,2344,2343
+beehiiv / owned_audience,new,1921,1925
+listmonk / newsletter,new,1520,1521
+(direct) / (none),new,1327,1327
+listmonk / owned_audience,new,708,709
+teams.public.onecdn.static.microsoft / referral,new,172,172
+google / organic,returning,166,100
+linkedin / organic_social,new,165,165
+google / organic,new,157,157
+(direct) / (none),returning,153,108
+linkedin / partner_social,returning,99,24
+linkedin / organic_social,returning,96,25
+atm-media.beehiiv.com / newsletter,returning,87,66
+atm-media / newsletter,new,77,77
+beehiiv / owned_audience,returning,77,65
+linkedin.com / referral,new,66,66
+(direct) / (none),(not set),64,46
+meta / organic_social,new,53,53
+ig / social,new,52,53
+teams.public.onecdn.static.microsoft / referral,returning,52,41
+disneyadvertising.com / referral,new,51,51
+linkedin / partner_social,new,37,37
+meta / organic_social,returning,36,6
+teams.public.onecdn.static.microsoft / referral,(not set),26,16
+bing / organic,new,23,23
+linkedin / organic_social,(not set),23,13
+google / organic,(not set),22,19
+hs_email / email,new,21,21
+meta / organic_social,(not set),21,5
+linkedin / partner_social,(not set),20,12
+linkedin.com / referral,returning,19,16
+(not set),new,14,14
+disneyadvertising.com / referral,(not set),14,6
+l.instagram.com / referral,new,14,14
+meta / organic,new,13,13
 beehiiv / owned_audience,(not set),12,6
-mail.google.com / referral,new,12,12
-m.facebook.com / referral,new,9,9
-yahoo / organic,returning,9,1
+linkedin.com / referral,(not set),12,6
+atm-media.beehiiv.com / newsletter,(not set),11,9
+danielreji21-atmmedia.editor.wix.com / referral,returning,11,2
+disneyadvertising.com / referral,returning,11,9
 youtube.com / referral,new,9,9
-atm-media.beehiiv.com / referral,returning,8,5
-bing / organic,returning,7,7
-linkedin / referral,new,7,7
-login.b2b.yahooinc.com / referral,new,7,7
-meta / organic,(not set),7,3
-dsp.yahooinc.com / referral,new,6,6
-bing / organic,(not set),5,1
-usc-word-edit.officeapps.live.com / referral,returning,5,2
-atm-media.beehiiv.com / referral,new,4,4
-linkedin / (not set),(not set),4,1
+m.facebook.com / referral,new,8,8
+atm-media.beehiiv.com / referral,returning,7,4
+atm-media.beehiiv.com / referral,new,5,5
+mail.google.com / referral,new,5,5
+yahoo / organic,returning,5,1
+meta / organic,(not set),4,1
 so / mail,returning,4,2
 yahoo / organic,(not set),4,1
-chatgpt.com / ai-assistant,returning,3,2
-later-linkinbio / referral,returning,3,2
-linkedin / (not set),new,3,3
-themachinenyc.com / referral,returning,3,1
-usc-word-edit.officeapps.live.com / referral,new,3,3
+bing / organic,returning,3,3
+usc-word-edit.officeapps.live.com / referral,returning,3,1
