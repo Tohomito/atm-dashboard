@@ -23,7 +23,7 @@ The header shows the date of each source.
 - `js/daily_view.js`: draws the daily sections with the scorecard's chart code.
 - `js/glance.js`: the toolbar (Data & insights / Actions switch, Refresh, the "Ask Claude" box), the "At a glance" insights for 7 days / 14 days / 30 days / All, and the key-measures panel.
 - `js/archive.js`: history the sheet doesn't hold (posts through Oct 5, 2026; LinkedIn monthly totals May to Sep 2026).
-- `data/execs.csv`: executive titles for section D, read from the ATM Kitchen board item names and post copy. Add a row when a new title is known; the section follows the posts on its own.
+- `data/execs.csv`: executive titles for the executives section (data key D), read from the ATM Kitchen board item names and post copy. Add a row when a new title is known; the section follows the posts on its own.
 - `js/carousel.js`: the chart carousels in sections 02 to 05. They page only with the arrow buttons or arrow keys.
 - `tools/build_unified.py` and `tools/scorecard_loader.js`: rebuild `index.html` from the scorecard's published page (layout, section order, wording fixes). Run `python3 -I tools/build_unified.py <handoff folder> .`; the build reads `scorecard_loader.js` from its own folder.
 - `docs/DATA_SPEC.md`: the files Rob's monthly run must save to SharePoint.
@@ -35,6 +35,7 @@ The header shows the date of each source.
 - Monthly files must follow `docs/DATA_SPEC.md`. To refresh by hand, replace the files in `data/scorecard/` and commit.
 - After any change to `data/` or `js/archive.js`, refresh the two Google Docs (steps in `tools/build_ask.py`), so the ask box reads current figures.
 - Keep the Actions view to real, open actions. When a setup task, tracking fix or priority is done, delete its row from `data/analysis.csv` in the same change (and at each monthly rewrite, drop anything finished). Principles and reading notes do not go in the Actions view; notes stay in `analysis.csv` as `note` rows for the Ask Claude data only.
+- Section letters (B to G) are set by page order in code (`ATMReletter` in index.html), not by the data keys. To move a section, move its markup and mark it `data-lettered`; the internal keys (`B`, `C`, `D`, `E` in the monthly files) stay as they are.
 - Date-stamp team flags: they come from the monthly analysis and show the date of the analysis they came from.
 - People who use the ask box need Google Drive connected in Claude and access to the Drive folder.
 - Use the dashboard from its direct address, https://atm.mattbecher.com. The Notion embed is retired.
@@ -100,7 +101,7 @@ After changing anything in `data/monthly/`, run `python3 tools/apply_monthly.py`
 
 ## Video (monthly)
 
-Section G shows how far people watch each episode on atm.media and how visitors move through the episode pages, one calendar month at a time. `tools/video.py` loads a month into `data/video/` from four inputs: Vimeo's video report export for the month (Vimeo, Analytics, Videos, Export; the free plan includes it) and three GA4 pulls listed in the script's header. Run `python3 -I tools/video.py --month YYYY-MM --vimeo <export.csv> --pageviews <csv> --landing <csv> --referrers <csv>`.
+The video section shows how far people watch each episode on atm.media and how visitors move through the episode pages, one calendar month at a time. `tools/video.py` loads a month into `data/video/` from four inputs: Vimeo's video report export for the month (Vimeo, Analytics, Videos, Export; the free plan includes it) and three GA4 pulls listed in the script's header. Run `python3 -I tools/video.py --month YYYY-MM --vimeo <export.csv> --pageviews <csv> --landing <csv> --referrers <csv>`.
 
 - `videos.csv`: every Vimeo video with plays that month. `kind` is "episode" when the video is linked to an episode page (its title matches the page address, or `links.csv` links them), "site" for the site's background loops (`exclude.csv`), and "other" for review copies, social cuts, teasers and footage. Only episode videos count in the section's figures, because the others include the team's own review plays.
 - `pages.csv`: every episode page: views, visits that began there from email links and from everything else (with their average length), moves to another page, its video and its tags.
