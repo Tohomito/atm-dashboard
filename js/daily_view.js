@@ -175,7 +175,7 @@ function render(S) {
   const proxy = MOk.find(k => MO[k].proxy);
   setHTML('a-bench-note', `${Hn} ${Hm.slice(0, 4)} is the last full month in the daily sheet; the benchmark is the three months before it, so this row moves forward on its own each month. LinkedIn per-post reach = monthly organic impressions ÷ (days × ${CAD} posts/day).${proxy ? ` From ${monthName(proxy)} on, LinkedIn monthly engagement is summed from posts published that month; earlier months use LinkedIn's Highlights totals.` : ''} Sources: LinkedIn page analytics, Meta Business Suite, YouTube Studio.`);
 
-  /* ===== executives featured, in section D ===== */
+  /* ===== executives featured (Executives section) ===== */
   (function () {
     const parse = t => { const rows = []; let r = [], c = '', q = false; for (let i = 0; i < t.length; i++) { const ch = t[i]; if (q) { if (ch === '"') { if (t[i + 1] === '"') { c += '"'; i++; } else q = false; } else c += ch; } else if (ch === '"') q = true; else if (ch === ',') { r.push(c); c = ''; } else if (ch === '\n') { r.push(c); rows.push(r); r = []; c = ''; } else if (ch !== '\r') c += ch; } if (c || r.length) { r.push(c); rows.push(r); } const [h, ...rest] = rows.filter(x => x.length > 1); return rest.map(x => Object.fromEntries(h.map((k, i) => [k, x[i] || '']))); };
     const key = n => n.toLowerCase().replace(/[^a-z]/g, '');
@@ -214,14 +214,14 @@ function render(S) {
     }).catch(e => { console.error(e); setHTML('d-ceo', '<p class="sub">Executive titles could not load.</p>'); });
   })();
 
-  /* ===== YouTube watch time, in section B ===== */
+  /* ===== YouTube watch time (12-month section) ===== */
   const ytm = YT.months.filter(m => m.watch != null);
   if (ytm.length && $('d-ytwatch')) C.vbar('d-ytwatch', ytm.map(m => m.m), ytm.map(m => m.watch), { fmt: C.fmtInt, aria: 'YouTube watch hours per month', colors: ytm.map(m => m.pre || m.partial ? css('--muted') : S1), notes: ytm.map(m => m.pre ? 'pre-launch' : m.partial ? 'partial month' : '') });
 
-  /* ===== F · every post ===== */
+  /* ===== Posts: every post ===== */
   const BENCH = buildBench(POSTS);
   const spanDays = Math.round((new Date(POST_END) - new Date(POST_START)) / 864e5) + 1;
-  setHTML('f-eyebrow', `F · Posts · ${slash(POST_START)} to ${slash(POST_END)}`);
+  setHTML('f-eyebrow', `Posts · ${slash(POST_START)} to ${slash(POST_END)}`); if (window.ATMReletter) window.ATMReletter();
   setHTML('f-lede', `${POSTS.length} organic LinkedIn and Instagram posts over ${spanDays} days. Per-post figures from LinkedIn page analytics and Meta Business Suite; recent posts keep gaining until they mature. Instagram Stories are excluded. LinkedIn engagement rate = (clicks + reactions + comments + reposts) ÷ impressions; Instagram = interactions ÷ reach, so read each against its own median.`);
   const L = BENCH.LinkedIn, I = BENCH.Instagram;
   const brow = (lab, a, b) => `<tr><td>${lab}</td><td class="num">${a}</td><td class="num">${b}</td></tr>`;

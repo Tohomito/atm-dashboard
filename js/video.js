@@ -1,4 +1,4 @@
-/* Section G, Video: how far people watch each episode on atm.media (Vimeo export) and how visitors move
+/* Video section: how far people watch each episode on atm.media (Vimeo export) and how visitors move
    through the episode pages (GA4). Data: data/video/ (tools/video.py, loaded once a month). */
 (function () {
 'use strict';
