@@ -302,7 +302,10 @@ function measureCards(f, tiles, chan) {
 /* the monthly headline numbers, filed under the channel each one measures */
 const tileCh = l => /linkedin/i.test(l) ? 'li' : /instagram/i.test(l) ? 'ig' : /youtube/i.test(l) ? 'yt' : /newsletter|verified human clicks/i.test(l) ? 'nl' : /atm\.media|session|site/i.test(l) ? 'site' : null;
 function headlineTiles(tiles, chan) {
-  return (tiles || []).filter(t => /^A\b/.test(t.section) && (chan === 'all' || tileCh(t.label) === chan));
+  // the month's syndication multiplier joins the headline numbers, filed under LinkedIn; the partner-repost section has the detail
+  const syn = tileBy(tiles, /syndication multiplier/i);
+  const list = (tiles || []).filter(t => /^A\b/.test(t.section)).concat(syn ? [syn] : []);
+  return list.filter(t => chan === 'all' || (t === syn ? 'li' : tileCh(t.label)) === chan);
 }
 function headlineHTML(list, f) {
   if (!list.length) return '';
